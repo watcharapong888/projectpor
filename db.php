@@ -1,12 +1,12 @@
 <?php
  
-    $hName='localhost'; // host name
- 
-    $uName='root';   // database user name
- 
-    $password='';   // database password
- 
-    $dbName = "project"; // database name
- 
-    $dbCon = mysqli_connect($hName,$uName,$password,"$dbName");
+// PHP Data Objects(PDO) Sample Code:
+try {
+    $conn = new PDO("sqlsrv:server = tcp:projectpor.database.windows.net,1433; Database = projectpor", "adminbp", "{your_password_here}");
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+}
+catch (PDOException $e) {
+    print("Error connecting to SQL Server.");
+    die(print_r($e));
+}
 ?>
