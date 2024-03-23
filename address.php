@@ -36,7 +36,7 @@
         </h3>
       </center>
       <nav class="navbar navbar-light justify-content-between">
-        <button><a href="addaddress" class="btn btn-info">เพิ่มที่ครัวเรือนใหม่</a></button>
+        <button style="width: auto;"><a href="addaddress.php" class="btn btn-info">เพิ่มที่ครัวเรือนใหม่</a></button>
         <form class="form-inline">
           <input type="text" name="itemname" id="itemname" autocomplete="off" class="form-control mr-sm-2" id="#live_search" placeholder="ค้นหาครัวเรือน" />
           <button type="button" id="btnSearch" class="btn btn-outline-success my-2 my-sm-0">
