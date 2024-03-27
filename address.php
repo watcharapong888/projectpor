@@ -58,11 +58,11 @@
                    FROM 
                    address AS ad
                    JOIN 
-                   amphures AS aph ON ad.amphures_id = aph.amphures_id 
+                   amphures AS aph ON ad.amphure_id = aph.amphure_id 
                    JOIN 
-                   districts AS di ON ad.districts_id = di.districts_id 
+                   districts AS di ON ad.district_id = di.district_id 
                    JOIN 
-                   provinces AS pro ON ad.provinces_id = pro.provinces_id 
+                   provinces AS pro ON ad.province_id = pro.province_id 
                    LIMIT 150;
                    ");
               $stmt->execute();
