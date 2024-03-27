@@ -123,19 +123,19 @@
               $result2 = $stmt2->fetchAll();
               foreach ($result2 as $row2) {
               ?>
-                <option value="<?php echo $row2['provinces_id']; ?>"><?php echo $row2['name_th']; ?></option>
+                <option value="<?php echo $row2['province_id']; ?>"><?php echo $row2['name_th']; ?></option>
               <?php } ?>
             </select>
 
             <label class="col-form-label">อำเภอ:</label>
             <select class="form-select" id="inputGroupSelect01">
               <option selected>กรุณาเลือกอำเภอ</option>
-              <?php $stmt3 = $conn->prepare("SELECT  amphures_id,name_th FROM amphures ORDER BY name_th  ASC; ");
+              <?php $stmt3 = $conn->prepare("SELECT  amphure_id,name_th FROM amphures ORDER BY name_th  ASC; ");
               $stmt3->execute();
               $result3 = $stmt3->fetchAll();
               foreach ($result3 as $row3) {
               ?>
-                <option value="<?php echo $row3['amphures_id']; ?>"><?php echo $row3['name_th']; ?></option>
+                <option value="<?php echo $row3['amphure_id']; ?>"><?php echo $row3['name_th']; ?></option>
               <?php }  ?>
             </select>
 
