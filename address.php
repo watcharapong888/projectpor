@@ -63,7 +63,6 @@
                    districts AS di ON ad.district_id = di.district_id 
                    JOIN 
                    provinces AS pro ON ad.province_id = pro.province_id 
-                   LIMIT 150;
                    ");
               $stmt->execute();
               $result = $stmt->fetchAll();
