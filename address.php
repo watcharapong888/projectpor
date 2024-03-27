@@ -5,29 +5,13 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css" />
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-  <link rel="stylesheet" href="all.css?v=<?php echo time(); ?>" />
   <title>ชุมชนด่านขุนทด</title>
 </head>
 
 <body>
-  <div class="sidebar">
-    <h2>สวัสดีผู้ใช้งาน</h2>
-    <ul>
-      <li><a href="Index.php">หน้าแรก</a></li>
-      <li><a href="address.php">ข้อมูลครัวเรือน</a></li>
-      <li><a href="data.php">ข้อมูลคนในชุมชน</a></li>
-      <li><a href="#services">โรคประจำตัว</a></li>
-      <li><a href="news.php">ข่าวสารประจำเดือน</a></li>
-      <li><a href="#" class="logout-btn">ออกจากระบบ</a></li>
-      <ul>
-  </div>
+  <?php include 'menu.php' ?>
+  <br>
   <div class="showall">
     <div class="show">
       <center>
@@ -35,108 +19,147 @@
           <p>ข้อมูลครัวเรือน</p>
         </h3>
       </center>
-      <nav class="navbar navbar-light justify-content-between">
-        <button><a href="addaddress" class="btn btn-info">เพิ่มที่ครัวเรือนใหม่</a></button>
-        <form class="form-inline">
-          <input type="text" name="itemname" id="itemname" autocomplete="off" class="form-control mr-sm-2" id="#live_search" placeholder="ค้นหาครัวเรือน" />
-          <button type="button" id="btnSearch" class="btn btn-outline-success my-2 my-sm-0">
-            ค้นหา
-          </button>
-          <script type="text/javascript" src="jquery-1.11.2.min.js"></script>
-
-        </form>
-      </nav>
-      <br />
-      <table>
-        <thead>
-          <tr>
-            <th scope="col">รหัสบ้าน</th>
-            <th scope="col">บ้านเลขที่</th>
-            <th scope="col">หมู่</th>
-            <th scope="col">ตำบล</th>
-            <th scope="col">อำเภอ</th>
-            <th scope="col">จังหวัด</th>
-            <th scope="col">ประเภทบ้าน</th>
-            <th scope="col"></th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php
-          include 'db.php';
-          $query = "SELECT home_id,home_no,swine,subdistrict,district,province,home_type
-                        FROM subdistrict AS sub,district AS di,provinces AS pro,address AS ad
-                        WHERE ad.subdistrict_id = sub.subdistrict_id AND ad.district_id = di.district_id AND ad.province_id = pro.province_id limit 150";
-          $result = mysqli_query($dbCon, $query);
-          ?>
-          <?php if ($result->num_rows > 0) : ?>
-            <?php while ($array = mysqli_fetch_row($result)) : ?>
-              <tr>
-                <td scope="row"><?php echo $array[0]; ?></td>
-                <td><?php echo $array[1]; ?></td>
-                <td><?php echo $array[2]; ?></td>
-                <td><?php echo $array[3]; ?></td>
-                <td><?php echo $array[4]; ?></td>
-                <td><?php echo $array[5]; ?></td>
-                <td><?php echo $array[6]; ?></td>
-                <td style="width: 450px">
-                  <button type="button" class="btn btn-primary">เพิ่มสมาชิกครัวเรือน</button>
-                  <button type="button" class="btn btn-success">ดูข้อมูล</button>
-                  <a href="editaddress.php? id=<?=$array[0]; ?>" class="btn btn-warning edit">แก้ไขข้อมูล</a>
-                  <a href="javascript:void(0)" class="btn btn-danger delete" data-id="<?php echo $array[0]; ?>">ลบข้อมูล</a>
-                </td>
+      <div class="container mt-3">
+        <nav class="navbar navbar-light justify-content-between">
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">เพิ่มที่ครัวเรือนใหม่</button>
+          <form class="d-flex" role="search">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+          </form>
+        </nav>
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr class="table-success">
+                <th>ลำดับ</th>
+                <th>รหัสบ้าน</th>
+                <th>บ้านเลขที่</th>
+                <th>หมู่</th>
+                <th>ตำบล</th>
+                <th>อำเภอ</th>
+                <th>จังหวัด</th>
+                <th>ประเภทบ้าน</th>
+                <th></th>
+                <th></th>
+                <th></th>
               </tr>
-            <?php endwhile; ?>
-          <?php else : ?>
-            <tr>
-              <td colspan="4" rowspan="1" headers="">ไม่มีข้อมูล</td>
-            </tr>
-          <?php endif; ?>
-          <?php mysqli_free_result($result); ?>
-        </tbody>
-      </table>
+            </thead>
+            <tbody>
+              <?php
+              require_once 'db.php';
+              $stmt = $conn->prepare("SELECT 
+                   ad.home_id,
+                   ad.home_no,
+                   ad.swine,
+                   aph.name_th as aph,
+                   di.name_th as di,
+                   pro.name_th as pro,
+                   ad.home_type
+                   FROM 
+                   address AS ad
+                   JOIN 
+                   amphures AS aph ON ad.amphures_id = aph.amphures_id 
+                   JOIN 
+                   districts AS di ON ad.districts_id = di.districts_id 
+                   JOIN 
+                   provinces AS pro ON ad.provinces_id = pro.provinces_id 
+                   LIMIT 150;
+                   ");
+              $stmt->execute();
+              $result = $stmt->fetchAll();
+
+              if ($result != null) {
+                $i = 1;
+                foreach ($result as $row) {
+              ?>
+                  <tr>
+                    <td><?php echo $i; ?></td>
+                    <td><?php echo $row['home_id']; ?></td>
+                    <td><?php echo $row['home_no']; ?></td>
+                    <td><?php echo $row['swine']; ?></td>
+                    <td><?php echo $row['aph']; ?></td>
+                    <td><?php echo $row['di']; ?></td>
+                    <td><?php echo $row['pro']; ?></td>
+                    <td><?php echo $row['home_type']; ?></td>
+                    <td><button type="button" class="btn btn-success">ดูข้อมูล</button></td>
+                    <td> <a href="editaddress.php? id=<?= $array[0]; ?>" class="btn btn-warning edit">แก้ไขข้อมูล</a></td>
+                    <td> <a href="javascript:void(0)" class="btn btn-danger delete" data-id="<?php echo $array[0]; ?>">ลบข้อมูล</a></td>
+                  </tr>
+                <?php }
+                $i++;
+              } else { ?>
+                  <tr>
+                    <td colspan="11" style="text-align: center; color:red;">ไม่มีข้อมูล</td>
+                  </tr>
+              <?php  } ?>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
-  <script type="text/javascript">
-    $(document).ready(function($) {
-      $('#addNewUser').click(function() {
-        $('#userInserUpdateForm').trigger("reset");
-        $('#userModel').html("Add New User");
-        $('#user-model').modal('show');
-      });
-      $('body').on('click', '.delete', function() {
-        if (confirm("Delete Record?") == true) {
-          var id = $(this).data('id');
-          // ajax
-          $.ajax({
-            type: "POST",
-            url: "delete.php",
-            data: {
-              id: id
-            },
-            dataType: 'json',
-            success: function(res) {
-              $('#home_id').html(res.home_id);
-              $('#home_no').html(res.home_no);
-              $('#swine').html(res.swine);
-              $('#subdistrict').html(res.subdistrict);
-              $('#district').html(res.district);
-              $('#province').html(res.province);
-              $('#home_type').html(res.home_type);
-              window.location.reload();
-            }
-          });
-        }
-      });
-    });
-    const logoutBtn = document.querySelector('.logout-btn');
-    logoutBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      // ทำการออกจากระบบที่นี่
-      alert('ออกจากระบบแล้ว');
-    });
-  </script>
-  </script>
+  <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">เพิ่มครัวเรือน</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <label class="col-form-label">รหัสบ้าน:</label>
+            <input type="text" class="form-control" id="">
+
+            <label class="col-form-label">บ้านเลขที่:</label>
+            <input type="text" class="form-control" id="">
+
+            <label class="col-form-label">หมู่:</label>
+            <input type="text" class="form-control" id="">
+
+            <label class="col-form-label">จังหวัด:</label>
+            <select class="form-select" id="inputGroupSelect01">
+              <option selected>กรุณาเลือกจังหวัด</option>
+              <?php $stmt2 = $conn->prepare("SELECT  * FROM provinces ORDER BY name_th  ASC; ");
+              $stmt2->execute();
+              $result2 = $stmt2->fetchAll();
+              foreach ($result2 as $row2) {
+              ?>
+                <option value="<?php echo $row2['provinces_id']; ?>"><?php echo $row2['name_th']; ?></option>
+              <?php } ?>
+            </select>
+
+            <label class="col-form-label">อำเภอ:</label>
+            <select class="form-select" id="inputGroupSelect01">
+              <option selected>กรุณาเลือกอำเภอ</option>
+              <?php $stmt3 = $conn->prepare("SELECT  amphures_id,name_th FROM amphures ORDER BY name_th  ASC; ");
+              $stmt3->execute();
+              $result3 = $stmt3->fetchAll();
+              foreach ($result3 as $row3) {
+              ?>
+                <option value="<?php echo $row3['amphures_id']; ?>"><?php echo $row3['name_th']; ?></option>
+              <?php }  ?>
+            </select>
+
+            <label class="col-form-label">ตำบล:</label>
+            <input type="text" class="form-control" id="">
+
+            <label class="col-form-label">รหัสไปรษณีย์:</label>
+            <input type="text" class="form-control" id="">
+
+            <label class="form-label">ประเภทบ้าน:</label>
+            <input type="text" class="form-control" id="">
+
+            <label class="col-form-label">ตำแหน่งของบ้าน:</label>
+            <input type="text" class="form-control" id="">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ย้อนกลับ</button>
+          <button type="button" class="btn btn-primary">เพิ่มข้อมูล</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>
