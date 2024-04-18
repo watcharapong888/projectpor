@@ -21,10 +21,6 @@
 <body>
   <?php include 'menu.php';
   require_once 'db.php';
-  if ($_SESSION['user_name'] == '') {
-    header("Location: login.php"); // ทำการ redirect ไปยังหน้า login.php
-    exit; // จบการทำงานของสคริปต์
-  }
   // echo '<pre>';
   // print_r($_POST);
   // echo '</pre>';

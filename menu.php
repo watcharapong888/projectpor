@@ -68,8 +68,7 @@
 <div class="w3-sidebar w3-bar-block w3-card w3-animate-left" style="display:none" id="mySidebar">
   <button class="w3-bar-item w3-button w3-large" onclick="w3_close()">ย้อนกลับ &times;</button>
   <p style="font-size: 15pt;" class="w3-bar-item">สวัสดีผู้ใช้งาน</p>
-  <p class="w3-bar-item" style="color: green;">
-
+  <p class="w3-bar-item" style="color: green;"></p>
   <a href="Index.php" class="w3-bar-item w3-button">หน้าแรก</a>
   <a href="address.php" class="w3-bar-item w3-button">ข้อมูลครัวเรือน</a>
   <a href="data.php" class="w3-bar-item w3-button">ข้อมูลคนในชุมชน</a>
