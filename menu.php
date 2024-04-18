@@ -1,12 +1,12 @@
 <?php session_start();
 // print_r($_SESSION);
-$user_name = $_SESSION['user_name'];
-$user_lname = $_SESSION['user_lname'];
-$user_rank = $_SESSION['user_rank'];
-if ($_SESSION['user_name'] == '' || $_SESSION['user_name'] == null) {
-  header("Location: login.php"); // ทำการ redirect ไปยังหน้า login.php
-  exit; // จบการทำงานของสคริปต์
-}
+// $user_name = $_SESSION['user_name'];
+// $user_lname = $_SESSION['user_lname'];
+// $user_rank = $_SESSION['user_rank'];
+// if ($_SESSION['user_name'] == '' || $_SESSION['user_name'] == null) {
+//   header("Location: login.php"); // ทำการ redirect ไปยังหน้า login.php
+//   exit; // จบการทำงานของสคริปต์
+// }
 ?>
 
 <html lang="en">
@@ -69,11 +69,7 @@ if ($_SESSION['user_name'] == '' || $_SESSION['user_name'] == null) {
   <button class="w3-bar-item w3-button w3-large" onclick="w3_close()">ย้อนกลับ &times;</button>
   <p style="font-size: 15pt;" class="w3-bar-item">สวัสดีผู้ใช้งาน</p>
   <p class="w3-bar-item" style="color: green;">
-    <?php echo $user_name;
-    echo "&nbsp;";
-    echo $user_lname;
-    echo "&nbsp;", '(', $user_rank, ')';
-    ?></p>
+
   <a href="Index.php" class="w3-bar-item w3-button">หน้าแรก</a>
   <a href="address.php" class="w3-bar-item w3-button">ข้อมูลครัวเรือน</a>
   <a href="data.php" class="w3-bar-item w3-button">ข้อมูลคนในชุมชน</a>
