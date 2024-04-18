@@ -3,7 +3,7 @@
 $user_name = $_SESSION['user_name'];
 $user_lname = $_SESSION['user_lname'];
 $user_rank = $_SESSION['user_rank'];
-if ($_SESSION['user_name'] == '') {
+if ($_SESSION['user_name'] == '' || $_SESSION['user_name'] == null) {
   header("Location: login.php"); // ทำการ redirect ไปยังหน้า login.php
   exit; // จบการทำงานของสคริปต์
 }
