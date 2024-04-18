@@ -1,42 +1,100 @@
-<?php session_start(); ?>
+<?php session_start();?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
-  <link rel="stylesheet" href="login.css?v=<?php echo time(); ?>" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <title>เข้าสู่ระบบ</title>
 </head>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&display=swap');
+
+  * {
+    font-family: "IBM Plex Sans Thai", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+  }
+
+  .box {
+    padding: 20px;
+    width: 50vh;
+  }
+</style>
 
 <body>
-  <form action="action_page.php" method="post">
-    <center>
-      <h3>บ้านด่านขุนทดหมู่ที่ 8 </h3>
-    </center>
-    <div class="imgcontainer">
-      <img src="home.png" alt="Avatar" class="avatar">
-    </div>
-
-    <div class="container">
-      <label for="uname"><b>ชื่อผู้ใช้</b></label>
-      <input type="text" placeholder="กรุณาใส่ชื่อผู้ใช้" name="uname" required>
-
-      <label for="psw"><b>รหัสผ่าน</b></label>
-      <input type="password" placeholder="กรุณาใส่รหัสผ่าน" name="psw" required>
-
-      <button type="submit">เข้าสู่ระบบ</button>
-      <label>
-        <input type="checkbox" checked="checked" name="remember"> จดจำฉัน
-      </label>
-    </div>
-
-    <div class="container">
-      <button type="button" class="cancelbtn">กลับไปที่หน้าหลัก</button>
-      <span class="psw">ลืมรหัสผ่าน? <a href="#">เปลี่ยนรหัส</a></span>
-    </div>
-  </form>
+<?php 
+ print_r($_POST);
+?>
+  <div class="container mt-3 box card">
+    <h2>
+      <p>บ้านด่านขุนทดหมู่ที่ 8</p>
+    </h2>
+    <img src="https://thaipublica.org/wp-content/uploads/2020/04/%E0%B8%A7%E0%B8%B4%E0%B8%81%E0%B8%A4%E0%B8%95%E0%B9%82%E0%B8%84%E0%B8%A7%E0%B8%B4%E0%B8%94%E0%B8%8A%E0%B8%B8%E0%B8%A1%E0%B8%8A%E0%B8%99-thaipublica-scaled.jpg" alt="">
+    <form method="post">
+      <div class="mb-3 mt-3">
+        <label for="text">ชื่อผู้ใช้:</label>
+        <input type="text" class="form-control" id="username" placeholder="กรุณาใส่ชื่อผู้ใช้" name="username" required>
+      </div>
+      <div class="mb-3">
+        <label for="pwd">รหัสผ่าน:</label>
+        <input type="password" class="form-control" id="pwd" placeholder="กรุณาใส่รหัสผ่าน" name="password" required>
+      </div>
+      <div class="form-check mb-3">
+        <label class="form-check-label">
+          <input class="form-check-input" type="checkbox" name="remember"> จดจำฉัน
+        </label>
+      </div>
+      <center>
+        <button type="submit" class="btn btn-primary">เข้าสู่ระบบ</button>
+      </center>
+    </form>
+  </div>
+  <center>
+    <br><p>?</p>
+    <a href="Index.php" type="button" class="btn btn-light" style="text-decoration: none;">กลับไปที่หน้าหลัก</a>
+  </center>
 </body>
+<?php
+    if(isset($_POST['username']) && isset($_POST['password']) ){
+    echo '
+    <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert-dev.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css">';
+ 
+    require_once 'db.php';
+    $username = $_POST['username'];
+    $password = $_POST['password']; 
+ 
+      $stmt = $conn->prepare("SELECT * FROM user WHERE user = :username AND password = :password");
+      $stmt->bindParam(':username', $username , PDO::PARAM_STR);
+      $stmt->bindParam(':password', $password , PDO::PARAM_STR);
+      $stmt->execute();
+ 
+      if($stmt->rowCount() == 1){
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $_SESSION['user_id'] = $row['user_id'];
+        $_SESSION['user_name'] = $row['user_name'];
+        $_SESSION['user_lname'] = $row['user_lname'];
+        $_SESSION['user_rank'] = $row['user_rank'];
 
+          header('Location: Index.php'); 
+      }else{ 
+         echo '<script>
+                       setTimeout(function() {
+                        swal({
+                            title: "เกิดข้อผิดพลาด",
+                             text: "Username หรือ Password ไม่ถูกต้อง ลองใหม่อีกครั้ง",
+                            type: "warning"
+                        }, function() {
+                            window.location = "login.php"; //หน้าที่ต้องการให้กระโดดไป
+                        });
+                      }, 1000);
+                  </script>';
+              $conn = null; 
+            } 
+    }
+    ?>
 </html>

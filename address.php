@@ -21,6 +21,10 @@
 <body>
   <?php include 'menu.php';
   require_once 'db.php';
+  if ($_SESSION['user_name'] == '') {
+    header("Location: login.php"); // ทำการ redirect ไปยังหน้า login.php
+    exit; // จบการทำงานของสคริปต์
+  }
   // echo '<pre>';
   // print_r($_POST);
   // echo '</pre>';
@@ -87,7 +91,92 @@
       });
     }, 1000);
   </script>';
-    } //else ของ if result
+    }
+  }
+
+  if (isset($_POST['homeid']) && isset($_POST['homeno']) && isset($_POST['swine']) && isset($_POST['pro']) && isset($_POST['hometype']) && isset($_POST['aph']) && isset($_POST['di'])) {
+    $homeid = $_POST['homeid'];
+    $homeno = $_POST['homeno'];
+    $swine = $_POST['swine'];
+    $pro = $_POST['pro'];
+    $aph = $_POST['aph'];
+    $di = $_POST['di'];
+    $hometype = $_POST['hometype'];
+
+    // SQL update
+    $stmt = $conn->prepare("UPDATE address SET 
+    home_id = :homeid,
+    home_no = :homeno, 
+    swine = :swine,
+    amphure_id = :aph,
+    district_id = :di,
+    province_id = :pro,
+    home_type = :hometype
+    WHERE home_id = :homeid");
+
+    $stmt->bindParam(':homeid', $homeid, PDO::PARAM_INT);
+    $stmt->bindParam(':homeno', $homeno, PDO::PARAM_STR);
+    $stmt->bindParam(':swine', $swine, PDO::PARAM_STR);
+    $stmt->bindParam(':pro', $pro, PDO::PARAM_STR);
+    $stmt->bindParam(':aph', $aph, PDO::PARAM_STR);
+    $stmt->bindParam(':di', $di, PDO::PARAM_STR);
+    $stmt->bindParam(':hometype', $hometype, PDO::PARAM_STR);
+    $stmt->execute();
+
+    if ($stmt->rowCount() >= 0) {
+      echo '<script>
+           setTimeout(function() {
+            swal({
+                title: "แก้ไขข้อมูลสำเร็จ",
+                type: "success"
+            }, function() {
+                window.location = "address.php"; //หน้าที่ต้องการให้กระโดดไป
+            });
+          }, 1000);
+      </script>';
+    } else {
+      echo '<script>
+           setTimeout(function() {
+            swal({
+                title: "เกิดข้อผิดพลาด",
+                type: "error"
+            }, function() {
+                window.location = "address.php"; //หน้าที่ต้องการให้กระโดดไป
+            });
+          }, 1000);
+      </script>';
+    }
+    $conn = null; //close connect db
+  } //isset
+  if (@isset($_GET['delete_id'])) {
+    $id = $_GET['delete_id'];
+    $stmt = $conn->prepare('DELETE FROM address WHERE home_id=:id');
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    if ($stmt->rowCount() == 1) {
+      echo '<script>
+           setTimeout(function() {
+            swal({
+                title: "ลบข้อมูลสำเร็จ",
+                type: "success"
+            }, function() {
+                window.location = "address.php"; //หน้าที่ต้องการให้กระโดดไป
+            });
+          }, 1000);
+      </script>';
+    } else {
+      echo '<script>
+           setTimeout(function() {
+            swal({
+                title: "เกิดข้อผิดพลาด",
+                type: "error"
+            }, function() {
+                window.location = "address.php"; //หน้าที่ต้องการให้กระโดดไป
+            });
+          }, 1000);
+      </script>';
+    }
+    $conn = null;
   } //isset
   ?>
   <br>
@@ -239,10 +328,37 @@
                     <td><?php echo $row['di']; ?></td>
                     <td><?php echo $row['pro']; ?></td>
                     <td><?php echo $row['home_type']; ?></td>
-                    <td><button type="button" class="btn btn-success">ดูข้อมูล</button></td>
+                    <td><a href="show-address.php?home_id=<?php echo $row['home_id']; ?>&home_no=<?php echo $row['home_no']; ?>&swine=<?php echo $row['swine']; ?>&aph=<?php echo $row['aph']; ?>&di=<?php echo $row['di']; ?>&pro=<?php echo $row['pro']; ?>&home_type=<?php echo $row['home_type']; ?>" class="btn btn-success">ดูข้อมูล</a></td>
                     <td><button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#myModal<?php echo $row['home_id']; ?>">แก้ไขข้อมูล</button></td>
-                    <td> <a href="javascript:void(0)" class="btn btn-danger delete" data-id="<?php echo $array[0]; ?>">ลบข้อมูล</a></td>
+                    <td> <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Modaldeletel<?php echo $row['home_id']; ?>">
+                        ลบข้อมูล
+                      </button></td>
                   </tr>
+                  <div class="modal fade" id="Modaldeletel<?php echo $row['home_id']; ?>">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                          <b class="modal-title">ลบข้อมูลหรือไม่</b>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                          หากลบข้อมูลแล้วจะไม่สามารถย้อนคืนได้
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                          <a href="address.php?delete_id=<?php echo $row['home_id']; ?>" class="btn btn-danger">ลบข้อมูล</a>
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ย้อนกลับ</button>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
                   <div class="modal fade" id="myModal<?php echo $row['home_id']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-scrollable">
                       <div class="modal-content">
@@ -253,18 +369,18 @@
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                          <form>
+                          <form action="address.php" method="post">
                             <label class="col-form-label">รหัสบ้าน:</label>
-                            <input type="text" class="form-control" id="" value="<?php echo $row['home_id']; ?>">
+                            <input type="text" class="form-control" id="" name="homeid" value="<?php echo $row['home_id']; ?>">
 
                             <label class="col-form-label">บ้านเลขที่:</label>
-                            <input type="text" class="form-control" id="" value="<?php echo $row['home_no']; ?>">
+                            <input type="text" class="form-control" id="" name="homeno" value="<?php echo $row['home_no']; ?>">
 
                             <label class="col-form-label">หมู่:</label>
-                            <input type="text" class="form-control" id="" value="<?php echo $row['swine']; ?>">
+                            <input type="text" class="form-control" id="" name="swine" value="<?php echo $row['swine']; ?>">
 
                             <label class="col-form-label">จังหวัด:</label>
-                            <select class="form-select" id="inputGroupSelect01">
+                            <select name="pro" class="form-select" id="inputGroupSelect01" required>
                               <option selected value="<?php echo $row['provinceId']; ?>"><?php echo $row['pro']; ?></option>
                               <?php $stmt2 = $conn->prepare("SELECT  * FROM provinces ORDER BY name_th  ASC; ");
                               $stmt2->execute();
@@ -276,7 +392,7 @@
                             </select>
 
                             <label class="col-form-label">อำเภอ:</label>
-                            <select class="form-select" id="inputGroupSelect01">
+                            <select name="aph" class="form-select" id="inputGroupSelect01" required>
                               <option selected value="<?php echo $row['amphureId']; ?>"><?php echo $row['aph']; ?></option>
                               <?php $stmt3 = $conn->prepare("SELECT  amphure_id,name_th FROM amphures ORDER BY name_th  ASC; ");
                               $stmt3->execute();
@@ -288,7 +404,7 @@
                             </select>
 
                             <label class="col-form-label">ตำบล:</label>
-                            <select class="form-select" id="inputGroupSelect01">
+                            <select name="di" class="form-select" id="inputGroupSelect01" required>
                               <option selected value="<?php echo $row['districtId']; ?>"><?php echo $row['di']; ?></option>
                               <?php $stmt4 = $conn->prepare("SELECT  district_id ,name_th FROM districts ORDER BY name_th  ASC; ");
                               $stmt4->execute();
@@ -300,26 +416,26 @@
                             </select>
 
                             <label class="col-form-label">รหัสไปรษณีย์:</label>
-                            <input type="text" class="form-control" id="">
+                            <input type="text" class="form-control" id="" name="">
 
                             <label class="form-label">ประเภทบ้าน:</label>
-                            <select name="home_type" class="form-select" id="inputGroupSelect01" required>
+                            <select name="hometype" class="form-select" id="inputGroupSelect01" required>
                               <option selected value="<?php echo $row['home_type']; ?>"><?php echo $row['home_type']; ?></option>
                               <option>บ้านส่วนตัว</option>
                               <option>บ้านเช่า</option>
                             </select>
-
                             <label class="col-form-label">ตำแหน่งของบ้าน:</label>
-                            <input type="text" class="form-control" id="">
-                          </form>
+                            <input type="text" class="form-control" name="" id="">
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ย้อนกลับ</button>
-                          <button type="button" class="btn btn-primary">เพิ่มข้อมูล</button>
+                          <button type="submit" class="btn btn-primary">แก้ไขข้อมูล</button>
                         </div>
+                        </form>
                       </div>
                     </div>
                   </div>
+
                 <?php $i++;
                 }
               } else { ?>
