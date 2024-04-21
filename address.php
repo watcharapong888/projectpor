@@ -89,61 +89,90 @@
   </script>';
     }
   }
+  if (isset($_GET['act']) && $_GET['act'] === 'edit') {
+    if (
+        isset($_POST['homeid']) && isset($_POST['homeno']) && isset($_POST['swine']) &&
+        isset($_POST['pro']) && isset($_POST['aph']) && isset($_POST['di']) && isset($_POST['hometype'])
+    ) {
+        $homeid = $_POST['homeid'];
+        $homeno = $_POST['homeno'];
+        $swine = $_POST['swine'];
+        $pro = $_POST['pro'];
+        $aph = $_POST['aph'];
+        $di = $_POST['di'];
+        $hometype = $_POST['hometype'];
 
-  if (isset($_GET['act'] )) {
-    $homeid = $_POST['homeid'];
-    $homeno = $_POST['homeno'];
-    $swine = $_POST['swine'];
-    $pro = $_POST['pro'];
-    $aph = $_POST['aph'];
-    $di = $_POST['di'];
-    $hometype = $_POST['hometype'];
+        // SQL update
+        $stmt = $conn->prepare("UPDATE address SET 
+        home_no = :homeno, 
+        swine = :swine,
+        amphure_id = :aph,
+        district_id = :di,
+        province_id = :pro,
+        home_type = :hometype
+        WHERE home_id = :homeid");
 
-    // SQL update
-    $stmt = $conn->prepare("UPDATE address SET 
-    home_id = :homeid,
-    home_no = :homeno, 
-    swine = :swine,
-    amphure_id = :aph,
-    district_id = :di,
-    province_id = :pro,
-    home_type = :hometype
-    WHERE home_id = :homeid");
-
-    $stmt->bindParam(':homeid', $homeid, PDO::PARAM_INT);
-    $stmt->bindParam(':homeno', $homeno, PDO::PARAM_STR);
-    $stmt->bindParam(':swine', $swine, PDO::PARAM_STR);
-    $stmt->bindParam(':pro', $pro, PDO::PARAM_STR);
-    $stmt->bindParam(':aph', $aph, PDO::PARAM_STR);
-    $stmt->bindParam(':di', $di, PDO::PARAM_STR);
-    $stmt->bindParam(':hometype', $hometype, PDO::PARAM_STR);
-    $stmt->execute();
-
-    if ($stmt->rowCount() >= 0) {
-      echo '<script>
-           setTimeout(function() {
-            swal({
-                title: "แก้ไขข้อมูลสำเร็จ",
-                type: "success"
-            }, function() {
-                window.location = "address.php"; //หน้าที่ต้องการให้กระโดดไป
-            });
-          }, 1000);
-      </script>';
+        $stmt->bindParam(':homeid', $homeid, PDO::PARAM_INT);
+        $stmt->bindParam(':homeno', $homeno, PDO::PARAM_STR);
+        $stmt->bindParam(':swine', $swine, PDO::PARAM_STR);
+        $stmt->bindParam(':pro', $pro, PDO::PARAM_STR);
+        $stmt->bindParam(':aph', $aph, PDO::PARAM_STR);
+        $stmt->bindParam(':di', $di, PDO::PARAM_STR);
+        $stmt->bindParam(':hometype', $hometype, PDO::PARAM_STR);
+        
+        try {
+            $stmt->execute();
+            
+            if ($stmt->rowCount() > 0) {
+                echo '<script>
+                     setTimeout(function() {
+                      swal({
+                          title: "แก้ไขข้อมูลสำเร็จ",
+                          type: "success"
+                      }, function() {
+                          window.location = "address.php"; //หน้าที่ต้องการให้กระโดดไป
+                      });
+                    }, 1000);
+                </script>';
+            } else {
+                echo '<script>
+                     setTimeout(function() {
+                      swal({
+                          title: "ไม่มีการเปลี่ยนแปลงข้อมูล",
+                          type: "info"
+                      }, function() {
+                          window.location = "address.php"; //หน้าที่ต้องการให้กระโดดไป
+                      });
+                    }, 1000);
+                </script>';
+            }
+        } catch (PDOException $e) {
+            echo '<script>
+                 setTimeout(function() {
+                  swal({
+                      title: "เกิดข้อผิดพลาด",
+                      text: "' . $e->getMessage() . '",
+                      type: "error"
+                  }, function() {
+                      window.location = "address.php"; //หน้าที่ต้องการให้กระโดดไป
+                  });
+                }, 1000);
+            </script>';
+        }
     } else {
-      echo '<script>
-           setTimeout(function() {
-            swal({
-                title: "เกิดข้อผิดพลาด",
-                type: "error"
-            }, function() {
-                window.location = "address.php"; //หน้าที่ต้องการให้กระโดดไป
-            });
-          }, 1000);
-      </script>';
+        echo '<script>
+             setTimeout(function() {
+              swal({
+                  title: "ข้อมูลไม่ครบถ้วน",
+                  type: "error"
+              }, function() {
+                  window.location = "address.php"; //หน้าที่ต้องการให้กระโดดไป
+              });
+            }, 1000);
+        </script>';
     }
-    $conn = null; //close connect db
-  } //isset
+}
+
   if (@isset($_GET['delete_id'])) {
     $id = $_GET['delete_id'];
     $stmt = $conn->prepare('DELETE FROM address WHERE home_id=:id');
