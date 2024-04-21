@@ -21,9 +21,9 @@
 <body>
   <?php include 'menu.php';
   require_once 'db.php';
-  // echo '<pre>';
-  // print_r($_POST);
-  // echo '</pre>';
+  echo '<pre>';
+  print_r($_POST);
+  echo '</pre>';
   // exit();
   //ตรวจสอบตัวแปรที่ส่งมาจากฟอร์ม
   if (isset($_POST['home_id']) != null && isset($_POST['home_no']) != null && isset($_POST['swine']) != null) {
@@ -90,7 +90,7 @@
     }
   }
 
-  if (isset($_POST['homeid']) && isset($_POST['homeno']) && isset($_POST['swine']) && isset($_POST['pro']) && isset($_POST['hometype']) && isset($_POST['aph']) && isset($_POST['di'])) {
+  if (isset($_GET['act'] )) {
     $homeid = $_POST['homeid'];
     $homeno = $_POST['homeno'];
     $swine = $_POST['swine'];
@@ -365,7 +365,7 @@
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                          <form action="address.php" method="post">
+                          <form action="address.php?act=edit" method="post">
                             <label class="col-form-label">รหัสบ้าน:</label>
                             <input type="text" class="form-control" id="" name="homeid" value="<?php echo $row['home_id']; ?>">
 
