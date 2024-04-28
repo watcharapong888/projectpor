@@ -32,7 +32,7 @@
     <h2>
       <p>บ้านด่านขุนทดหมู่ที่ 8</p>
     </h2>
-    <img src="https://thaipublica.org/wp-content/uploads/2020/04/%E0%B8%A7%E0%B8%B4%E0%B8%81%E0%B8%A4%E0%B8%95%E0%B9%82%E0%B8%84%E0%B8%A7%E0%B8%B4%E0%B8%94%E0%B8%8A%E0%B8%B8%E0%B8%A1%E0%B8%8A%E0%B8%99-thaipublica-scaled.jpg" alt="">
+    <img src="img/bg-login.jpg" alt="">
     <form method="post">
       <div class="mb-3 mt-3">
         <label for="text">ชื่อผู้ใช้:</label>

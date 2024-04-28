@@ -235,7 +235,7 @@
               <div class="col">
                 <label class="col-form-label">จังหวัด:</label>
                 <select name="province_id" class="form-select" id="inputGroupSelect01" required>
-                  <option selected>กรุณาเลือกจังหวัด</option>
+                  <option selected disabled>กรุณาเลือกจังหวัด</option>
                   <?php $stmt2 = $conn->prepare("SELECT  * FROM provinces ORDER BY name_th  ASC; ");
                   $stmt2->execute();
                   $result2 = $stmt2->fetchAll();
@@ -248,7 +248,7 @@
               <div class="col">
                 <label class="col-form-label">อำเภอ:</label>
                 <select name="amphure_id" class="form-select" id="inputGroupSelect01" required>
-                  <option selected>กรุณาเลือกอำเภอ</option>
+                  <option selected disabled>กรุณาเลือกอำเภอ</option>
                   <?php $stmt3 = $conn->prepare("SELECT  amphure_id,name_th FROM amphures ORDER BY name_th  ASC; ");
                   $stmt3->execute();
                   $result3 = $stmt3->fetchAll();
@@ -261,7 +261,7 @@
               <div class="col">
                 <label class="col-form-label">ตำบล:</label>
                 <select name="district_id" class="form-select" id="inputGroupSelect01" required>
-                  <option selected>กรุณาเลือกอำเภอ</option>
+                  <option selected disabled>กรุณาเลือกอำเภอ</option>
                   <?php $stmt3 = $conn->prepare("SELECT  * FROM districts ORDER BY name_th  ASC; ");
                   $stmt3->execute();
                   $result3 = $stmt3->fetchAll();
@@ -280,6 +280,7 @@
               <div class="col">
                 <label class="col-form-label">ประเภทบ้าน:</label>
                 <select name="home_type" class="form-select" id="inputGroupSelect01" required>
+                  <option selected disabled>กรุณาเลือกประเภทบ้าน</option>
                   <option>บ้านส่วนตัว</option>
                   <option>บ้านเช่า</option>
                 </select>
