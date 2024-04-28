@@ -324,6 +324,7 @@
                    aph.name_th as aph,
                    di.name_th as di,
                    pro.name_th as pro,
+                   ad.location,
                    ad.home_type ,
                    pro.province_id as provinceId ,
                    aph.amphure_id as amphureId ,
@@ -354,7 +355,7 @@
                     <td><?php echo $row['di']; ?></td>
                     <td><?php echo $row['pro']; ?></td>
                     <td><?php echo $row['home_type']; ?></td>
-                    <td><a href="show-address.php?home_id=<?php echo $row['home_id']; ?>&home_no=<?php echo $row['home_no']; ?>&swine=<?php echo $row['swine']; ?>&aph=<?php echo $row['aph']; ?>&di=<?php echo $row['di']; ?>&pro=<?php echo $row['pro']; ?>&home_type=<?php echo $row['home_type']; ?>" class="btn btn-success">ดูข้อมูล</a></td>
+                    <td><a href="show-address.php?home_id=<?php echo $row['home_id']; ?>&home_no=<?php echo $row['home_no']; ?>&swine=<?php echo $row['swine']; ?>&aph=<?php echo $row['aph']; ?>&di=<?php echo $row['di']; ?>&pro=<?php echo $row['pro']; ?>&location=<?php echo urlencode($row['location']); ?>&home_type=<?php echo $row['home_type']; ?>" class="btn btn-success">ดูข้อมูล</a></td>
                     <td><button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#myModal<?php echo $row['home_id']; ?>">แก้ไขข้อมูล</button></td>
                     <td> <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Modaldeletel<?php echo $row['home_id']; ?>">
                         ลบข้อมูล

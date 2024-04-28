@@ -45,11 +45,13 @@
   // exit();
   //ตรวจสอบตัวแปรที่ส่งมาจากฟอร์ม
   if (isset($_POST['card_id']) && $_GET['act'] === 'add') {
-    //ไฟล์เชื่อมต่อฐานข้อมูล
-    //sql insert
+    $disease_ids = $_POST['disease_id']; 
+    $disease_id = implode(',', $disease_ids);
+    $m_rank = 4 ;
+    $stay = 41 ;
+    $user_id = 1;
     $stmt = $conn->prepare("INSERT INTO data
   (
-    id,
     prefix_id,
     name,
     lastname,
@@ -60,11 +62,20 @@
     disease_id,
     place,
     handicap,
-    tel
+    tel,
+    home_id,
+    home_no,
+    swine,
+    amphure_id,
+    district_id,
+    province_id,
+    m_rank,
+    stay,
+    user_id,
+    id_card
   )
   VALUES
   (
-  :card_id,
   :prefix_id,
   :fname,
   :lname,
@@ -72,27 +83,46 @@
   :sex,
   :status,
   :occupation,
-  :disease,
+  :disease_id,
   :place,
   :handicap,
-  :tel
+  :tel,
+  :home_id,
+  :home_no,
+  :swine,
+  :amphure_id,
+  :district_id,
+  :province_id,
+  :m_rank,
+  :stay,
+  :user_id,
+  :card_id
   )
 ");
-
-    $stmt->bindParam(':card_id', $_POST['card_id'], PDO::PARAM_STR);
-    $stmt->bindParam(':prefix_id', $_POST['prefix_id'], PDO::PARAM_STR);
-    $stmt->bindParam(':fname', $_POST['fname'], PDO::PARAM_STR);
-    $stmt->bindParam(':lname', $_POST['lname'], PDO::PARAM_STR);
-    $stmt->bindParam(':bdate', $_POST['bdate'], PDO::PARAM_STR);
-    $stmt->bindParam(':sex', $_POST['sex'], PDO::PARAM_STR);
-    $stmt->bindParam(':status', $_POST['status'], PDO::PARAM_STR);
-    $stmt->bindParam(':occupation', $_POST['occupation'], PDO::PARAM_STR);
-    $stmt->bindParam(':disease', $_POST['disease'], PDO::PARAM_STR);
-    $stmt->bindParam(':place', $_POST['place'], PDO::PARAM_STR);
-    $stmt->bindParam(':handicap', $_POST['handicap'], PDO::PARAM_STR);
-    $stmt->bindParam(':tel', $_POST['tel'], PDO::PARAM_STR);
-
-    $result = $stmt->execute();
+      
+      $stmt->bindParam(':prefix_id', $_POST['prefix_id'], PDO::PARAM_STR);
+      $stmt->bindParam(':fname', $_POST['fname'], PDO::PARAM_STR);
+      $stmt->bindParam(':lname', $_POST['lname'], PDO::PARAM_STR);
+      $stmt->bindParam(':bdate', $_POST['bdate'], PDO::PARAM_STR);
+      $stmt->bindParam(':sex', $_POST['sex'], PDO::PARAM_STR);
+      $stmt->bindParam(':status', $_POST['status'], PDO::PARAM_STR);
+      $stmt->bindParam(':occupation', $_POST['occupation'], PDO::PARAM_STR);
+      $stmt->bindParam(':disease_id', $disease_id, PDO::PARAM_STR);
+      $stmt->bindParam(':place', $_POST['place'], PDO::PARAM_STR);
+      $stmt->bindParam(':handicap', $_POST['handicap'], PDO::PARAM_STR);
+      $stmt->bindParam(':tel', $_POST['tel'], PDO::PARAM_STR);
+      $stmt->bindParam(':home_id', $_POST['home_id'], PDO::PARAM_STR);
+      $stmt->bindParam(':home_no', $_POST['home_no'], PDO::PARAM_STR);
+      $stmt->bindParam(':swine', $_POST['swine'], PDO::PARAM_STR);
+      $stmt->bindParam(':amphure_id', $_POST['amphure_id'], PDO::PARAM_STR);
+      $stmt->bindParam(':district_id', $_POST['district_id'], PDO::PARAM_STR);
+      $stmt->bindParam(':province_id', $_POST['province_id'], PDO::PARAM_STR);
+      $stmt->bindParam(':m_rank', $m_rank, PDO::PARAM_INT);
+      $stmt->bindParam(':stay', $stay, PDO::PARAM_INT);
+      $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+      $stmt->bindParam(':card_id', $_POST['card_id'], PDO::PARAM_STR);
+      
+      $result = $stmt->execute();
     $conn = null; // ปิดการเชื่อมต่อกับฐานข้อมูล
 
     if ($result) {
@@ -102,7 +132,7 @@
       title: "เพิ่มข้อมูลสำเร็จ",
       type: "success"
       }, function() {
-      window.location = "address.php"; //หน้าที่ต้องการให้กระโดดไป
+      window.location = "data.php"; //หน้าที่ต้องการให้กระโดดไป
       });
     }, 1000);
   </script>';
@@ -113,7 +143,7 @@
       title: "เกิดข้อผิดพลาด",
       type: "error"
       }, function() {
-      window.location = "address.php"; //หน้าที่ต้องการให้กระโดดไป
+      window.location = "data.php"; //หน้าที่ต้องการให้กระโดดไป
       });
     }, 1000);
   </script>';
@@ -160,7 +190,7 @@
                           title: "แก้ไขข้อมูลสำเร็จ",
                           type: "success"
                       }, function() {
-                          window.location = "address.php"; //หน้าที่ต้องการให้กระโดดไป
+                          window.location = "data.php"; //หน้าที่ต้องการให้กระโดดไป
                       });
                     }, 1000);
                 </script>';
@@ -171,7 +201,7 @@
                           title: "ไม่มีการเปลี่ยนแปลงข้อมูล",
                           type: "info"
                       }, function() {
-                          window.location = "address.php"; //หน้าที่ต้องการให้กระโดดไป
+                          window.location = "data.php"; //หน้าที่ต้องการให้กระโดดไป
                       });
                     }, 1000);
                 </script>';
@@ -184,7 +214,7 @@
                       text: "' . $e->getMessage() . '",
                       type: "error"
                   }, function() {
-                      window.location = "address.php"; //หน้าที่ต้องการให้กระโดดไป
+                      window.location = "data.php"; //หน้าที่ต้องการให้กระโดดไป
                   });
                 }, 1000);
             </script>';
@@ -196,7 +226,7 @@
                   title: "ข้อมูลไม่ครบถ้วน",
                   type: "error"
               }, function() {
-                  window.location = "address.php"; //หน้าที่ต้องการให้กระโดดไป
+                  window.location = "data.php"; //หน้าที่ต้องการให้กระโดดไป
               });
             }, 1000);
         </script>';
@@ -322,8 +352,8 @@
                   ?>
                     <div class="form-check">
                       <div>
-                        <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something">
-                        <label class="form-check-label"><?php echo $row2['disease']; ?></label>
+                        <input class="form-check-input" type="checkbox" id="check1" name="disease_id[]" value="<?php echo $row2['disease_id'] ?? ''; ?>">
+                        <label class="form-check-label" style="font-weight:400;"><?php echo $row2['disease']; ?></label>
                       </div>
                     </div>
                   <?php } ?>
@@ -355,8 +385,15 @@
             <div class="row">
               <div class="col">
                 <label class="col-form-label">รหัสบ้านตามทะเบียนบ้าน:</label>
-                <select name="handicap" class="fstdropdown-select" id="inputGroupSelect01" required>
+                <select name="home_id" class="fstdropdown-select" id="inputGroupSelect01" required>
                   <option selected disabled>--กรุณาเลือก--</option>
+                  <?php $stmt3 = $conn->prepare("SELECT  * FROM address ORDER BY home_id  ASC; ");
+                  $stmt3->execute();
+                  $result3 = $stmt3->fetchAll();
+                  foreach ($result3 as $row3) {
+                  ?>
+                    <option value="<?php echo $row3['home_id']; ?>"><?php echo $row3['home_id']; ?></option>
+                  <?php } ?>
                 </select>
               </div>
             </div> <br>
@@ -380,24 +417,43 @@
             <div class="row">
               <div class="col">
                 <label class="col-form-label">จังหวัด:</label>
-                <select name="province_id" class="form-select" id="inputGroupSelect01" required>
+                <select name="province_id" class="fstdropdown-select" id="select_box" required>
                   <option selected disabled>กรุณาเลือกจังหวัด</option>
-
+                  <?php $stmt2 = $conn->prepare("SELECT  * FROM provinces ORDER BY name_th  ASC; ");
+                  $stmt2->execute();
+                  $result2 = $stmt2->fetchAll();
+                  foreach ($result2 as $row2) {
+                  ?>
+                    <option value="<?php echo $row2['province_id']; ?>"><?php echo $row2['name_th']; ?></option>
+                  <?php } ?>
                 </select>
               </div>
               <div class="col">
                 <label class="col-form-label">อำเภอ:</label>
-                <select name="amphure_id" class="form-select" id="inputGroupSelect01" required>
+                <select name="amphure_id" class="fstdropdown-select" id="select_box" required>
                   <option selected disabled>กรุณาเลือกอำเภอ</option>
+                  <?php $stmt3 = $conn->prepare("SELECT  amphure_id,name_th FROM amphures ORDER BY name_th  ASC; ");
+                  $stmt3->execute();
+                  $result3 = $stmt3->fetchAll();
+                  foreach ($result3 as $row3) {
+                  ?>
+                    <option value="<?php echo $row3['amphure_id']; ?>"><?php echo $row3['name_th']; ?></option>
+                  <?php }  ?>
                 </select>
               </div>
             </div>
             <div class="row">
               <div class="col">
                 <label class="col-form-label">ตำบล:</label>
-                <select name="district_id" class="form-select" id="inputGroupSelect01" required>
-                  <option selected disabled>กรุณาเลือกอำเภอ</option>
-
+                <select name="district_id" class="fstdropdown-select" id="select_box" required>
+                  <option selected disabled>กรุณาเลือกตำบล</option>
+                  <?php $stmt4 = $conn->prepare("SELECT  district_id ,name_th FROM districts ORDER BY name_th  ASC; ");
+                  $stmt4->execute();
+                  $result4 = $stmt4->fetchAll();
+                  foreach ($result4 as $row4) {
+                  ?>
+                    <option value="<?php echo $row4['district_id']; ?>"><?php echo $row4['name_th']; ?></option>
+                  <?php }  ?>
                 </select>
               </div>
               <div class="col">
@@ -459,7 +515,8 @@
                 pro.name_th as pro, 
                 m_rank, 
                 stay, 
-                us.user_name as user_name
+                us.user_name as user_name,
+                id_card
                 FROM data as dt 
                 JOIN 
                 prefix AS pr ON dt.prefix_id = pr.prefix_id
@@ -486,7 +543,7 @@
               ?>
                   <tr>
                     <td><?php echo $i; ?></td>
-                    <td><?php echo $row['id']; ?></td>
+                    <td><?php echo $row['id_card']; ?></td>
                     <td><?php echo $row['prefix']; ?></td>
                     <td><?php echo $row['name']; ?></td>
                     <td><?php echo $row['lastname']; ?></td>
