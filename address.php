@@ -411,13 +411,13 @@
                             <label class="col-form-label">รหัสบ้าน:<span class="required-star">*</span></label>
                             <input type="text" class="form-control" id="" name="id_home" value="<?php echo $row['id_home']; ?>">
 
-                            <label class="col-form-label">บ้านเลขที่:</label>
+                            <label class="col-form-label">บ้านเลขที่:<span class="required-star">*</span></label>
                             <input type="text" class="form-control" id="" name="homeno" value="<?php echo $row['home_no']; ?>">
 
-                            <label class="col-form-label">หมู่:</label>
+                            <label class="col-form-label">หมู่:<span class="required-star">*</span></label>
                             <input type="text" class="form-control" id="" name="swine" value="<?php echo $row['swine']; ?>">
 
-                            <label class="col-form-label">จังหวัด:</label>
+                            <label class="col-form-label">จังหวัด:<span class="required-star">*</span></label>
                             <select name="pro" class="form-select" id="inputGroupSelect01" required>
                               <option selected value="<?php echo $row['provinceId']; ?>"><?php echo $row['pro']; ?></option>
                               <?php $stmt2 = $conn->prepare("SELECT  * FROM provinces ORDER BY name_th  ASC; ");
@@ -429,7 +429,7 @@
                               <?php } ?>
                             </select>
 
-                            <label class="col-form-label">อำเภอ:</label>
+                            <label class="col-form-label">อำเภอ:<span class="required-star">*</span></label>
                             <select name="aph" class="form-select" id="inputGroupSelect01" required>
                               <option selected value="<?php echo $row['amphureId']; ?>"><?php echo $row['aph']; ?></option>
                               <?php $stmt3 = $conn->prepare("SELECT  amphure_id,name_th FROM amphures ORDER BY name_th  ASC; ");
@@ -441,7 +441,7 @@
                               <?php }  ?>
                             </select>
 
-                            <label class="col-form-label">ตำบล:</label>
+                            <label class="col-form-label">ตำบล:<span class="required-star">*</span></label>
                             <select name="di" class="form-select" id="inputGroupSelect01" required>
                               <option selected value="<?php echo $row['districtId']; ?>"><?php echo $row['di']; ?></option>
                               <?php $stmt4 = $conn->prepare("SELECT  district_id ,name_th FROM districts ORDER BY name_th  ASC; ");
@@ -452,13 +452,14 @@
                                 <option value="<?php echo $row4['district_id']; ?>"><?php echo $row4['name_th']; ?></option>
                               <?php }  ?>
                             </select>
-                            <label class="form-label">ประเภทบ้าน:</label>
+                            <label class="form-label">ประเภทบ้าน:<span class="required-star">*</span></label>
                             <select name="hometype" class="form-select" id="inputGroupSelect01" required>
                               <option selected value="<?php echo $row['home_type']; ?>"><?php echo $row['home_type']; ?></option>
                               <option>บ้านส่วนตัว</option>
                               <option>บ้านเช่า</option>
                             </select>
-                            <label class="col-form-label">ตำแหน่งของบ้าน:</label>
+                            <label class="col-form-label">ตำแหน่งของบ้าน:<span class="required-star">*</span></label>
+                            <a href="https://www.google.com/maps" target="_blank">ดูบน Google Maps</a></label>
                             <textarea class="form-control" rows="5" id="comment" name="location"><?php echo $row['location']; ?></textarea>
                         </div>
                         <div class="modal-footer">
