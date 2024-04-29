@@ -13,6 +13,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -55,16 +57,10 @@
     justify-content: space-between;
   }
 
-  .btn-login a {
-    justify-content: center;
-    display: flex;
-    align-items: center;
-    width: 100px;
-    height: 50px;
-    background-color: blue;
-    text-decoration: none;
+  #login {
+    width: 50px;
     color: white;
-    border-radius: 40PX;
+    font-size: 30pt;
   }
 </style>
 <div class="w3-sidebar w3-bar-block w3-card w3-animate-left" style="display:none" id="mySidebar">
@@ -89,7 +85,7 @@
           <a>ระบบจัดการข้อมูลคนในชุมชน</a>
         </h4>
       </div>
-      <div class="btn-login"><a href="login.php">เข้าสู่ระบบ</a></div>
+        <a href="login.php"><span class="material-symbols-outlined" id="login">login </span></a>
     </div>
   </div>
 

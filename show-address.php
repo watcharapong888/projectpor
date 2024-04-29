@@ -50,7 +50,7 @@
     <div class="menushow">
         <?php
         // ตรวจสอบว่ามีค่า home_id และ home_no ที่ส่งมาจาก URL หรือไม่
-        if (isset($_GET['home_id']) && isset($_GET['home_no']) && isset($_GET['swine']) && isset($_GET['aph']) && isset($_GET['di']) && isset($_GET['pro']) && isset($_GET['location']) && isset($_GET['home_type'])) {
+        if (isset($_GET['home_id']) && isset($_GET['home_no']) && isset($_GET['swine']) && isset($_GET['aph']) && isset($_GET['di']) && isset($_GET['pro']) && isset($_GET['location'])&& isset($_GET['zip_code']) && isset($_GET['home_type'])) {
             // ถ้ามีค่า ให้กำหนดค่าให้กับตัวแปร $home_id และ $home_no
             $home_id = $_GET['home_id'];
             $home_no = $_GET['home_no'];
@@ -59,6 +59,7 @@
             $di = $_GET['di'];
             $pro = $_GET['pro'];
             $location = $_GET['location'];
+            $zip_code = $_GET['zip_code'];
             $home_type = $_GET['home_type'];
         ?>
             <p style="font-size: 15pt;">ข้อมูลครัวเรือน</p>
@@ -98,12 +99,14 @@
                                 </td>
                             </tr>
                             <tr>
+                                <td class="table-light">รหัสไปรษณีย์:</td>
+                                <td>
+                                    <p style="font-weight:400;"> <?php echo $zip_code ?></p>
+                                </td>
                                 <td class="table-light">ประเภทบ้าน:</td>
                                 <td>
                                     <p style="font-weight:400;"> <?php echo $home_type ?></p>
                                 </td>
-                                <td></td>
-                                <td></td>
                             </tr>
                         </tbody>
                     </table>

@@ -24,9 +24,9 @@
 <body>
   <?php include 'menu.php';
   require_once 'db.php';
-  echo '<pre>';
-  print_r($_POST);
-  echo '</pre>';
+  // echo '<pre>';
+  // print_r($_POST);
+  // echo '</pre>';
   // exit();
   //ตรวจสอบตัวแปรที่ส่งมาจากฟอร์ม
   if (isset($_POST['home_id']) != null && isset($_POST['home_no']) != null && isset($_POST['swine']) != null) {
@@ -34,25 +34,25 @@
     //sql insert
     $stmt = $conn->prepare("INSERT INTO address
   (
-    home_id,
     home_no,
     swine,
     amphure_id,
     district_id,
     province_id,
     location,
-    home_type
+    home_type,
+    id_home
   )
   VALUES
   (
-  :home_id,
   :home_no,
   :swine,
   :amphure_id,
   :district_id, 
   :province_id,
   :location,
-  :home_type
+  :home_type,
+  :home_id
   )
 ");
 
@@ -94,34 +94,40 @@
   }
   if (isset($_GET['act']) && $_GET['act'] === 'edit') {
     if (
-        isset($_POST['homeid']) && isset($_POST['homeno']) && isset($_POST['swine']) &&
-        isset($_POST['pro']) && isset($_POST['aph']) && isset($_POST['di']) && isset($_POST['hometype'])
+        isset($_POST['homeid']) && isset($_POST['homeno'])&& isset($_POST['id_home']) && isset($_POST['swine']) &&
+        isset($_POST['pro']) && isset($_POST['aph']) && isset($_POST['di']) && isset($_POST['hometype'])&& isset($_POST['location'])
     ) {
         $homeid = $_POST['homeid'];
+        $id_home = $_POST['id_home'];
         $homeno = $_POST['homeno'];
         $swine = $_POST['swine'];
         $pro = $_POST['pro'];
         $aph = $_POST['aph'];
         $di = $_POST['di'];
         $hometype = $_POST['hometype'];
+        $location = $_POST['location'];
 
         // SQL update
         $stmt = $conn->prepare("UPDATE address SET 
         home_no = :homeno, 
+        id_home = :id_home, 
         swine = :swine,
         amphure_id = :aph,
         district_id = :di,
         province_id = :pro,
-        home_type = :hometype
+        home_type = :hometype,
+        location = :location
         WHERE home_id = :homeid");
 
         $stmt->bindParam(':homeid', $homeid, PDO::PARAM_INT);
+        $stmt->bindParam(':id_home', $id_home, PDO::PARAM_INT);
         $stmt->bindParam(':homeno', $homeno, PDO::PARAM_STR);
         $stmt->bindParam(':swine', $swine, PDO::PARAM_STR);
         $stmt->bindParam(':pro', $pro, PDO::PARAM_STR);
         $stmt->bindParam(':aph', $aph, PDO::PARAM_STR);
         $stmt->bindParam(':di', $di, PDO::PARAM_STR);
         $stmt->bindParam(':hometype', $hometype, PDO::PARAM_STR);
+        $stmt->bindParam(':location', $location, PDO::PARAM_STR);
         
         try {
             $stmt->execute();
@@ -237,7 +243,7 @@
             <div class="row">
               <div class="col">
                 <label class="col-form-label">จังหวัด:<span class="required-star">*</span></label>
-                <select name="province_id" class="form-select" id="inputGroupSelect01" required>
+                <select name="province_id" class="fstdropdown-select" id="select_box" required>
                   <option selected disabled>กรุณาเลือกจังหวัด</option>
                   <?php $stmt2 = $conn->prepare("SELECT  * FROM provinces ORDER BY name_th  ASC; ");
                   $stmt2->execute();
@@ -250,7 +256,7 @@
               </div>
               <div class="col">
                 <label class="col-form-label">อำเภอ:<span class="required-star">*</span></label>
-                <select name="amphure_id" class="form-select" id="inputGroupSelect01" required>
+                <select name="amphure_id" class="fstdropdown-select" id="select_box" required>
                   <option selected disabled>กรุณาเลือกอำเภอ</option>
                   <?php $stmt3 = $conn->prepare("SELECT  amphure_id,name_th FROM amphures ORDER BY name_th  ASC; ");
                   $stmt3->execute();
@@ -263,7 +269,7 @@
               </div>
               <div class="col">
                 <label class="col-form-label">ตำบล:<span class="required-star">*</span></label>
-                <select name="district_id" class="form-select" id="inputGroupSelect01" required>
+                <select name="district_id" class="fstdropdown-select" id="select_box" required>
                   <option selected disabled>กรุณาเลือกอำเภอ</option>
                   <?php $stmt3 = $conn->prepare("SELECT  * FROM districts ORDER BY name_th  ASC; ");
                   $stmt3->execute();
@@ -276,10 +282,6 @@
               </div>
             </div>
             <div class="row">
-              <div class="col">
-                <label class="col-form-label">รหัสไปรษณีย์:<span class="required-star">*</span></label>
-                <input type="text" class="form-control" id="" name="addr" required>
-              </div>
               <div class="col">
                 <label class="col-form-label">ประเภทบ้าน:<span class="required-star">*</span></label>
                 <select name="home_type" class="form-select" id="inputGroupSelect01" required>
@@ -312,6 +314,7 @@
                 <th>ตำบล</th>
                 <th>อำเภอ</th>
                 <th>จังหวัด</th>
+                <th>รหัสไปรษณีย์</th>
                 <th>ประเภทบ้าน</th>
                 <th></th>
                 <th></th>
@@ -323,6 +326,7 @@
               $stmt = $conn->prepare(
                 "SELECT 
                    ad.home_id,
+                   ad.id_home,
                    ad.home_no,
                    ad.swine,
                    aph.name_th as aph,
@@ -332,7 +336,8 @@
                    ad.home_type ,
                    pro.province_id as provinceId ,
                    aph.amphure_id as amphureId ,
-                   di.district_id as districtId
+                   di.district_id as districtId,
+                   di.zip_code
                    FROM 
                    address AS ad
                    JOIN 
@@ -352,14 +357,15 @@
               ?>
                   <tr>
                     <td><?php echo $i; ?></td>
-                    <td><?php echo $row['home_id']; ?></td>
+                    <td><?php echo $row['id_home']; ?></td>
                     <td><?php echo $row['home_no']; ?></td>
                     <td><?php echo $row['swine']; ?></td>
                     <td><?php echo $row['aph']; ?></td>
                     <td><?php echo $row['di']; ?></td>
                     <td><?php echo $row['pro']; ?></td>
+                    <td><?php echo $row['zip_code']; ?></td>
                     <td><?php echo $row['home_type']; ?></td>
-                    <td><a href="show-address.php?home_id=<?php echo $row['home_id']; ?>&home_no=<?php echo $row['home_no']; ?>&swine=<?php echo $row['swine']; ?>&aph=<?php echo $row['aph']; ?>&di=<?php echo $row['di']; ?>&pro=<?php echo $row['pro']; ?>&location=<?php echo urlencode($row['location']); ?>&home_type=<?php echo $row['home_type']; ?>" class="btn btn-success">ดูข้อมูล</a></td>
+                    <td><a href="show-address.php?home_id=<?php echo $row['id_home']; ?>&home_no=<?php echo $row['home_no']; ?>&swine=<?php echo $row['swine']; ?>&aph=<?php echo $row['aph']; ?>&di=<?php echo $row['di']; ?>&pro=<?php echo $row['pro']; ?>&location=<?php echo urlencode($row['location']); ?>&zip_code=<?php echo $row['zip_code']; ?>&home_type=<?php echo $row['home_type']; ?>" class="btn btn-success">ดูข้อมูล</a></td>
                     <td><button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#myModal<?php echo $row['home_id']; ?>">แก้ไขข้อมูล</button></td>
                     <td> <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Modaldeletel<?php echo $row['home_id']; ?>">
                         ลบข้อมูล
@@ -401,8 +407,9 @@
                         </div>
                         <div class="modal-body">
                           <form action="address.php?act=edit" method="post">
+                            <input type="hidden" name="homeid" value="<?php echo $row['home_id']; ?>">
                             <label class="col-form-label">รหัสบ้าน:</label>
-                            <input type="text" class="form-control" id="" name="homeid" value="<?php echo $row['home_id']; ?>">
+                            <input type="text" class="form-control" id="" name="id_home" value="<?php echo $row['id_home']; ?>">
 
                             <label class="col-form-label">บ้านเลขที่:</label>
                             <input type="text" class="form-control" id="" name="homeno" value="<?php echo $row['home_no']; ?>">
@@ -445,10 +452,6 @@
                                 <option value="<?php echo $row4['district_id']; ?>"><?php echo $row4['name_th']; ?></option>
                               <?php }  ?>
                             </select>
-
-                            <label class="col-form-label">รหัสไปรษณีย์:</label>
-                            <input type="text" class="form-control" id="" name="">
-
                             <label class="form-label">ประเภทบ้าน:</label>
                             <select name="hometype" class="form-select" id="inputGroupSelect01" required>
                               <option selected value="<?php echo $row['home_type']; ?>"><?php echo $row['home_type']; ?></option>
@@ -456,7 +459,7 @@
                               <option>บ้านเช่า</option>
                             </select>
                             <label class="col-form-label">ตำแหน่งของบ้าน:</label>
-                            <input type="text" class="form-control" name="" id="">
+                            <textarea class="form-control" rows="5" id="comment" name="location"><?php echo $row['location']; ?></textarea>
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ย้อนกลับ</button>
