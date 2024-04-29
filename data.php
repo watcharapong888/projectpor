@@ -483,6 +483,7 @@
                 <th>ชื่อ</th>
                 <th>นามสกุล</th>
                 <th>วันเดือนปีเกิด</th>
+                <th>อายุ</th>
                 <th>เพศ</th>
                 <th>สถานะ</th>
                 <th>อาชีพ</th>
@@ -504,6 +505,7 @@
                 name, 
                 lastname,  
                 date,
+                TIMESTAMPDIFF(YEAR, date, CURDATE()) AS age,
                 sex, 
                 status, 
                 o.occupation as occupation, 
@@ -552,12 +554,13 @@
                     <td><?php echo $row['name']; ?></td>
                     <td><?php echo $row['lastname']; ?></td>
                     <td><?php echo $row['date']; ?></td>
+                    <td><?php echo $row['age']; ?></td>
                     <td><?php echo $row['sex']; ?></td>
                     <td><?php echo $row['status']; ?></td>
                     <td><?php echo $row['occupation']; ?></td>
                     <td><?php echo $row['disease']; ?></td>
-                    <td><?php echo $row['place']; ?></td>
                     <td><?php echo $row['handicap']; ?></td>
+                    <td><?php echo $row['place']; ?></td>
                     <td><?php echo $row['tel']; ?></td>
                     <td><a id="ff" href="show-address.php?home_id=<?php echo $row['home_id']; ?>" class="btn btn-success">ดูข้อมูล</a></td>
                     <td><button id="ff" type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#myModal<?php echo $row['id']; ?>">แก้ไขข้อมูล</button></td>

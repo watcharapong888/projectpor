@@ -70,7 +70,7 @@
   <a href="Index.php" class="w3-bar-item w3-button">หน้าแรก</a>
   <a href="address.php" class="w3-bar-item w3-button">ข้อมูลครัวเรือน</a>
   <a href="data.php" class="w3-bar-item w3-button">ข้อมูลคนในชุมชน</a>
-  <a href="#services" class="w3-bar-item w3-button">โรคประจำตัว</a>
+  <a href="disease.php" class="w3-bar-item w3-button">โรคประจำตัว</a>
   <a href="news.php" class="w3-bar-item w3-button">กิจกรรมและข่าวสารประจำเดือน</a>
   <a href="logout.php" class="w3-bar-item w3-button" style="color: red;">ออกจากระบบ</a>
 </div>
