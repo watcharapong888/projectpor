@@ -34,6 +34,9 @@
   #re>div {
     margin-right: 10px;
   }
+  .required-star {
+  color: red;  /* กำหนดสีของดาว */
+}
 </style>
 
 <body>
@@ -279,11 +282,11 @@
           <div class="container mt-3">
             <div class="row">
               <div class="col">
-                <label class="col-form-label">รหัสบัตรประชาชน:</label>
+                <label class="col-form-label">รหัสบัตรประชาชน:<span class="required-star">*</span></label>
                 <input type="text" class="form-control" id="" name="card_id" maxlength="13" placeholder="ระบุตัวเลขไม่เกิน 13 ตัว" required>
               </div>
               <div class="col">
-                <label class="col-form-label">คำนำหน้า:</label>
+                <label class="col-form-label">คำนำหน้า:<span class="required-star">*</span></label>
                 <select name="prefix_id" class="fstdropdown-select" id="select_box" required>
                   <option selected disabled>กรุณาเลือกคำนำหน้า</option>
                   <?php $stmt2 = $conn->prepare("SELECT  * FROM prefix ORDER BY prefix  ASC; ");
@@ -296,21 +299,21 @@
                 </select>
               </div>
               <div class="col">
-                <label class="col-form-label">ชื่อ:</label>
+                <label class="col-form-label">ชื่อ:<span class="required-star">*</span></label>
                 <input type="text" class="form-control" id="" name="fname" required>
               </div>
               <div class="col">
-                <label class="col-form-label">นามสกุล:</label>
+                <label class="col-form-label">นามสกุล:<span class="required-star">*</span></label>
                 <input type="text" class="form-control" id="" name="lname" required>
               </div>
             </div>
             <div class="row">
               <div class="col">
-                <label class="col-form-label">วัน-เดือน-ปีเกิด:</label>
+                <label class="col-form-label">วัน-เดือน-ปีเกิด:<span class="required-star">*</span></label>
                 <input type="date" class="form-control" id="" name="bdate" required>
               </div>
               <div class="col">
-                <label class="col-form-label">เพศ:</label>
+                <label class="col-form-label">เพศ:<span class="required-star">*</span></label>
                 <select name="sex" class="form-select" id="inputGroupSelect01" required>
                   <option selected disabled>--กรุณาเลือก--</option>
                   <option>ชาย</option>
@@ -318,7 +321,7 @@
                 </select>
               </div>
               <div class="col">
-                <label class="col-form-label">สถานะ:</label>
+                <label class="col-form-label">สถานะ:<span class="required-star">*</span></label>
                 <select name="status" class="form-select" id="inputGroupSelect01" required>
                   <option value="" selected disabled>-- กรุณาเลือก --</option>
                   <option value="โสด">โสด</option>
@@ -328,7 +331,7 @@
 
               </div>
               <div class="col">
-                <label class="col-form-label">อาชีพ:</label>
+                <label class="col-form-label">อาชีพ:<span class="required-star">*</span></label>
                 <select name="occupation" class="fstdropdown-select" id="inputGroupSelect01" required>
                   <option selected disabled>กรุณาเลือกอาชีพ</option>
                   <?php $stmt2 = $conn->prepare("SELECT  * FROM occupation ORDER BY occupation  ASC; ");
@@ -343,7 +346,7 @@
             </div>
             <div class="row">
               <div class="col">
-                <label class="col-form-label">โรคประจำตัว:</label>
+                <label class="col-form-label">โรคประจำตัว:<span class="required-star">*</span></label>
                 <div id="re">
                   <?php $stmt2 = $conn->prepare("SELECT  * FROM disease ORDER BY disease  ASC; ");
                   $stmt2->execute();
@@ -362,7 +365,7 @@
             </div>
             <div class="row">
               <div class="col">
-                <label class="col-form-label">กลุ่มเปราะบาง:</label>
+                <label class="col-form-label">กลุ่มเปราะบาง:<span class="required-star">*</span></label>
                 <select name="place" class="form-select" id="inputGroupSelect01" required>
                   <option selected disabled>--กรุณาเลือก--</option>
                   <option>ใช่</option>
@@ -370,21 +373,22 @@
                 </select>
               </div>
               <div class="col">
-                <label class="col-form-label">สถานที่รับยา:</label>
+                <label class="col-form-label">สถานที่รับยา:<span class="required-star">*</span></label>
                 <select name="handicap" class="form-select" id="inputGroupSelect01" required>
                   <option selected disabled>--กรุณาเลือก--</option>
+                  <option>ไม่มีโรคประจำตัว</option>
                   <option>โรงพยาบาลด่านขุนทด (รพ.เก่า)</option>
                   <option>โรงพยาบาลหลวงพ่อคูณปริสุทฺโธ (รพ.ใหม่)</option>
                 </select>
               </div>
               <div class="col">
-                <label class="col-form-label">เบอร์โทร:</label>
+                <label class="col-form-label">เบอร์โทร:<span class="required-star">*</span></label>
                 <input type="text" class="form-control" id="" name="tel" required>
               </div>
             </div>
             <div class="row">
               <div class="col">
-                <label class="col-form-label">รหัสบ้านตามทะเบียนบ้าน:</label>
+                <label class="col-form-label">รหัสบ้านตามทะเบียนบ้าน:<span class="required-star">*</span></label>
                 <select name="home_id" class="fstdropdown-select" id="inputGroupSelect01" required>
                   <option selected disabled>--กรุณาเลือก--</option>
                   <?php $stmt3 = $conn->prepare("SELECT  * FROM address ORDER BY home_id  ASC; ");
@@ -406,17 +410,17 @@
             </div>
             <div class="row">
               <div class="col">
-                <label class="col-form-label">บ้านเลขที่:</label>
+                <label class="col-form-label">บ้านเลขที่:<span class="required-star">*</span></label>
                 <input type="text" class="form-control" id="" name="home_no" required>
               </div>
               <div class="col">
-                <label class="col-form-label">หมู่:</label>
+                <label class="col-form-label">หมู่:<span class="required-star">*</span></label>
                 <input type="text" class="form-control" id="" name="swine" required>
               </div>
             </div>
             <div class="row">
               <div class="col">
-                <label class="col-form-label">จังหวัด:</label>
+                <label class="col-form-label">จังหวัด:<span class="required-star">*</span></label>
                 <select name="province_id" class="fstdropdown-select" id="select_box" required>
                   <option selected disabled>กรุณาเลือกจังหวัด</option>
                   <?php $stmt2 = $conn->prepare("SELECT  * FROM provinces ORDER BY name_th  ASC; ");
@@ -429,7 +433,7 @@
                 </select>
               </div>
               <div class="col">
-                <label class="col-form-label">อำเภอ:</label>
+                <label class="col-form-label">อำเภอ:<span class="required-star">*</span></label>
                 <select name="amphure_id" class="fstdropdown-select" id="select_box" required>
                   <option selected disabled>กรุณาเลือกอำเภอ</option>
                   <?php $stmt3 = $conn->prepare("SELECT  amphure_id,name_th FROM amphures ORDER BY name_th  ASC; ");
@@ -444,7 +448,7 @@
             </div>
             <div class="row">
               <div class="col">
-                <label class="col-form-label">ตำบล:</label>
+                <label class="col-form-label">ตำบล:<span class="required-star">*</span></label>
                 <select name="district_id" class="fstdropdown-select" id="select_box" required>
                   <option selected disabled>กรุณาเลือกตำบล</option>
                   <?php $stmt4 = $conn->prepare("SELECT  district_id ,name_th FROM districts ORDER BY name_th  ASC; ");
@@ -457,7 +461,7 @@
                 </select>
               </div>
               <div class="col">
-                <label class="col-form-label">รหัสไปรษณีย์:</label>
+                <label class="col-form-label">รหัสไปรษณีย์:<span class="required-star">*</span></label>
                 <input type="text" class="form-control" id="" name="addr" required>
               </div>
             </div>
