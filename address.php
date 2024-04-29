@@ -16,6 +16,9 @@
     border-radius: 5px;
     padding: 15px;
   }
+  .required-star {
+  color: red;  /* กำหนดสีของดาว */
+}
 </style>
 
 <body>
@@ -218,22 +221,22 @@
         <form method="post" action="address.php?act=add">
           <div class="container mt-3">
             <div class="row">
-              <div class="col">
-                <label class="col-form-label">รหัสบ้าน:</label>
+            <div class="col">
+            <label class="col-form-label">รหัสบ้าน:<span class="required-star">*</span></label>
                 <input type="text" class="form-control" id="" name="home_id" maxlength="11" placeholder="ระบุตัวเลขไม่เกิน 11 ตัว" required>
               </div>
               <div class="col">
-                <label class="col-form-label">บ้านเลขที่:</label>
-                <input type="text" class="form-control" id="" name="home_no" required>
+                <label class="col-form-label">บ้านเลขที่:<span class="required-star">*</span></label>
+                <input type="text" class="form-control" id="" name="home_no" placeholder="ตัวอย่างเช่น 44/1 " required>
               </div>
               <div class="col">
-                <label class="col-form-label">หมู่:</label>
-                <input type="text" class="form-control" id="" name="swine" required>
+                <label class="col-form-label">หมู่:<span class="required-star">*</span></label>
+                <input type="text" class="form-control" id="" name="swine" placeholder="ถ้าไม่หมู่ให้ใส่ -" required>
               </div>
             </div>
             <div class="row">
               <div class="col">
-                <label class="col-form-label">จังหวัด:</label>
+                <label class="col-form-label">จังหวัด:<span class="required-star">*</span></label>
                 <select name="province_id" class="form-select" id="inputGroupSelect01" required>
                   <option selected disabled>กรุณาเลือกจังหวัด</option>
                   <?php $stmt2 = $conn->prepare("SELECT  * FROM provinces ORDER BY name_th  ASC; ");
@@ -246,7 +249,7 @@
                 </select>
               </div>
               <div class="col">
-                <label class="col-form-label">อำเภอ:</label>
+                <label class="col-form-label">อำเภอ:<span class="required-star">*</span></label>
                 <select name="amphure_id" class="form-select" id="inputGroupSelect01" required>
                   <option selected disabled>กรุณาเลือกอำเภอ</option>
                   <?php $stmt3 = $conn->prepare("SELECT  amphure_id,name_th FROM amphures ORDER BY name_th  ASC; ");
@@ -259,7 +262,7 @@
                 </select>
               </div>
               <div class="col">
-                <label class="col-form-label">ตำบล:</label>
+                <label class="col-form-label">ตำบล:<span class="required-star">*</span></label>
                 <select name="district_id" class="form-select" id="inputGroupSelect01" required>
                   <option selected disabled>กรุณาเลือกอำเภอ</option>
                   <?php $stmt3 = $conn->prepare("SELECT  * FROM districts ORDER BY name_th  ASC; ");
@@ -274,11 +277,11 @@
             </div>
             <div class="row">
               <div class="col">
-                <label class="col-form-label">รหัสไปรษณีย์:</label>
+                <label class="col-form-label">รหัสไปรษณีย์:<span class="required-star">*</span></label>
                 <input type="text" class="form-control" id="" name="addr" required>
               </div>
               <div class="col">
-                <label class="col-form-label">ประเภทบ้าน:</label>
+                <label class="col-form-label">ประเภทบ้าน:<span class="required-star">*</span></label>
                 <select name="home_type" class="form-select" id="inputGroupSelect01" required>
                   <option selected disabled>กรุณาเลือกประเภทบ้าน</option>
                   <option>บ้านส่วนตัว</option>
@@ -286,7 +289,8 @@
                 </select>
               </div>
               <div class="col">
-                <label class="col-form-label">ตำแหน่งของบ้าน:</label>
+                <label class="col-form-label">ตำแหน่งของบ้าน:<span class="required-star">*</span>
+                <a href="https://www.google.com/maps" target="_blank">ดูบน Google Maps</a></label>
                 <input type="text" class="form-control" id="" name="location">
               </div>
             </div><br>
