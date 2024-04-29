@@ -408,7 +408,7 @@
                         <div class="modal-body">
                           <form action="address.php?act=edit" method="post">
                             <input type="hidden" name="homeid" value="<?php echo $row['home_id']; ?>">
-                            <label class="col-form-label">รหัสบ้าน:</label>
+                            <label class="col-form-label">รหัสบ้าน:<span class="required-star">*</span></label>
                             <input type="text" class="form-control" id="" name="id_home" value="<?php echo $row['id_home']; ?>">
 
                             <label class="col-form-label">บ้านเลขที่:</label>
