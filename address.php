@@ -237,7 +237,7 @@
               </div>
               <div class="col">
                 <label class="col-form-label">หมู่:<span class="required-star">*</span></label>
-                <input type="text" class="form-control" id="" name="swine" placeholder="ถ้าไม่หมู่ให้ใส่ -" required>
+                <input type="text" class="form-control" id="" name="swine" placeholder="ถ้าไม่มีหมู่ให้ใส่ -" required>
               </div>
             </div>
             <div class="row">

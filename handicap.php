@@ -66,11 +66,49 @@
     <div class="show" >
       <div class="container mt-3">
             <h3>
-              <p>ข้อมูลผู้ที่มีโรคประจำตัว
+              <p>กลุ่มเปราะบาง
               </p>
             </h3>
       </div>
       <div class="container mt-3"  >
+      <form action="" method="POST">
+    <label for="handicap">เลือกกลุ่มเปราะบาง:</label>
+    <select id="handicap" name="handicap">
+      <option value="ใช่">กลุ่มเปราะบาง</option>
+      <option value="ไม่ใช่">ไม่อยู่ในกลุ่มเปราะบาง</option>
+    </select>
+    <button type="submit" class="btn btn-success">แสดงผล</button>
+  </form><br>
+  <?php
+// รับค่าจาก dropdown หากมีการส่งค่ามา
+$selectedHandicap = $_POST['handicap'] ?? 'ทั้งหมด';
+
+// สร้างส่วนของคำสั่ง SQL สำหรับกรองข้อมูลตามกลุ่มเปราะบางที่เลือก
+$handicapCondition = "";
+if ($selectedHandicap !== 'ทั้งหมด') {
+    $handicapCondition = " WHERE handicap = '$selectedHandicap'";
+}
+
+// เตรียมคำสั่ง SQL พร้อมเงื่อนไขที่ได้จากการเลือกของผู้ใช้
+$sql = "SELECT 
+    id, 
+    CONCAT(pr.prefix, ' ', name, ' ', lastname) AS full_name,
+    date,
+    TIMESTAMPDIFF(YEAR, date, CURDATE()) AS age,
+    sex, 
+    handicap, 
+    tel
+    FROM data as dt 
+    JOIN prefix AS pr ON dt.prefix_id = pr.prefix_id
+    $handicapCondition";
+
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+$result = $stmt->fetchAll();
+
+// ต่อจากนี้คือการแสดงผลและโค้ดที่เหลือเหมือนด้านบน
+?>
+
         <div class="table-responsive" id="id-of-the-tr" >
           <table class="table table-striped" id="myTable" >
             <thead >
@@ -80,8 +118,7 @@
                 <th>ชื่อ</th>
                 <th>อายุ</th>
                 <th>เพศ</th>
-                <th>โรคประจำตัว</th>
-                <th>สถานที่รับยา</th>
+                <th>กลุ่มเปราะบาง</th>
                 <th>เบอร์โทร</th>
               </tr>
             </thead>
@@ -140,8 +177,7 @@
                     <td><?php echo $row['full_name']; ?></td>
                     <td><?php echo $row['age']; ?></td>
                     <td><?php echo $row['sex']; ?></td>
-                    <td><?php echo $row['disease']; ?></td>
-                    <td><?php echo $row['place']; ?></td>
+                    <td><?php echo $row['handicap']; ?></td>
                     <td><?php echo $row['tel']; ?></td>
                   </tr>
                 <?php $i++;

@@ -366,7 +366,7 @@
             <div class="row">
               <div class="col">
                 <label class="col-form-label">กลุ่มเปราะบาง:<span class="required-star">*</span></label>
-                <select name="place" class="form-select" id="inputGroupSelect01" required>
+                <select name="handicap" class="form-select" id="inputGroupSelect01" required>
                   <option selected disabled>--กรุณาเลือก--</option>
                   <option>ใช่</option>
                   <option>ไม่ใช่</option>
@@ -374,7 +374,7 @@
               </div>
               <div class="col">
                 <label class="col-form-label">สถานที่รับยา:<span class="required-star">*</span></label>
-                <select name="handicap" class="form-select" id="inputGroupSelect01" required>
+                <select name="place" class="form-select" id="inputGroupSelect01" required>
                   <option selected disabled>--กรุณาเลือก--</option>
                   <option>ไม่มีโรคประจำตัว</option>
                   <option>โรงพยาบาลด่านขุนทด (รพ.เก่า)</option>
