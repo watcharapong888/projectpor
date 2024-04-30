@@ -48,7 +48,7 @@
 <body>
     <?php include 'menu.php'; require_once 'db.php'; ?>
     <div class="container mt-3">
-        <h3><p>ข้อมูลกลุ่มเปราะบาง</p></h3>
+        <h3><p>รายชื่อ</p></h3>
        
 <form action="" method="POST">
     <div class="row">
@@ -169,7 +169,7 @@ $result = $stmt->fetchAll();
                 </thead>
                 <tbody>
                     <?php
-                    if ($result) {
+                    if ($result != null) {
                         $i = 1;
                         foreach ($result as $row) {
                             echo "<tr>
@@ -188,9 +188,11 @@ $result = $stmt->fetchAll();
                                   </tr>";
                             $i++;
                         }
-                    } else {
-                        echo "<tr><td colspan='7' style='text-align: center;'>ไม่มีข้อมูล</td></tr>";
-                    }
+                    } else { ?>
+                        <tr>
+                          <td colspan="11" style="text-align: center; color:red;">ไม่มีข้อมูล</td>
+                        </tr>
+                      <?php  }
                     ?>
                 </tbody>
             </table>
