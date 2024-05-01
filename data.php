@@ -505,7 +505,7 @@
                 name, 
                 lastname,  
                 date,
-                TIMESTAMPDIFF(YEAR, date, CURRENT_DATE) AS age,
+                $dateDB AS age,
                 sex, 
                 status, 
                 o.occupation as occupation, 
