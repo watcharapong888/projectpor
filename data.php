@@ -537,7 +537,7 @@
                 JOIN 
                 provinces AS pro ON dt.province_id = pro.province_id 
                 JOIN 
-                user AS us ON dt.user_id = us.user_id 
+                'user' AS us ON dt.user_id = us.user_id 
                    "
               );
               $stmt->execute();
