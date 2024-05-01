@@ -52,7 +52,7 @@
     $disease_id = implode(',', $disease_ids);
     $m_rank = 4 ;
     $stay = 41 ;
-    $user_id = 1;
+    $user_id = 2;
     $stmt = $conn->prepare("INSERT INTO data
   (
     prefix_id,
@@ -505,7 +505,7 @@
                 name, 
                 lastname,  
                 date,
-                TIMESTAMPDIFF(YEAR, date, CURDATE()) AS age,
+                TIMESTAMPDIFF(YEAR, date, CURRENT_DATE) AS age,
                 sex, 
                 status, 
                 o.occupation as occupation, 
