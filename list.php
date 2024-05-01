@@ -71,21 +71,21 @@
             </select>
         </div>
         <div class="col-md-4 mb-3">
-            <label for="chronicDisease" class="form-label">เลือกกลุ่มโรคประจำตัว:</label>
+            <label for="chronicDisease" the form-label">เลือกกลุ่มโรคประจำตัว:</label>
             <select id="chronicDisease" name="chronicDisease" class="form-select">
-            <option value="all">ทั้งหมด</option>
-        <option value="ไม่มีโรคประจำตัว">ไม่มีโรคประจำตัว</option>
-        <option value="โรคเบาหวาน">โรคเบาหวาน</option>
-        <option value="โรคหัวใจ">โรคหัวใจ</option>
-        <option value="โรคความดัน">โรคความดัน</option>
-        <option value="โรคเส้นเลือดตีบ">โรคเส้นเลือดตีบ</option>
-        <option value="โรคไต">โรคไต</option>
-        <option value="โรครูมาตอยด์">โรครูมาตอยด์</option>
-        <option value="โรคมะเร็งเต้านม">โรคมะเร็งเต้านม</option>
-        <option value="โรคมะเร็งตับ">โรคมะเร็งตับ</option>
-        <option value="โรคมะเร็งลำไส้">โรคมะเร็งลำไส้</option>
-        <option value="โรคมะเร็งกล่องเสียง">โรคมะเร็งกล่องเสียง</option>
-        <option value="ภาวะธาตุเหล็กเกิน">ภาวะธาตุเหล็กเกิน</option>
+                <option value="all">ทั้งหมด</option>
+                <option value="ไม่มีโรคประจำตัว">ไม่มีโรคประจำตัว</option>
+                <option value="โรคเบาหวาน">โรคเบาหวาน</option>
+                <option value="โรคหัวใจ">โรคหัวใจ</option>
+                <option value="โรคความดัน">โรคความดัน</option>
+                <option value="โรคเส้นเลือดตีบ">โรคเส้นเลือดตีบ</option>
+                <option value="โรคไต">โรคไต</option>
+                <option value="โรครูมาตอยด์">โรครูมาตอยด์</option>
+                <option value="โรคมะเร็งเต้านม">โรคมะเร็งเต้านม</option>
+                <option value="โรคมะเร็งตับ">โรคมะเร็งตับ</option>
+                <option value="โรคมะเร็งลำไส้">โรคมะเร็งลำไส้</option>
+                <option value="โรคมะเร็งกล่องเสียง">โรคมะเร็งกล่องเสียง</option>
+                <option value="ภาวะธาตุเหล็กเกิน">ภาวะธาตุเหล็กเกิน</option>
             </select>
         </div>
     </div>
@@ -95,6 +95,7 @@
         </div>
     </div>
 </form>
+
 
         <br>
         <?php
@@ -125,22 +126,44 @@ if ($selectedAgeGroup != 'all') {
 $diseaseCondition = $selectedChronicDisease !== 'all' ? "AND ds.disease = '$selectedChronicDisease'" : "";
 
 $sql = "SELECT 
-    dt.id, 
-    CONCAT(pr.prefix, ' ', dt.name, ' ', dt.lastname) AS full_name,
-    dt.date,
-    TIMESTAMPDIFF(YEAR, dt.date, CURDATE()) AS age,
-    dt.sex, 
-    dt.handicap,
-    ds.disease,
-    dt.tel,
-    dt.id_card,
-    dt.status,
-o.occupation,
-dt.place
+id, 
+pr.prefix_id,
+pr.prefix as prefix,
+name, 
+lastname,  
+date,
+$dateDB AS age,
+sex, 
+status, 
+o.occupation_id,
+o.occupation as occupation, 
+ds.disease_id,
+ds.disease as disease, 
+place, 
+handicap, 
+tel, 
+home_id, 
+home_no, 
+swine, 
+aph.name_th as aph, 
+di.name_th as di, 
+pro.name_th as pro, 
+m_rank, 
+stay, 
+id_card
 FROM data as dt 
-JOIN prefix AS pr ON dt.prefix_id = pr.prefix_id
-JOIN disease AS ds ON dt.disease_id = ds.disease_id
-JOIN occupation AS o ON dt.occupation_id = o.occupation_id
+JOIN 
+prefix AS pr ON dt.prefix_id = pr.prefix_id
+JOIN 
+occupation AS o ON dt.occupation_id = o.occupation_id
+JOIN 
+disease  AS ds ON dt.disease_id = ds.disease_id
+JOIN 
+amphures AS aph ON dt.amphure_id = aph.amphure_id 
+JOIN 
+districts AS di ON dt.district_id = di.district_id 
+JOIN 
+provinces AS pro ON dt.province_id = pro.province_id 
 WHERE 1 = 1
 $handicapCondition
 $ageCondition
@@ -153,9 +176,12 @@ $result = $stmt->fetchAll();
             <table class="table table-striped" id="myTable">
                 <thead>
                     <tr class="table-success">
-                    <th>#</th>
+                    <tr class="table-success">
+                <th>#</th>
                 <th>รหัสบัตรประชาชน</th>
+                <th>คำนำหน้า</th>
                 <th>ชื่อ</th>
+                <th>นามสกุล</th>
                 <th>วันเดือนปีเกิด</th>
                 <th>อายุ</th>
                 <th>เพศ</th>
@@ -168,32 +194,42 @@ $result = $stmt->fetchAll();
                     </tr>
                 </thead>
                 <tbody>
-                    <?php
-                    if ($result != null) {
-                        $i = 1;
-                        foreach ($result as $row) {
-                            echo "<tr>
-                            <td>{$i}</td>
-                                    <td>{$row['id_card']}</td>
-                                    <td>{$row['full_name']}</td>
-                                    <td>{$row['date']}</td>
-                                    <td>{$row['age']}</td>
-                                    <td>{$row['sex']}</td>
-                                    <td>{$row['status']}</td>
-                                    <td>{$row['occupation']}</td>
-                                    <td>{$row['disease']}</td>
-                                    <td>{$row['handicap']}</td>
-                                    <td>{$row['place']}</td>
-                                    <td>{$row['tel']}</td>
-                                  </tr>";
-                            $i++;
-                        }
-                    } else { ?>
-                        <tr>
-                          <td colspan="11" style="text-align: center; color:red;">ไม่มีข้อมูล</td>
-                        </tr>
-                      <?php  }
-                    ?>
+                <?php
+$stmt->execute();
+$result = $stmt->fetchAll();
+
+if (!empty($result)) {
+    $i = 1;
+    foreach ($result as $row) {
+?>
+      <tr>
+        <td><?php echo $i; ?></td>
+        <td><?php echo htmlspecialchars($row['id_card']); ?></td>
+        <td><?php echo htmlspecialchars($row['prefix']); ?></td>
+        <td><?php echo htmlspecialchars($row['name']); ?></td>
+        <td><?php echo htmlspecialchars($row['lastname']); ?></td>
+        <td><?php echo htmlspecialchars($row['date']); ?></td>
+        <td><?php echo htmlspecialchars($row['age']); ?></td>
+        <td><?php echo htmlspecialchars($row['sex']); ?></td>
+        <td><?php echo htmlspecialchars($row['status']); ?></td>
+        <td><?php echo htmlspecialchars($row['occupation']); ?></td>
+        <td><?php echo htmlspecialchars($row['disease']); ?></td>
+        <td><?php echo htmlspecialchars($row['handicap']); ?></td>
+        <td><?php echo htmlspecialchars($row['place']); ?></td>
+        <td><?php echo htmlspecialchars($row['tel']); ?></td>
+      </tr>
+<?php
+        $i++;
+    }
+} else {
+?>
+    <tr>
+      <td colspan="17" style="text-align: center; color:red;">ไม่มีข้อมูล</td>
+    </tr>
+<?php
+}
+?>
+
                 </tbody>
             </table>
             <button onclick="printContent('myTable')" class="btn btn-primary print-button">พิมพ์</button>
