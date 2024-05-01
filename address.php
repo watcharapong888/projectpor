@@ -365,7 +365,7 @@
                     <td><?php echo $row['pro']; ?></td>
                     <td><?php echo $row['zip_code']; ?></td>
                     <td><?php echo $row['home_type']; ?></td>
-                    <td><a href="show-address.php?home_id=<?php echo $row['id_home']; ?>&home_no=<?php echo $row['home_no']; ?>&swine=<?php echo $row['swine']; ?>&aph=<?php echo $row['aph']; ?>&di=<?php echo $row['di']; ?>&pro=<?php echo $row['pro']; ?>&location=<?php echo urlencode($row['location']); ?>&zip_code=<?php echo $row['zip_code']; ?>&home_type=<?php echo $row['home_type']; ?>" class="btn btn-success">ดูข้อมูล</a></td>
+                    <td><a href="show-address.php?home_id=<?php echo $row['home_id']; ?>&id_home=<?php echo $row['id_home']; ?>&home_no=<?php echo $row['home_no']; ?>&swine=<?php echo $row['swine']; ?>&aph=<?php echo $row['aph']; ?>&di=<?php echo $row['di']; ?>&pro=<?php echo $row['pro']; ?>&location=<?php echo urlencode($row['location']); ?>&zip_code=<?php echo $row['zip_code']; ?>&home_type=<?php echo $row['home_type']; ?>" class="btn btn-success">ดูข้อมูล</a></td>
                     <td><button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#myModal<?php echo $row['home_id']; ?>">แก้ไขข้อมูล</button></td>
                     <td> <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Modaldeletel<?php echo $row['home_id']; ?>">
                         ลบข้อมูล

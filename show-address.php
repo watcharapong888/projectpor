@@ -50,9 +50,10 @@
     <div class="menushow">
         <?php
         // ตรวจสอบว่ามีค่า home_id และ home_no ที่ส่งมาจาก URL หรือไม่
-        if (isset($_GET['home_id']) && isset($_GET['home_no']) && isset($_GET['swine']) && isset($_GET['aph']) && isset($_GET['di']) && isset($_GET['pro']) && isset($_GET['location'])&& isset($_GET['zip_code']) && isset($_GET['home_type'])) {
+        if (isset($_GET['home_id']) && isset($_GET['id_home']) && isset($_GET['home_no']) && isset($_GET['swine']) && isset($_GET['aph']) && isset($_GET['di']) && isset($_GET['pro']) && isset($_GET['location'])&& isset($_GET['zip_code']) && isset($_GET['home_type'])) {
             // ถ้ามีค่า ให้กำหนดค่าให้กับตัวแปร $home_id และ $home_no
             $home_id = $_GET['home_id'];
+            $id_home = $_GET['id_home'];
             $home_no = $_GET['home_no'];
             $swine = $_GET['swine'];
             $aph = $_GET['aph'];
@@ -70,7 +71,7 @@
                             <tr>
                                 <td class="table-light">รหัสบ้าน:</td>
                                 <td>
-                                    <p style="font-weight:400;"> <?php echo $home_id ?></p>
+                                    <p style="font-weight:400;"> <?php echo $id_home ?></p>
                                 </td>
                                 <td class="table-light">เลขที่บ้าน:</td>
                                 <td>
