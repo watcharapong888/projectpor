@@ -49,46 +49,45 @@
     <?php include 'menu.php'; require_once 'db.php'; ?>
     <div class="container mt-3">
         <h3><p>รายชื่อ</p></h3>
-       
-<form action="" method="POST">
-    <div class="row">
-        <div class="col-md-4 mb-3">
-            <label for="handicap" class="form-label">เลือกกลุ่มเปราะบาง:</label>
-            <select id="handicap" name="handicap" class="form-select">
-                <option value="ทั้งหมด">ทั้งหมด</option>
-                <option value="ใช่">กลุ่มเปราะบาง</option>
-                <option value="ไม่ใช่">ไม่อยู่ในกลุ่มเปราะบาง</option>
-            </select>
-        </div>
-        <div class="col-md-4 mb-3">
-            <label for="ageGroup" class="form-label">เลือกกลุ่มอายุ:</label>
-            <select id="ageGroup" name="ageGroup" class="form-select">
-                <option value="all">ทั้งหมด</option>
-                <option value="0-20">0-20 ปี</option>
-                <option value="21-40">21-40 ปี</option>
-                <option value="41-60">41-60 ปี</option>
-                <option value="61+">61 ปีขึ้นไป</option>
-            </select>
-        </div>
-        <div class="col-md-4 mb-3">
-            <label for="chronicDisease" the form-label">เลือกกลุ่มโรคประจำตัว:</label>
-            <select id="chronicDisease" name="chronicDisease" class="form-select">
-                <option value="all">ทั้งหมด</option>
-                <option value="ไม่มีโรคประจำตัว">ไม่มีโรคประจำตัว</option>
-                <option value="โรคเบาหวาน">โรคเบาหวาน</option>
-                <option value="โรคหัวใจ">โรคหัวใจ</option>
-                <option value="โรคความดัน">โรคความดัน</option>
-                <option value="โรคเส้นเลือดตีบ">โรคเส้นเลือดตีบ</option>
-                <option value="โรคไต">โรคไต</option>
-                <option value="โรครูมาตอยด์">โรครูมาตอยด์</option>
-                <option value="โรคมะเร็งเต้านม">โรคมะเร็งเต้านม</option>
-                <option value="โรคมะเร็งตับ">โรคมะเร็งตับ</option>
-                <option value="โรคมะเร็งลำไส้">โรคมะเร็งลำไส้</option>
-                <option value="โรคมะเร็งกล่องเสียง">โรคมะเร็งกล่องเสียง</option>
-                <option value="ภาวะธาตุเหล็กเกิน">ภาวะธาตุเหล็กเกิน</option>
-            </select>
-        </div>
-    </div>
+        <form action="" method="POST">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="handicap" class="form-label">เลือกกลุ่มเปราะบาง:</label>
+                    <select id="handicap" name="handicap" class="form-select">
+                        <option value="ทั้งหมด">ทั้งหมด</option>
+                        <option value="ใช่">กลุ่มเปราะบาง</option>
+                        <option value="ไม่ใช่">ไม่อยู่ในกลุ่มเปราะบาง</option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="ageGroup" class="form-label">เลือกกลุ่มอายุ:</label>
+                    <select id="ageGroup" name="ageGroup" class="form-select">
+                        <option value="all">ทั้งหมด</option>
+                        <option value="0-20">0-20 ปี</option>
+                        <option value="21-40">21-40 ปี</option>
+                        <option value="41-60">41-60 ปี</option>
+                        <option value="61+">61 ปีขึ้นไป</option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="chronicDisease" class="form-label">เลือกกลุ่มโรคประจำตัว:</label>
+                    <select id="chronicDisease" name="chronicDisease" class="form-select">
+                        <option value="all">ทั้งหมด</option>
+                        <option value="ไม่มีโรคประจำตัว">ไม่มีโรคประจำตัว</option>
+                        <option value="โรคเบาหวาน">โรคเบาหวาน</option>
+                        <option value="โรคหัวใจ">โรคหัวใจ</option>
+                        <option value="โรคความดัน">โรคความดัน</option>
+                        <option value="โรคเส้นเลือดตีบ">โรคเส้นเลือดตีบ</option>
+                        <option value="โรคไต">โรคไต</option>
+                        <option value="โรครูมาตอยด์">โรครูมาตอยด์</option>
+                        <option value="โรคมะเร็งเต้านม">โรคมะเร็งเต้านม</option>
+                        <option value="โรคมะเร็งตับ">โรคมะเร็งตับ</option>
+                        <option value="โรคมะเร็งลำไส้">โรคมะเร็งลำไส้</option>
+                        <option value="โรคมะเร็งกล่องเสียง">โรคมะเร็งกล่องเสียง</option>
+                        <option value="ภาวะธาตุเหล็กเกิน">ภาวะธาตุเหล็กเกิน</option>
+                    </select>
+                </div>
+            </div>
     <div class="row">
         <div class="col-12">
             <button type="submit" class="btn btn-success">แสดงผล</button>
@@ -168,9 +167,9 @@ WHERE 1 = 1
 $handicapCondition
 $ageCondition
 $diseaseCondition";
-$stmt = $conn->prepare($sql);
-$stmt->execute();
-$result = $stmt->fetchAll();
+     $stmt = $conn->prepare($sql);
+     $stmt->execute();
+     $result = $stmt->fetchAll();
 ?>
         <div class="table-responsive">
             <table class="table table-striped" id="myTable">
