@@ -50,17 +50,13 @@
     <div class="container mt-3">
         <h3><p>รายชื่อ</p></h3>
         <form action="" method="POST">
-        <div class="row">
+            <div class="row">
                 <div class="col-md-4 mb-3">
                     <label for="handicap" class="form-label">เลือกกลุ่มเปราะบาง:</label>
                     <select id="handicap" name="handicap" class="form-select">
                         <option value="ทั้งหมด">ทั้งหมด</option>
-                        <?php
-                        $handicapQuery = $conn->query("SELECT DISTINCT handicap FROM data");
-                        while ($h = $handicapQuery->fetch(PDO::FETCH_ASSOC)) {
-                            echo "<option value=\"{$h['handicap']}\">{$h['handicap']}</option>";
-                        }
-                        ?>
+                        <option value="ใช่">กลุ่มเปราะบาง</option>
+                        <option value="ไม่ใช่">ไม่อยู่ในกลุ่มเปราะบาง</option>
                     </select>
                 </div>
                 <div class="col-md-4 mb-3">
@@ -77,48 +73,55 @@
                     <label for="chronicDisease" class="form-label">เลือกกลุ่มโรคประจำตัว:</label>
                     <select id="chronicDisease" name="chronicDisease" class="form-select">
                         <option value="all">ทั้งหมด</option>
-                        <?php
-                        $diseaseQuery = $conn->query("SELECT DISTINCT disease FROM disease");
-                        while ($d = $diseaseQuery->fetch(PDO::FETCH_ASSOC)) {
-                            echo "<option value=\"{$d['disease']}\">{$d['disease']}</option>";
-                        }
-                        ?>
+                        <option value="ไม่มีโรคประจำตัว">ไม่มีโรคประจำตัว</option>
+                        <option value="โรคเบาหวาน">โรคเบาหวาน</option>
+                        <option value="โรคหัวใจ">โรคหัวใจ</option>
+                        <option value="โรคความดัน">โรคความดัน</option>
+                        <option value="โรคเส้นเลือดตีบ">โรคเส้นเลือดตีบ</option>
+                        <option value="โรคไต">โรคไต</option>
+                        <option value="โรครูมาตอยด์">โรครูมาตอยด์</option>
+                        <option value="โรคมะเร็งเต้านม">โรคมะเร็งเต้านม</option>
+                        <option value="โรคมะเร็งตับ">โรคมะเร็งตับ</option>
+                        <option value="โรคมะเร็งลำไส้">โรคมะเร็งลำไส้</option>
+                        <option value="โรคมะเร็งกล่องเสียง">โรคมะเร็งกล่องเสียง</option>
+                        <option value="ภาวะธาตุเหล็กเกิน">ภาวะธาตุเหล็กเกิน</option>
                     </select>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-12">
-                    <button type="submit" class="btn btn-success">แสดงผล</button>
-                </div>
-            </div>
+    <div class="row">
+        <div class="col-12">
+            <button type="submit" class="btn btn-success">แสดงผล</button>
+        </div>
+    </div>
 </form>
 
 
         <br>
         <?php
-         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // หลังจากที่ผู้ใช้ส่งแบบฟอร์ม
 $selectedHandicap = $_POST['handicap'] ?? 'ทั้งหมด';
-        $selectedAgeGroup = $_POST['ageGroup'] ?? 'all';
-        $selectedChronicDisease = $_POST['chronicDisease'] ?? 'all';
-
-
+$selectedAgeGroup = $_POST['ageGroup'] ?? 'all';
+$selectedChronicDisease = $_POST['chronicDisease'] ?? 'all';
 $handicapCondition = $selectedHandicap !== 'ทั้งหมด' ? "AND handicap = '$selectedHandicap'" : "";
-
-// SQL condition for filtering by age group
 $ageCondition = "";
 if ($selectedAgeGroup != 'all') {
-    $ageRanges = [
-        '0-20' => "AND TIMESTAMPDIFF(YEAR, date, CURDATE()) BETWEEN 0 AND 20",
-        '21-40' => "AND TIMESTAMPDIFF(YEAR, date, CURDATE()) BETWEEN 21 AND 40",
-        '41-60' => "AND TIMESTAMPDIFF(YEAR, date, CURDATE()) BETWEEN 41 AND 60",
-        '61+' => "AND TIMESTAMPDIFF(YEAR, date, CURDATE()) >= 61"
-    ];
-    $ageCondition = $ageRanges[$selectedAgeGroup] ?? "";
+    switch ($selectedAgeGroup) {
+        case '0-20':
+            $ageCondition = "AND TIMESTAMPDIFF(YEAR, date, CURDATE()) BETWEEN 0 AND 20";
+            break;
+        case '21-40':
+            $ageCondition = "AND TIMESTAMPDIFF(YEAR, date, CURDATE()) BETWEEN 21 AND 40";
+            break;
+        case '41-60':
+            $ageCondition = "AND TIMESTAMPDIFF(YEAR, date, CURDATE()) BETWEEN 41 AND 60";
+            break;
+        case '61+':
+            $ageCondition = "AND TIMESTAMPDIFF(YEAR, date, CURDATE()) >= 61";
+            break;
+    }
 }
 
-// SQL condition for filtering by chronic disease
-$diseaseCondition = $selectedChronicDisease !== 'all' ? "AND disease = '$selectedChronicDisease'" : "";
+$diseaseCondition = $selectedChronicDisease !== 'all' ? "AND ds.disease = '$selectedChronicDisease'" : "";
 
 $sql = "SELECT 
 id, 
@@ -127,7 +130,7 @@ pr.prefix as prefix,
 name, 
 lastname,  
 date,
-TIMESTAMPDIFF(YEAR, date, CURDATE()) AS age,
+$dateDB AS age,
 sex, 
 status, 
 o.occupation_id,
@@ -223,7 +226,6 @@ if (!empty($result)) {
     </tr>
 <?php
 }
-}
 ?>
 
                 </tbody>
@@ -231,6 +233,9 @@ if (!empty($result)) {
             <button onclick="printContent('myTable')" class="btn btn-primary print-button">พิมพ์</button>
         </div>
     </div>
+    
+
+    
     <script>
     function printContent(elementId) {
         // Remove print-section class from all elements
