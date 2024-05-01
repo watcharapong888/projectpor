@@ -103,23 +103,23 @@
   )
 ");
       
-      $stmt->bindParam(':prefix_id', $_POST['prefix_id'], PDO::PARAM_STR);
+      $stmt->bindParam(':prefix_id', $_POST['prefix_id'], PDO::PARAM_INT); 
       $stmt->bindParam(':fname', $_POST['fname'], PDO::PARAM_STR);
       $stmt->bindParam(':lname', $_POST['lname'], PDO::PARAM_STR);
       $stmt->bindParam(':bdate', $_POST['bdate'], PDO::PARAM_STR);
       $stmt->bindParam(':sex', $_POST['sex'], PDO::PARAM_STR);
-      $stmt->bindParam(':status', $_POST['status'], PDO::PARAM_STR);
-      $stmt->bindParam(':occupation', $_POST['occupation'], PDO::PARAM_STR);
-      $stmt->bindParam(':disease_id', $disease_id, PDO::PARAM_STR);
+      $stmt->bindParam(':status', $_POST['status'], PDO::PARAM_STR); 
+      $stmt->bindParam(':occupation', $_POST['occupation'], PDO::PARAM_INT); 
+      $stmt->bindParam(':disease_id', $disease_id, PDO::PARAM_INT);
       $stmt->bindParam(':place', $_POST['place'], PDO::PARAM_STR);
       $stmt->bindParam(':handicap', $_POST['handicap'], PDO::PARAM_STR);
       $stmt->bindParam(':tel', $_POST['tel'], PDO::PARAM_STR);
-      $stmt->bindParam(':home_id', $_POST['home_id'], PDO::PARAM_STR);
+      $stmt->bindParam(':home_id', $_POST['home_id'], PDO::PARAM_INT);
       $stmt->bindParam(':home_no', $_POST['home_no'], PDO::PARAM_STR);
-      $stmt->bindParam(':swine', $_POST['swine'], PDO::PARAM_STR);
-      $stmt->bindParam(':amphure_id', $_POST['amphure_id'], PDO::PARAM_STR);
-      $stmt->bindParam(':district_id', $_POST['district_id'], PDO::PARAM_STR);
-      $stmt->bindParam(':province_id', $_POST['province_id'], PDO::PARAM_STR);
+      $stmt->bindParam(':swine', $_POST['swine'], PDO::PARAM_INT);
+      $stmt->bindParam(':amphure_id', $_POST['amphure_id'], PDO::PARAM_INT);
+      $stmt->bindParam(':district_id', $_POST['district_id'], PDO::PARAM_INT);
+      $stmt->bindParam(':province_id', $_POST['province_id'], PDO::PARAM_INT);
       $stmt->bindParam(':m_rank', $m_rank, PDO::PARAM_INT);
       $stmt->bindParam(':stay', $stay, PDO::PARAM_INT);
       $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
