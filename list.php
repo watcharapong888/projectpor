@@ -136,7 +136,7 @@
         $selectedHandicap = $_POST['handicap'] ?? 'ทั้งหมด';
         $selectedAgeGroup = $_POST['age'] ?? 'all';
         $selectedChronicDisease = $_POST['disease_id'] ?? 'all';
-        $handicapCondition = $selectedHandicap !== 'ทั้งหมด' ? "AND handicap = '$selectedHandicap'" : "";
+        $handicapCondition = $selectedHandicap !== 'ทั้งหมด' ? "AND dt.handicap = '$selectedHandicap'" : "";
 
         $ageCondition = "";
         if ($selectedAgeGroup != 'all') {
