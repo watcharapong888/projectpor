@@ -193,7 +193,6 @@
 
       // SQL update
       $stmt = $conn->prepare("UPDATE data SET 
-            id = :id,
             id_card = :id_card,
             prefix_id = :prefix_id,
             name = :fname,
