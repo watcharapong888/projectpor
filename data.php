@@ -44,9 +44,9 @@
 <body>
   <?php include 'menu.php';
   require_once 'db.php';
-  // echo '<pre>';
-  // print_r($_POST);
-  // echo '</pre>';
+  echo '<pre>';
+  print_r($_POST);
+  echo '</pre>';
   // exit();
   //ตรวจสอบตัวแปรที่ส่งมาจากฟอร์ม
   if (isset($_POST['card_id']) && $_GET['act'] === 'add') {
@@ -156,87 +156,131 @@
   }
   if (isset($_GET['act']) && $_GET['act'] === 'edit') {
     if (
-      isset($_POST['homeid']) && isset($_POST['homeno']) && isset($_POST['swine']) &&
-      isset($_POST['pro']) && isset($_POST['aph']) && isset($_POST['di']) && isset($_POST['hometype'])
+      isset($_POST['id']) &&
+      isset($_POST['id_card']) &&
+      isset($_POST['prefix_id']) &&
+      isset($_POST['fname']) &&
+      isset($_POST['lname']) &&
+      isset($_POST['bdate']) &&
+      isset($_POST['sex']) &&
+      isset($_POST['status']) &&
+      isset($_POST['occupation']) &&
+      isset($_POST['disease_id']) &&
+      isset($_POST['handicap']) &&
+      isset($_POST['place']) &&
+      isset($_POST['tel']) &&
+      isset($_POST['home_no']) &&
+      isset($_POST['swine']) &&
+      isset($_POST['province_id'])
     ) {
-      $homeid = $_POST['homeid'];
-      $homeno = $_POST['homeno'];
+      $id = $_POST['id'];
+      $id_card = $_POST['id_card'];
+      $prefix_id = $_POST['prefix_id'];
+      $fname = $_POST['fname'];
+      $lname = $_POST['lname'];
+      $bdate = $_POST['bdate'];
+      $sex = $_POST['sex'];
+      $status = $_POST['status'];
+      $occupation_id = $_POST['occupation'];
+      $disease_ids = $_POST['disease_id'];
+      $disease_id = implode(',', $disease_ids);
+      $handicap = $_POST['handicap'];
+      $place = $_POST['place'];
+      $tel = $_POST['tel'];
+      $home_no = $_POST['home_no'];
       $swine = $_POST['swine'];
-      $pro = $_POST['pro'];
-      $aph = $_POST['aph'];
-      $di = $_POST['di'];
-      $hometype = $_POST['hometype'];
+      $province_id = $_POST['province_id'];
 
       // SQL update
-      $stmt = $conn->prepare("UPDATE address SET 
-        home_no = :homeno, 
-        swine = :swine,
-        amphure_id = :aph,
-        district_id = :di,
-        province_id = :pro,
-        home_type = :hometype
-        WHERE home_id = :homeid");
+      $stmt = $conn->prepare("UPDATE data SET 
+            id = :id,
+            id_card = :id_card,
+            prefix_id = :prefix_id,
+            name = :fname,
+            lastname = :lname,
+            date = :bdate,
+            sex = :sex,
+            status = :status,
+            occupation_id = :occupation_id,
+            disease_id = :disease_id,
+            handicap = :handicap,
+            place = :place,
+            tel = :tel,
+            home_no = :home_no,
+            swine = :swine,
+            province_id = :province_id
+            WHERE id = :id");
 
-      $stmt->bindParam(':homeid', $homeid, PDO::PARAM_INT);
-      $stmt->bindParam(':homeno', $homeno, PDO::PARAM_STR);
-      $stmt->bindParam(':swine', $swine, PDO::PARAM_STR);
-      $stmt->bindParam(':pro', $pro, PDO::PARAM_STR);
-      $stmt->bindParam(':aph', $aph, PDO::PARAM_STR);
-      $stmt->bindParam(':di', $di, PDO::PARAM_STR);
-      $stmt->bindParam(':hometype', $hometype, PDO::PARAM_STR);
+      $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+      $stmt->bindParam(':id_card', $id_card, PDO::PARAM_STR);
+      $stmt->bindParam(':prefix_id', $prefix_id, PDO::PARAM_STR);
+      $stmt->bindParam(':fname', $fname, PDO::PARAM_STR);
+      $stmt->bindParam(':lname', $lname, PDO::PARAM_STR);
+      $stmt->bindParam(':bdate', $bdate, PDO::PARAM_STR);
+      $stmt->bindParam(':sex', $sex, PDO::PARAM_STR);
+      $stmt->bindParam(':status', $status, PDO::PARAM_STR);
+      $stmt->bindParam(':occupation_id', $occupation_id, PDO::PARAM_INT);
+      $stmt->bindParam(':disease_id', $disease_id, PDO::PARAM_INT);
+      $stmt->bindParam(':handicap', $handicap, PDO::PARAM_STR);
+      $stmt->bindParam(':place', $place, PDO::PARAM_STR);
+      $stmt->bindParam(':tel', $tel, PDO::PARAM_INT);
+      $stmt->bindParam(':home_no', $home_no, PDO::PARAM_STR);
+      $stmt->bindParam(':swine', $swine, PDO::PARAM_INT);
+      $stmt->bindParam(':province_id', $province_id, PDO::PARAM_INT);
 
       try {
         $stmt->execute();
 
         if ($stmt->rowCount() > 0) {
           echo '<script>
-                     setTimeout(function() {
-                      swal({
-                          title: "แก้ไขข้อมูลสำเร็จ",
-                          type: "success"
-                      }, function() {
-                          window.location = "data.php"; //หน้าที่ต้องการให้กระโดดไป
-                      });
-                    }, 1000);
-                </script>';
+                         setTimeout(function() {
+                          swal({
+                              title: "แก้ไขข้อมูลสำเร็จ",
+                              type: "success"
+                          }, function() {
+                              window.location = "data.php"; //หน้าที่ต้องการให้กระโดดไป
+                          });
+                        }, 1000);
+                    </script>';
         } else {
           echo '<script>
-                     setTimeout(function() {
-                      swal({
-                          title: "ไม่มีการเปลี่ยนแปลงข้อมูล",
-                          type: "info"
-                      }, function() {
-                          window.location = "data.php"; //หน้าที่ต้องการให้กระโดดไป
-                      });
-                    }, 1000);
-                </script>';
+                         setTimeout(function() {
+                          swal({
+                              title: "ไม่มีการเปลี่ยนแปลงข้อมูล",
+                              type: "info"
+                          }, function() {
+                              window.location = "data.php"; //หน้าที่ต้องการให้กระโดดไป
+                          });
+                        }, 1000);
+                    </script>';
         }
       } catch (PDOException $e) {
         echo '<script>
+                     setTimeout(function() {
+                      swal({
+                          title: "เกิดข้อผิดพลาด",
+                          text: "' . $e->getMessage() . '",
+                          type: "error"
+                      }, function() {
+                          window.location = "data.php"; //หน้าที่ต้องการให้กระโดดไป
+                      });
+                    }, 1000);
+                </script>';
+      }
+    } else {
+      echo '<script>
                  setTimeout(function() {
                   swal({
-                      title: "เกิดข้อผิดพลาด",
-                      text: "' . $e->getMessage() . '",
+                      title: "ข้อมูลไม่ครบถ้วน",
                       type: "error"
                   }, function() {
                       window.location = "data.php"; //หน้าที่ต้องการให้กระโดดไป
                   });
                 }, 1000);
             </script>';
-      }
-    } else {
-      echo '<script>
-             setTimeout(function() {
-              swal({
-                  title: "ข้อมูลไม่ครบถ้วน",
-                  type: "error"
-              }, function() {
-                  window.location = "data.php"; //หน้าที่ต้องการให้กระโดดไป
-              });
-            }, 1000);
-        </script>';
     }
   }
+
 
   if (@isset($_GET['delete_id'])) {
     $id = $_GET['delete_id'];
@@ -463,8 +507,6 @@
                 </select>
               </div>
               <div class="col">
-                <label class="col-form-label">รหัสไปรษณีย์:<span class="required-star">*</span></label>
-                <input type="text" class="form-control" id="" name="addr" required>
               </div>
             </div>
             <br>
@@ -523,6 +565,7 @@
                 swine, 
                 aph.name_th as aph, 
                 di.name_th as di, 
+                pro.province_id,
                 pro.name_th as pro, 
                 m_rank, 
                 stay, 
@@ -599,7 +642,7 @@
                   </div>
 
                   <div class="modal fade" id="myModal<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-scrollable">
+                    <div class="modal-dialog modal-dialog-scrollable modal-xl">
                       <div class="modal-content">
                         <div class="modal-header">
                           <h1 class="modal-title fs-5" id="exampleModalLabel">
@@ -608,9 +651,10 @@
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                          <form action="address.php?act=edit" method="post">
+                          <form action="data.php?act=edit" method="post">
+                            <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
                             <label class="col-form-label">รหัสบัตรประชาชน:</label>
-                            <input type="text" class="form-control" id="" name="homeid" value="<?php echo $row['id_card']; ?>">
+                            <input type="text" class="form-control" id="" name="id_card" value="<?php echo $row['id_card']; ?>">
 
                             <label class="col-form-label">คำนำหน้า:<span class="required-star">*</span></label>
                             <select name="prefix_id" class="form-select" id="inputGroupSelect01" required>
@@ -623,13 +667,16 @@
                                 <option value="<?php echo $row2['prefix_id']; ?>"><?php echo $row2['prefix']; ?></option>
                               <?php } ?>
                             </select>
-
-                            <label class="col-form-label">ชื่อ:<span class="required-star">*</span></label>
-                            <input type="text" class="form-control" id="" name="fname" value="<?php echo $row['name']; ?>" required>
-
-                            <label class="col-form-label">นามสกุล:<span class="required-star">*</span></label>
-                            <input type="text" class="form-control" id="" name="lname" value="<?php echo $row['lastname']; ?>" required>
-
+                            <div class="row">
+                              <div class="col">
+                                <label class="col-form-label">ชื่อ:<span class="required-star">*</span></label>
+                                <input type="text" class="form-control" id="" name="fname" value="<?php echo $row['name']; ?>" required>
+                              </div>
+                              <div class="col">
+                                <label class="col-form-label">นามสกุล:<span class="required-star">*</span></label>
+                                <input type="text" class="form-control" id="" name="lname" value="<?php echo $row['lastname']; ?>" required>
+                              </div>
+                            </div>
                             <label class="col-form-label">วัน-เดือน-ปีเกิด:<span class="required-star">*</span></label>
                             <input type="date" class="form-control" id="" name="bdate" value="<?php echo $row['date']; ?>" required>
 
@@ -706,7 +753,60 @@
 
                             <label class="col-form-label">เบอร์โทร:<span class="required-star">*</span></label>
                             <input type="text" class="form-control" id="" name="tel" value="<?php echo $row['tel']; ?>" required>
-
+                            <div class="row">
+                              <div class="col">
+                                <label class="col-form-label">บ้านเลขที่:<span class="required-star">*</span></label>
+                                <input type="text" class="form-control" id="" name="home_no" value="<?php echo $row['home_no']; ?>" required>
+                              </div>
+                              <div class="col">
+                                <label class="col-form-label">หมู่:<span class="required-star">*</span></label>
+                                <input type="text" class="form-control" id="" name="swine" value="<?php echo $row['swine']; ?>" required>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col">
+                                <label class="col-form-label">จังหวัด:<span class="required-star">*</span></label>
+                                <select name="province_id" class="form-select" id="inputGroupSelect01" required>
+                                  <option selected disabled>กรุณาเลือกจังหวัด</option>
+                                  <option selected value="<?php echo $row['province_id']; ?> "><?php echo $row['pro']; ?></option>
+                                  <?php $stmt2 = $conn->prepare("SELECT  * FROM provinces ORDER BY name_th  ASC; ");
+                                  $stmt2->execute();
+                                  $result2 = $stmt2->fetchAll();
+                                  foreach ($result2 as $row2) {
+                                  ?>
+                                    <option value="<?php echo $row2['province_id']; ?>"><?php echo $row2['name_th']; ?></option>
+                                  <?php } ?>
+                                </select>
+                              </div>
+                              <div class="col">
+                                <label class="col-form-label">อำเภอ:<span class="required-star">*</span></label>
+                                <select name="amphure_id" class="form-select" id="inputGroupSelect01" required>
+                                  <option selected disabled>กรุณาเลือกอำเภอ</option>
+                                  <option selected value="<?php echo $row['aph']; ?> "><?php echo $row['aph']; ?></option>
+                                  <?php $stmt3 = $conn->prepare("SELECT  amphure_id,name_th FROM amphures ORDER BY name_th  ASC; ");
+                                  $stmt3->execute();
+                                  $result3 = $stmt3->fetchAll();
+                                  foreach ($result3 as $row3) {
+                                  ?>
+                                    <option value="<?php echo $row3['amphure_id']; ?>"><?php echo $row3['name_th']; ?></option>
+                                  <?php }  ?>
+                                </select>
+                              </div>
+                              <div class="col">
+                                <label class="col-form-label">ตำบล:<span class="required-star">*</span></label>
+                                <select name="district_id" class="form-select" id="inputGroupSelect01" required>
+                                  <option selected disabled>กรุณาเลือกตำบล</option>
+                                  <option selected value="<?php echo $row['di']; ?> "><?php echo $row['di']; ?></option>
+                                  <?php $stmt4 = $conn->prepare("SELECT  district_id ,name_th FROM districts ORDER BY name_th  ASC; ");
+                                  $stmt4->execute();
+                                  $result4 = $stmt4->fetchAll();
+                                  foreach ($result4 as $row4) {
+                                  ?>
+                                    <option value="<?php echo $row4['district_id']; ?>"><?php echo $row4['name_th']; ?></option>
+                                  <?php }  ?>
+                                </select>
+                              </div>
+                            </div>
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ย้อนกลับ</button>
