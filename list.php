@@ -12,8 +12,11 @@
             font-size: 9pt;
         }
 
-        input[type=search],
-        select {
+        #ff {
+            font-size: 5.5pt;
+        }
+
+        input[type=search] {
             width: 200px;
             height: 40px;
             margin-bottom: 8px;
@@ -22,25 +25,31 @@
             padding: 15px;
         }
 
-        .btn,
-        button {
-            padding: 8px 16px;
-            margin-top: 8px;
-            border: none;
-            background-color: #007bff;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
+        #re {
+            display: flex;
+            flex-wrap: wrap;
         }
 
+        #re>div {
+            margin-right: 10px;
+        }
+
+
         @media print {
+
+            @page {
+                size: landscape;
+            }
+
             body * {
                 visibility: hidden;
+                /* ซ่อนเนื้อหาอื่นบนหน้าเว็บเมื่อพิมพ์ */
             }
 
             .print-section,
             .print-section * {
                 visibility: visible;
+                /* แสดงเฉพาะส่วนที่ต้องการพิมพ์ */
             }
 
             .print-section {
@@ -48,6 +57,12 @@
                 left: 0;
                 top: 0;
                 width: 100%;
+                /* กำหนดความกว้างเต็มหน้ากระดาษ */
+                margin: 0;
+                padding: 15px;
+                /* ตั้งค่าระยะขอบในการพิมพ์ */
+                font-size: 14px;
+                /* ตั้งขนาดตัวอักษร */
             }
         }
     </style>
@@ -66,7 +81,7 @@
                     <label for="handicap" class="form-label">เลือกกลุ่มเปราะบาง:</label>
                     <select id="handicap" name="handicap" class="form-select">
                         <option value="all">ทั้งหมด</option>
-                        <option value="Yes">กลุ่มเปราะบาง</option> 
+                        <option value="Yes">กลุ่มเปราะบาง</option>
                         <option value="No">ไม่อยู่ในกลุ่มเปราะบาง</option>
                     </select>
                 </div>
@@ -133,9 +148,7 @@
         $sql = "SELECT 
 id, 
 pr.prefix_id,
-pr.prefix as prefix,
-name, 
-lastname,  
+CONCAT(pr.prefix, ' ', name, ' ', lastname) AS full_name,
 date,
 $dateDB AS age,
 sex, 
@@ -177,86 +190,83 @@ $diseaseCondition";
         $stmt->execute();
         $result = $stmt->fetchAll();
         ?>
-        <div class="table-responsive">
-            <table class="table table-striped" id="myTable">
-                <thead>
-                    <tr class="table-success">
-                    <tr class="table-success">
-                        <th>#</th>
-                        <th>รหัสบัตรประชาชน</th>
-                        <th>คำนำหน้า</th>
-                        <th>ชื่อ</th>
-                        <th>นามสกุล</th>
-                        <th>วันเดือนปีเกิด</th>
-                        <th>อายุ</th>
-                        <th>เพศ</th>
-                        <th>สถานะ</th>
-                        <th>อาชีพ</th>
-                        <th>โรคประจำตัว</th>
-                        <th>กลุ่มเปราะบาง</th>
-                        <th>สถานที่รับยา</th>
-                        <th>เบอร์โทร</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    $stmt->execute();
-                    $result = $stmt->fetchAll();
+        <div class="container mt-3">
+            <div class="table-responsive" id="print">
+                <table class="table table-striped" id="myTable" >
+                    <thead>
+                        <tr class="table-success">
+                            <th>#</th>
+                            <th>รหัสบัตรประชาชน</th>
+                            <th>ชื่อ</th>
+                            <th>วันเกิด</th>
+                            <th>อายุ</th>
+                            <th>เพศ</th>
+                            <th>สถานะ</th>
+                            <th>อาชีพ</th>
+                            <th>โรคประจำตัว</th>
+                            <th>กลุ่มเปราะบาง</th>
+                            <th>สถานที่รับยา</th>
+                            <th>เบอร์โทร</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $stmt->execute();
+                        $result = $stmt->fetchAll();
 
-                    if (!empty($result)) {
-                        $i = 1;
-                        foreach ($result as $row) {
+                        if (!empty($result)) {
+                            $i = 1;
+                            foreach ($result as $row) {
+                                ?>
+                                <tr>
+                                    <td><?php echo $i; ?></td>
+                                    <td><?php echo htmlspecialchars($row['id_card']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['full_name']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['date']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['age']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['sex']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['status']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['occupation']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['disease']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['handicap']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['place']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['tel']); ?></td>
+                                </tr>
+                                <?php
+                                $i++;
+                            }
+                        } else {
                             ?>
                             <tr>
-                                <td><?php echo $i; ?></td>
-                                <td><?php echo htmlspecialchars($row['id_card']); ?></td>
-                                <td><?php echo htmlspecialchars($row['prefix']); ?></td>
-                                <td><?php echo htmlspecialchars($row['name']); ?></td>
-                                <td><?php echo htmlspecialchars($row['lastname']); ?></td>
-                                <td><?php echo htmlspecialchars($row['date']); ?></td>
-                                <td><?php echo htmlspecialchars($row['age']); ?></td>
-                                <td><?php echo htmlspecialchars($row['sex']); ?></td>
-                                <td><?php echo htmlspecialchars($row['status']); ?></td>
-                                <td><?php echo htmlspecialchars($row['occupation']); ?></td>
-                                <td><?php echo htmlspecialchars($row['disease']); ?></td>
-                                <td><?php echo htmlspecialchars($row['handicap']); ?></td>
-                                <td><?php echo htmlspecialchars($row['place']); ?></td>
-                                <td><?php echo htmlspecialchars($row['tel']); ?></td>
+                                <td colspan="17" style="text-align: center; color:red;">ไม่มีข้อมูล</td>
                             </tr>
                             <?php
-                            $i++;
                         }
-                    } else {
                         ?>
-                        <tr>
-                            <td colspan="17" style="text-align: center; color:red;">ไม่มีข้อมูล</td>
-                        </tr>
-                        <?php
-                    }
-                    ?>
 
-                </tbody>
-            </table>
-            <button onclick="printContent('myTable')" class="btn btn-primary print-button">พิมพ์</button>
-        </div>
+                    </tbody>
+                </table>
+               
+            </div>
+        </div> <button onclick="printContent('print')" class="btn btn-primary print-button">พิมพ์</button>
     </div>
 
 
-
     <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable();
+        });
         function printContent(elementId) {
-            // Remove print-section class from all elements
             document.querySelectorAll('.print-section').forEach(el => {
                 el.classList.remove('print-section');
             });
-
-            // Add print-section class to the desired container
             const element = document.getElementById(elementId);
             element.classList.add('print-section');
 
-            // Call the browser's print function
-            window.print();
+            window.print(); // เรียกใช้งาน window.print หลังจากตั้งค่าคลาสที่ต้องการ
         }
+
+
     </script>
 </body>
 
