@@ -66,7 +66,7 @@
                     <label for="handicap" class="form-label">เลือกกลุ่มเปราะบาง:</label>
                     <select id="handicap" name="handicap" class="form-select">
                         <option value="ทั้งหมด">ทั้งหมด</option>
-                        <option value="ใช่">กลุ่มเปราะบาง</option>
+                        <option value="Yes">กลุ่มเปราะบาง</option>
                         <option value="ไม่ใช่">ไม่อยู่ในกลุ่มเปราะบาง</option>
                     </select>
                 </div>
