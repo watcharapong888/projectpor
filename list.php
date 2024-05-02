@@ -70,8 +70,8 @@
                         <option value="fgfg">fgfg</option>
                         <option value="Yes">กลุ่มเปราะบาง</option>
                         <option value="???">???</option>
-                        <option value="ใช่">กลุ่มเปราะบาง</option>
-                        <option value="ไม่ใช่">ไม่อยู่ในกลุ่มเปราะบาง</option>
+                        <option value="ใช่">ใช่</option>
+                        <option value="ไม่ใช่">ไม่ใช่</option>
                     </select>
                 </div>
                 <div class="col-md-4 mb-3">
@@ -145,11 +145,11 @@
         $ageCondition = "";
         if ($selectedAgeGroup != 'all') {
             switch ($selectedAgeGroup) {
-                case '0-20':
-                    $ageCondition = "AND $dateDB BETWEEN 0 AND 20";
+                case '0-1':
+                    $ageCondition = "AND $dateDB BETWEEN 0 AND 1";
                     break;
-                case '21-40':
-                    $ageCondition = "AND $dateDB BETWEEN 21 AND 40";
+                case '7-40':
+                    $ageCondition = "AND $dateDB BETWEEN 7 AND 40";
                     break;
                 case '41-60':
                     $ageCondition = "AND $dateDB BETWEEN 41 AND 60";
