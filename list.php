@@ -66,13 +66,14 @@
                     <label for="handicap" class="form-label">เลือกกลุ่มเปราะบาง:</label>
                     <select id="handicap" name="handicap" class="form-select">
                         <option value="ทั้งหมด">ทั้งหมด</option>
+                        <option value="fgfg">fgfg</option>
                         <option value="ใช่">กลุ่มเปราะบาง</option>
                         <option value="ไม่ใช่">ไม่อยู่ในกลุ่มเปราะบาง</option>
                     </select>
                 </div>
                 <div class="col-md-4 mb-3">
-                    <label for="ageGroup" class="form-label">เลือกกลุ่มอายุ:</label>
-                    <select id="ageGroup" name="ageGroup" class="form-select">
+                    <label for="age" class="form-label">เลือกกลุ่มอายุ:</label>
+                    <select id="age" name="age" class="form-select">
                         <option value="all">ทั้งหมด</option>
                         <option value="0-20">0-20 ปี</option>
                         <option value="21-40">21-40 ปี</option>
@@ -81,8 +82,8 @@
                     </select>
                 </div>
                 <div class="col-md-4 mb-3">
-                    <label for="chronicDisease" class="form-label">เลือกกลุ่มโรคประจำตัว:</label>
-                    <select id="chronicDisease" name="chronicDisease" class="form-select">
+                    <label for="disease" class="form-label">เลือกกลุ่มโรคประจำตัว:</label>
+                    <select id="disease" name="disease" class="form-select">
                         <option value="all">ทั้งหมด</option>
                         <option value="ไม่มีโรคประจำตัว">ไม่มีโรคประจำตัว</option>
                         <option value="โรคเบาหวาน">โรคเบาหวาน</option>
@@ -106,53 +107,53 @@
             </div>
         </form>
         <?php
-// Check if any GET parameters are set
-if (!empty($_GET)) {
-    echo "<h3>Received GET Parameters:</h3>";
-    foreach ($_GET as $key => $value) {
-        echo htmlspecialchars($key) . ": " . htmlspecialchars($value) . "<br>";
-    }
-} else {
-    echo "No GET parameters received.";
-}
-?>
-<?php
-// Check if the form was submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Check if any POST parameters are set
-    if (!empty($_POST)) {
-        echo "<h3>Received POST Parameters:</h3>";
-        foreach ($_POST as $key => $value) {
-            echo htmlspecialchars($key) . ": " . htmlspecialchars($value) . "<br>";
+        // Check if any GET parameters are set
+        if (!empty($_GET)) {
+            echo "<h3>Received GET Parameters:</h3>";
+            foreach ($_GET as $key => $value) {
+                echo htmlspecialchars($key) . ": " . htmlspecialchars($value) . "<br>";
+            }
+        } else {
+            echo "No GET parameters received.";
         }
-    } else {
-        echo "No POST parameters received.";
-    }
-}
-?>
+        ?>
+        <?php
+        // Check if the form was submitted
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            // Check if any POST parameters are set
+            if (!empty($_POST)) {
+                echo "<h3>Received POST Parameters:</h3>";
+                foreach ($_POST as $key => $value) {
+                    echo htmlspecialchars($key) . ": " . htmlspecialchars($value) . "<br>";
+                }
+            } else {
+                echo "No POST parameters received.";
+            }
+        }
+        ?>
 
 
         <br>
         <?php
         // หลังจากที่ผู้ใช้ส่งแบบฟอร์ม
         $selectedHandicap = $_POST['handicap'] ?? 'ทั้งหมด';
-        $selectedAgeGroup = $_POST['ageGroup'] ?? 'all';
-        $selectedChronicDisease = $_POST['chronicDisease'] ?? 'all';
+        $selectedAgeGroup = $_POST['age'] ?? 'all';
+        $selectedChronicDisease = $_POST['disease'] ?? 'all';
         $handicapCondition = $selectedHandicap !== 'ทั้งหมด' ? "AND handicap = '$selectedHandicap'" : "";
         $ageCondition = "";
         if ($selectedAgeGroup != 'all') {
             switch ($selectedAgeGroup) {
                 case '0-20':
-                    $ageCondition = "AND TIMESTAMPDIFF(YEAR, date, CURDATE()) BETWEEN 0 AND 20";
+                    $ageCondition = "AND $dateDB BETWEEN 0 AND 20";
                     break;
                 case '21-40':
-                    $ageCondition = "AND TIMESTAMPDIFF(YEAR, date, CURDATE()) BETWEEN 21 AND 40";
+                    $ageCondition = "AND $dateDB BETWEEN 21 AND 40";
                     break;
                 case '41-60':
-                    $ageCondition = "AND TIMESTAMPDIFF(YEAR, date, CURDATE()) BETWEEN 41 AND 60";
+                    $ageCondition = "AND $dateDB BETWEEN 41 AND 60";
                     break;
                 case '61+':
-                    $ageCondition = "AND TIMESTAMPDIFF(YEAR, date, CURDATE()) >= 61";
+                    $ageCondition = "AND $dateDB >= 61";
                     break;
             }
         }
