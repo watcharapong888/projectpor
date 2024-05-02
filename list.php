@@ -58,7 +58,7 @@
     require_once 'db.php'; ?>
     <div class="container mt-3">
         <h3>
-            <p>รายชื่อ</p>
+            <p>รายชื่อทั้งหมดคนในชุมชน</p>
         </h3>
         <form action="" method="POST">
             <div class="row">
@@ -66,18 +66,20 @@
                     <label for="handicap" class="form-label">เลือกกลุ่มเปราะบาง:</label>
                     <select id="handicap" name="handicap" class="form-select">
                         <option value="ทั้งหมด">ทั้งหมด</option>
+                        <option value="fgfgk">fgfgk</option>
                         <option value="fgfg">fgfg</option>
-                        <option value="ใช่">กลุ่มเปราะบาง</option>
+                        <option value="Yes">กลุ่มเปราะบาง</option>
                         <option value="???">???</option>
-                        <option value="No">ไม่อยู่ในกลุ่มเปราะบาง</option>
+                        <option value="ใช่">กลุ่มเปราะบาง</option>
+                        <option value="ไม่ใช่">ไม่อยู่ในกลุ่มเปราะบาง</option>
                     </select>
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="age" class="form-label">เลือกกลุ่มอายุ:</label>
                     <select id="age" name="age" class="form-select">
                         <option value="all">ทั้งหมด</option>
-                        <option value="0-20">0-20 ปี</option>
-                        <option value="21-40">21-40 ปี</option>
+                        <option value="0-1">0-1 ปี</option>
+                        <option value="7-40">7-40 ปี</option>
                         <option value="41-60">41-60 ปี</option>
                         <option value="61+">61 ปีขึ้นไป</option>
                     </select>
@@ -132,8 +134,6 @@
             }
         }
         ?>
-
-
         <br>
         <?php
         // หลังจากที่ผู้ใช้ส่งแบบฟอร์ม
@@ -141,6 +141,7 @@
         $selectedAgeGroup = $_POST['age'] ?? 'all';
         $selectedChronicDisease = $_POST['disease'] ?? 'all';
         $handicapCondition = $selectedHandicap !== 'ทั้งหมด' ? "AND handicap = '$selectedHandicap'" : "";
+
         $ageCondition = "";
         if ($selectedAgeGroup != 'all') {
             switch ($selectedAgeGroup) {
