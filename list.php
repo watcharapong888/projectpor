@@ -66,40 +66,36 @@
                     <label for="handicap" class="form-label">เลือกกลุ่มเปราะบาง:</label>
                     <select id="handicap" name="handicap" class="form-select">
                         <option value="ทั้งหมด">ทั้งหมด</option>
-                        <option value="fgfgk">fgfgk</option>
-                        <option value="fgfg">fgfg</option>
-                        <option value="Yes">กลุ่มเปราะบาง</option>
-                        <option value="???">???</option>
-                        <option value="ใช่">ใช่</option>
-                        <option value="ไม่ใช่">ไม่ใช่</option>
+                        <option value="ใช่">กลุ่มเปราะบาง</option>
+                        <option value="ไม่ใช่">ไม่อยู่ในกลุ่มเปราะบาง</option>
                     </select>
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="age" class="form-label">เลือกกลุ่มอายุ:</label>
                     <select id="age" name="age" class="form-select">
                         <option value="all">ทั้งหมด</option>
-                        <option value="0-1">0-1 ปี</option>
-                        <option value="7-40">7-40 ปี</option>
+                        <option value="0-20">0-20 ปี</option>
+                        <option value="21-40">21-40 ปี</option>
                         <option value="41-60">41-60 ปี</option>
                         <option value="61+">61 ปีขึ้นไป</option>
                     </select>
                 </div>
                 <div class="col-md-4 mb-3">
-                    <label for="disease" class="form-label">เลือกกลุ่มโรคประจำตัว:</label>
-                    <select id="disease" name="disease" class="form-select">
+                    <label for="disease_id" class="form-label">เลือกกลุ่มโรคประจำตัว:</label>
+                    <select id="disease_id" name="disease_id" class="form-select">
                         <option value="all">ทั้งหมด</option>
-                        <option value="ไม่มีโรคประจำตัว">ไม่มีโรคประจำตัว</option>
-                        <option value="โรคเบาหวาน">โรคเบาหวาน</option>
-                        <option value="โรคหัวใจ">โรคหัวใจ</option>
-                        <option value="โรคความดัน">โรคความดัน</option>
-                        <option value="โรคเส้นเลือดตีบ">โรคเส้นเลือดตีบ</option>
-                        <option value="โรคไต">โรคไต</option>
-                        <option value="โรครูมาตอยด์">โรครูมาตอยด์</option>
-                        <option value="โรคมะเร็งเต้านม">โรคมะเร็งเต้านม</option>
-                        <option value="โรคมะเร็งตับ">โรคมะเร็งตับ</option>
-                        <option value="โรคมะเร็งลำไส้">โรคมะเร็งลำไส้</option>
-                        <option value="โรคมะเร็งกล่องเสียง">โรคมะเร็งกล่องเสียง</option>
-                        <option value="ภาวะธาตุเหล็กเกิน">ภาวะธาตุเหล็กเกิน</option>
+                        <option value="12">ไม่มีโรคประจำตัว</option>
+                        <option value="1">โรคเบาหวาน</option>
+                        <option value="2">โรคหัวใจ</option>
+                        <option value="3">โรคความดัน</option>
+                        <option value="4">โรคเส้นเลือดตีบ</option>
+                        <option value="5">โรคไต</option>
+                        <option value="6">โรครูมาตอยด์</option>
+                        <option value="7">โรคมะเร็งเต้านม</option>
+                        <option value="9">โรคมะเร็งตับ</option>
+                        <option value="8">โรคมะเร็งลำไส้</option>
+                        <option value="10">โรคมะเร็งกล่องเสียง</option>
+                        <option value="11">ภาวะธาตุเหล็กเกิน</option>
                     </select>
                 </div>
             </div>
@@ -139,17 +135,17 @@
         // หลังจากที่ผู้ใช้ส่งแบบฟอร์ม
         $selectedHandicap = $_POST['handicap'] ?? 'ทั้งหมด';
         $selectedAgeGroup = $_POST['age'] ?? 'all';
-        $selectedChronicDisease = $_POST['disease'] ?? 'all';
+        $selectedChronicDisease = $_POST['disease_id'] ?? 'all';
         $handicapCondition = $selectedHandicap !== 'ทั้งหมด' ? "AND handicap = '$selectedHandicap'" : "";
 
         $ageCondition = "";
         if ($selectedAgeGroup != 'all') {
             switch ($selectedAgeGroup) {
-                case '0-1':
-                    $ageCondition = "AND $dateDB BETWEEN 0 AND 1";
+                case '0-20':
+                    $ageCondition = "AND $dateDB BETWEEN 0 AND 20";
                     break;
-                case '7-40':
-                    $ageCondition = "AND $dateDB BETWEEN 7 AND 40";
+                case '21-40':
+                    $ageCondition = "AND $dateDB BETWEEN 21 AND 40";
                     break;
                 case '41-60':
                     $ageCondition = "AND $dateDB BETWEEN 41 AND 60";
@@ -160,7 +156,7 @@
             }
         }
 
-        $diseaseCondition = $selectedChronicDisease !== 'all' ? "AND ds.disease = '$selectedChronicDisease'" : "";
+        $diseaseCondition = $selectedChronicDisease !== 'all' ? "AND ds.disease_id = '$selectedChronicDisease'" : "";
 
         $sql = "SELECT 
 id, 
