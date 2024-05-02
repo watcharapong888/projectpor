@@ -571,7 +571,9 @@
                 home_no, 
                 swine, 
                 aph.name_th as aph, 
+                aph.amphure_id ,
                 di.name_th as di, 
+                di.district_id ,
                 pro.province_id,
                 pro.name_th as pro, 
                 m_rank, 
@@ -789,7 +791,7 @@
                                 <label class="col-form-label">อำเภอ:<span class="required-star">*</span></label>
                                 <select name="amphure_id" class="form-select" id="inputGroupSelect01" required>
                                   <option selected disabled>กรุณาเลือกอำเภอ</option>
-                                  <option selected value="<?php echo $row['aph']; ?> "><?php echo $row['aph']; ?></option>
+                                  <option selected value="<?php echo $row['amphure_id']; ?> "><?php echo $row['aph']; ?></option>
                                   <?php $stmt3 = $conn->prepare("SELECT  amphure_id,name_th FROM amphures ORDER BY name_th  ASC; ");
                                   $stmt3->execute();
                                   $result3 = $stmt3->fetchAll();
@@ -803,7 +805,7 @@
                                 <label class="col-form-label">ตำบล:<span class="required-star">*</span></label>
                                 <select name="district_id" class="form-select" id="inputGroupSelect01" required>
                                   <option selected disabled>กรุณาเลือกตำบล</option>
-                                  <option selected value="<?php echo $row['di']; ?> "><?php echo $row['di']; ?></option>
+                                  <option selected value="<?php echo $row['district_id']; ?> "><?php echo $row['di']; ?></option>
                                   <?php $stmt4 = $conn->prepare("SELECT  district_id ,name_th FROM districts ORDER BY name_th  ASC; ");
                                   $stmt4->execute();
                                   $result4 = $stmt4->fetchAll();
