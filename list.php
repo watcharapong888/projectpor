@@ -68,7 +68,8 @@
                         <option value="ทั้งหมด">ทั้งหมด</option>
                         <option value="fgfg">fgfg</option>
                         <option value="ใช่">กลุ่มเปราะบาง</option>
-                        <option value="ไม่ใช่">ไม่อยู่ในกลุ่มเปราะบาง</option>
+                        <option value="???">???</option>
+                        <option value="No">ไม่อยู่ในกลุ่มเปราะบาง</option>
                     </select>
                 </div>
                 <div class="col-md-4 mb-3">
