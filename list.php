@@ -137,7 +137,6 @@
         $selectedAgeGroup = $_POST['age'] ?? 'all';
         $selectedChronicDisease = $_POST['disease_id'] ?? 'all';
         $handicapCondition = $selectedHandicap !== 'ทั้งหมด' ? "AND dt.handicap = '$selectedHandicap'" : "";
-
         $ageCondition = "";
         if ($selectedAgeGroup != 'all') {
             switch ($selectedAgeGroup) {
@@ -155,9 +154,7 @@
                     break;
             }
         }
-
         $diseaseCondition = $selectedChronicDisease !== 'all' ? "AND ds.disease_id = '$selectedChronicDisease'" : "";
-
         $sql = "SELECT 
 id, 
 pr.prefix_id,
@@ -173,7 +170,7 @@ o.occupation as occupation,
 ds.disease_id,
 ds.disease as disease, 
 place, 
-handicap, 
+dt.handicap, 
 tel, 
 home_id, 
 home_no, 
