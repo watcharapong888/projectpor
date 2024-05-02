@@ -171,7 +171,9 @@
       isset($_POST['tel']) &&
       isset($_POST['home_no']) &&
       isset($_POST['swine']) &&
-      isset($_POST['province_id'])
+      isset($_POST['province_id']) &&
+      isset($_POST['amphure_id']) &&
+      isset($_POST['district_id'])
     ) {
       $id = $_POST['id'];
       $id_card = $_POST['id_card'];
@@ -190,6 +192,8 @@
       $home_no = $_POST['home_no'];
       $swine = $_POST['swine'];
       $province_id = $_POST['province_id'];
+      $amphure_id = $_POST['amphure_id'];
+      $district_id = $_POST['district_id'];
 
       // SQL update
       $stmt = $conn->prepare("UPDATE data SET 
@@ -207,7 +211,9 @@
             tel = :tel,
             home_no = :home_no,
             swine = :swine,
-            province_id = :province_id
+            province_id = :province_id,
+            amphure_id = :amphure_id,
+            district_id = :district_id
             WHERE id = :id");
 
       $stmt->bindParam(':id', $id, PDO::PARAM_INT);
@@ -226,6 +232,8 @@
       $stmt->bindParam(':home_no', $home_no, PDO::PARAM_STR);
       $stmt->bindParam(':swine', $swine, PDO::PARAM_INT);
       $stmt->bindParam(':province_id', $province_id, PDO::PARAM_INT);
+      $stmt->bindParam(':amphure_id', $amphure_id, PDO::PARAM_INT);
+      $stmt->bindParam(':district_id', $district_id, PDO::PARAM_INT);
 
       try {
         $stmt->execute();
