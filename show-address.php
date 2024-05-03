@@ -12,7 +12,7 @@
                 display: none !important;
             }
 
-            .btn-login {
+            #login  {
                 display: none !important;
             }
         }
@@ -47,9 +47,9 @@
     include "menu.php";
     require 'db.php';
 
-    echo '<pre>';
-    print_r($_GET);
-    echo '</pre>';
+    // echo '<pre>';
+    // print_r($_GET);
+    // echo '</pre>';
     ?>
     <div class="menushow">
         <?php

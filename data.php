@@ -8,10 +8,6 @@
   <title>ข้อมูลคนในชุมชน</title>
 </head>
 <style>
-  th,
-  td {
-    font-size: 9pt;
-  }
 
   #ff {
     font-size: 5.5pt;
@@ -44,9 +40,9 @@
 <body>
   <?php include 'menu.php';
   require_once 'db.php';
-  echo '<pre>';
-  print_r($_POST);
-  echo '</pre>';
+  // echo '<pre>';
+  // print_r($_POST);
+  // echo '</pre>';
   // exit();
   //ตรวจสอบตัวแปรที่ส่งมาจากฟอร์ม
   if (isset($_POST['card_id']) && $_GET['act'] === 'add') {
@@ -71,8 +67,8 @@
     home_id,
     home_no,
     swine,
-    amphure_id,
-    district_id,
+    amphure,
+    district,
     province_id,
     m_rank,
     stay,
@@ -119,8 +115,8 @@
     $stmt->bindParam(':home_id', $_POST['home_id'], PDO::PARAM_INT);
     $stmt->bindParam(':home_no', $_POST['home_no'], PDO::PARAM_STR);
     $stmt->bindParam(':swine', $_POST['swine'], PDO::PARAM_INT);
-    $stmt->bindParam(':amphure_id', $_POST['amphure_id'], PDO::PARAM_INT);
-    $stmt->bindParam(':district_id', $_POST['district_id'], PDO::PARAM_INT);
+    $stmt->bindParam(':amphure_id', $_POST['amphure'], PDO::PARAM_STR);
+    $stmt->bindParam(':district_id', $_POST['district'], PDO::PARAM_STR);
     $stmt->bindParam(':province_id', $_POST['province_id'], PDO::PARAM_INT);
     $stmt->bindParam(':m_rank', $m_rank, PDO::PARAM_INT);
     $stmt->bindParam(':stay', $stay, PDO::PARAM_INT);
@@ -172,8 +168,8 @@
       isset($_POST['home_no']) &&
       isset($_POST['swine']) &&
       isset($_POST['province_id']) &&
-      isset($_POST['amphure_id']) &&
-      isset($_POST['district_id'])
+      isset($_POST['amphure']) &&
+      isset($_POST['district'])
     ) {
       $id = $_POST['id'];
       $id_card = $_POST['id_card'];
@@ -192,8 +188,8 @@
       $home_no = $_POST['home_no'];
       $swine = $_POST['swine'];
       $province_id = $_POST['province_id'];
-      $amphure_id = $_POST['amphure_id'];
-      $district_id = $_POST['district_id'];
+      $amphure_id = $_POST['amphure'];
+      $district_id = $_POST['district'];
 
       // SQL update
       $stmt = $conn->prepare("UPDATE data SET 
@@ -212,8 +208,8 @@
             home_no = :home_no,
             swine = :swine,
             province_id = :province_id,
-            amphure_id = :amphure_id,
-            district_id = :district_id
+            amphure = :amphure_id,
+            district = :district_id
             WHERE id = :id");
 
       $stmt->bindParam(':id', $id, PDO::PARAM_INT);
@@ -232,8 +228,8 @@
       $stmt->bindParam(':home_no', $home_no, PDO::PARAM_STR);
       $stmt->bindParam(':swine', $swine, PDO::PARAM_INT);
       $stmt->bindParam(':province_id', $province_id, PDO::PARAM_INT);
-      $stmt->bindParam(':amphure_id', $amphure_id, PDO::PARAM_INT);
-      $stmt->bindParam(':district_id', $district_id, PDO::PARAM_INT);
+      $stmt->bindParam(':amphure_id', $amphure_id, PDO::PARAM_STR);
+      $stmt->bindParam(':district_id', $district_id, PDO::PARAM_STR);
 
       try {
         $stmt->execute();
@@ -444,12 +440,12 @@
                 <label class="col-form-label">รหัสบ้านตามทะเบียนบ้าน:<span class="required-star">*</span></label>
                 <select name="home_id" class="fstdropdown-select" id="inputGroupSelect01" required>
                   <option selected disabled>--กรุณาเลือก--</option>
-                  <?php $stmt3 = $conn->prepare("SELECT  * FROM address ORDER BY home_id  ASC; ");
+                  <?php $stmt3 = $conn->prepare("SELECT  * FROM address ORDER BY id_home  ASC; ");
                   $stmt3->execute();
                   $result3 = $stmt3->fetchAll();
                   foreach ($result3 as $row3) {
                   ?>
-                    <option value="<?php echo $row3['home_id']; ?>"><?php echo $row3['id_home']; ?></option>
+                    <option value="<?php echo $row3['id_home']; ?>"><?php echo $row3['id_home']; ?></option>
                   <?php } ?>
                 </select>
               </div>
@@ -487,31 +483,15 @@
               </div>
               <div class="col">
                 <label class="col-form-label">อำเภอ:<span class="required-star">*</span></label>
-                <select name="amphure_id" class="fstdropdown-select" id="select_box" required>
-                  <option selected disabled>กรุณาเลือกอำเภอ</option>
-                  <?php $stmt3 = $conn->prepare("SELECT  amphure_id,name_th FROM amphures ORDER BY name_th  ASC; ");
-                  $stmt3->execute();
-                  $result3 = $stmt3->fetchAll();
-                  foreach ($result3 as $row3) {
-                  ?>
-                    <option value="<?php echo $row3['amphure_id']; ?>"><?php echo $row3['name_th']; ?></option>
-                  <?php }  ?>
-                </select>
+                <input type="text" class="form-control" id="" name="amphure" required>
+
               </div>
             </div>
             <div class="row">
               <div class="col">
                 <label class="col-form-label">ตำบล:<span class="required-star">*</span></label>
-                <select name="district_id" class="fstdropdown-select" id="select_box" required>
-                  <option selected disabled>กรุณาเลือกตำบล</option>
-                  <?php $stmt4 = $conn->prepare("SELECT  district_id ,name_th FROM districts ORDER BY name_th  ASC; ");
-                  $stmt4->execute();
-                  $result4 = $stmt4->fetchAll();
-                  foreach ($result4 as $row4) {
-                  ?>
-                    <option value="<?php echo $row4['district_id']; ?>"><?php echo $row4['name_th']; ?></option>
-                  <?php }  ?>
-                </select>
+                <input type="text" class="form-control" id="" name="district" required>
+
               </div>
               <div class="col">
               </div>
@@ -535,13 +515,13 @@
                 <th>นามสกุล</th>
                 <th>วันเดือนปีเกิด</th>
                 <th>อายุ</th>
-                <th>เพศ</th>
+                <!-- <th>เพศ</th>
                 <th>สถานะ</th>
                 <th>อาชีพ</th>
                 <th>โรคประจำตัว</th>
                 <th>กลุ่มเปราะบาง</th>
                 <th>สถานที่รับยา</th>
-                <th>เบอร์โทร</th>
+                <th>เบอร์โทร</th> -->
                 <th></th>
                 <th></th>
                 <th></th>
@@ -557,7 +537,7 @@
                 name, 
                 lastname,  
                 date,
-                $dateDB AS age,
+                TIMESTAMPDIFF(YEAR, date, CURDATE()) AS age,
                 sex, 
                 status, 
                 o.occupation_id,
@@ -570,10 +550,8 @@
                 home_id, 
                 home_no, 
                 swine, 
-                aph.name_th as aph, 
-                aph.amphure_id ,
-                di.name_th as di, 
-                di.district_id ,
+                district,
+                amphure ,
                 pro.province_id,
                 pro.name_th as pro, 
                 m_rank, 
@@ -588,13 +566,9 @@
                 JOIN 
                 disease  AS ds ON dt.disease_id = ds.disease_id
                 JOIN 
-                amphures AS aph ON dt.amphure_id = aph.amphure_id 
-                JOIN 
-                districts AS di ON dt.district_id = di.district_id 
-                JOIN 
                 provinces AS pro ON dt.province_id = pro.province_id 
                 JOIN 
-                $user AS us ON dt.user_id = us.user_id 
+                user AS us ON dt.user_id = us.user_id 
                    "
               );
               $stmt->execute();
@@ -606,22 +580,37 @@
               ?>
                   <tr>
                     <td><?php echo $i; ?></td>
-                    <td><?php echo $row['id_card']; ?></td>
+                    <td><?php 
+                     $id_card = $row['id_card'];
+                     if (strlen($id_card) >= 3) {
+                         $masked_id = substr($id_card, 0, -3) . 'XXX';
+                         if (strlen($masked_id) == 13) {
+                             $display_id_card = substr($masked_id, 0, 1) . '-' .
+                                 substr($masked_id, 1, 4) . '-' .
+                                 substr($masked_id, 5, 5) . '-' .
+                                 substr($masked_id, 10, 3);
+                         } else {
+                             $display_id_card = $masked_id;
+                         }
+                     } else {
+                         $display_id_card = str_repeat('*', strlen($id_card));
+                     }
+                    echo $display_id_card ?></td>
                     <td><?php echo $row['prefix']; ?></td>
                     <td><?php echo $row['name']; ?></td>
                     <td><?php echo $row['lastname']; ?></td>
                     <td><?php echo $row['date']; ?></td>
                     <td><?php echo $row['age']; ?></td>
-                    <td><?php echo $row['sex']; ?></td>
+                    <!-- <td><?php echo $row['sex']; ?></td>
                     <td><?php echo $row['status']; ?></td>
                     <td><?php echo $row['occupation']; ?></td>
                     <td><?php echo $row['disease']; ?></td>
                     <td><?php echo $row['handicap']; ?></td>
                     <td><?php echo $row['place']; ?></td>
-                    <td><?php echo $row['tel']; ?></td>
-                    <td><a id="ff" href="show-address.php?home_id=<?php echo $row['home_id']; ?>" class="btn btn-success">ดูข้อมูล</a></td>
-                    <td><button id="ff" type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#myModal<?php echo $row['id']; ?>">แก้ไขข้อมูล</button></td>
-                    <td> <button id="ff" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Modaldeletel<?php echo $row['id']; ?>">
+                    <td><?php echo $row['tel']; ?></td> -->
+                    <td><a  href="show-data.php?id_card=<?php echo $row['id_card']; ?>&prefix_id=<?php echo $row['prefix']; ?>&lastname=<?php echo $row['lastname']; ?>&name=<?php echo $row['name']; ?>&date=<?php echo $row['date']; ?>&age=<?php echo $row['age']; ?>&sex=<?php echo $row['sex']; ?>&status=<?php echo $row['status']; ?>&occupation=<?php echo $row['occupation']; ?>&disease=<?php echo $row['disease']; ?>&place=<?php echo $row['place']; ?>&handicap=<?php echo $row['handicap']; ?>&tel=<?php echo $row['tel']; ?>&status=<?php echo $row['status']; ?>&home_id=<?php echo $row['home_id']; ?>&home_no=<?php echo $row['home_no']; ?>&swine=<?php echo $row['swine']; ?>&amphure=<?php echo $row['amphure']; ?>&district=<?php echo $row['district']; ?>&province_id=<?php echo $row['pro']; ?>" class="btn btn-success">ดูข้อมูล</a></td>
+                    <td><button  type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#myModal<?php echo $row['id']; ?>">แก้ไขข้อมูล</button></td>
+                    <td> <button  type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Modaldeletel<?php echo $row['id']; ?>">
                         ลบข้อมูล
                       </button></td>
                   </tr>
@@ -789,31 +778,11 @@
                               </div>
                               <div class="col">
                                 <label class="col-form-label">อำเภอ:<span class="required-star">*</span></label>
-                                <select name="amphure_id" class="form-select" id="inputGroupSelect01" required>
-                                  <option selected disabled>กรุณาเลือกอำเภอ</option>
-                                  <option selected value="<?php echo $row['amphure_id']; ?> "><?php echo $row['aph']; ?></option>
-                                  <?php $stmt3 = $conn->prepare("SELECT  amphure_id,name_th FROM amphures ORDER BY name_th  ASC; ");
-                                  $stmt3->execute();
-                                  $result3 = $stmt3->fetchAll();
-                                  foreach ($result3 as $row3) {
-                                  ?>
-                                    <option value="<?php echo $row3['amphure_id']; ?>"><?php echo $row3['name_th']; ?></option>
-                                  <?php }  ?>
-                                </select>
+                                <input type="text" class="form-control" id="" name="amphure" value="<?php echo $row['amphure']; ?>" required>
                               </div>
                               <div class="col">
                                 <label class="col-form-label">ตำบล:<span class="required-star">*</span></label>
-                                <select name="district_id" class="form-select" id="inputGroupSelect01" required>
-                                  <option selected disabled>กรุณาเลือกตำบล</option>
-                                  <option selected value="<?php echo $row['district_id']; ?> "><?php echo $row['di']; ?></option>
-                                  <?php $stmt4 = $conn->prepare("SELECT  district_id ,name_th FROM districts ORDER BY name_th  ASC; ");
-                                  $stmt4->execute();
-                                  $result4 = $stmt4->fetchAll();
-                                  foreach ($result4 as $row4) {
-                                  ?>
-                                    <option value="<?php echo $row4['district_id']; ?>"><?php echo $row4['name_th']; ?></option>
-                                  <?php }  ?>
-                                </select>
+                                <input type="text" class="form-control" id="" name="district" value="<?php echo $row['district']; ?>" required>
                               </div>
                             </div>
                         </div>
