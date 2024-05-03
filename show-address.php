@@ -46,11 +46,15 @@
     // เรียกใช้ไฟล์ menu.php
     include "menu.php";
     require 'db.php';
+
+    echo '<pre>';
+    print_r($_GET);
+    echo '</pre>';
     ?>
     <div class="menushow">
         <?php
         // ตรวจสอบว่ามีค่า home_id และ home_no ที่ส่งมาจาก URL หรือไม่
-        if (isset($_GET['home_id']) && isset($_GET['id_home']) && isset($_GET['home_no']) && isset($_GET['swine']) && isset($_GET['aph']) && isset($_GET['di']) && isset($_GET['pro']) && isset($_GET['location'])&& isset($_GET['zip_code']) && isset($_GET['home_type'])) {
+        if (isset($_GET['home_id']) && isset($_GET['id_home']) && isset($_GET['home_no']) && isset($_GET['swine']) && isset($_GET['aph']) && isset($_GET['di']) && isset($_GET['pro']) && isset($_GET['location']) && isset($_GET['zip_code']) && isset($_GET['home_type'])) {
             // ถ้ามีค่า ให้กำหนดค่าให้กับตัวแปร $home_id และ $home_no
             $home_id = $_GET['home_id'];
             $id_home = $_GET['id_home'];
@@ -90,7 +94,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td  class="table-light">อำเภอ:</td>
+                                <td class="table-light">อำเภอ:</td>
                                 <td>
                                     <p style="font-weight:400;"> <?php echo $di ?></p>
                                 </td>
@@ -128,10 +132,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                    <?php
-              $home_Id = $home_id;
-              $stmt = $conn->prepare(
-                "SELECT 
+                        <?php
+                        $home_Id = $home_id;
+                        $stmt = $conn->prepare(
+                            "SELECT 
                 id, 
                 pr.prefix as prefix,
                 name, 
@@ -142,29 +146,37 @@
                 JOIN 
                 prefix AS pr ON dt.prefix_id = pr.prefix_id
                 where 
-                home_id = $home_Id
+                home_id = $id_home
                    "
-              );
-              $stmt->execute();
-              $result = $stmt->fetchAll();
+                        );
+                        $stmt->execute();
+                        $result = $stmt->fetchAll();
 
-              if ($result != null) {
-                $i = 1;
-                foreach ($result as $row) {
-              ?>
-                        <tr>
-                            <td>  <p style="font-weight:400;"><?php echo $row['id_card'] ?></p></td>
-                            <td>  <p style="font-weight:400;"><?php echo $row['prefix'] ?></p></td>
-                            <td>  <p style="font-weight:400;"><?php echo $row['name'] ?></p></td>
-                            <td>  <p style="font-weight:400;"><?php echo $row['lastname'] ?></p></td>
-                        </tr>
-                        <?php $i++;
-                }
-              } else { ?>
-                <tr>
-                  <td colspan="11" style="text-align: center; color:red;">ไม่มีข้อมูล</td>
-                </tr>
-              <?php  } ?>
+                        if ($result != null) {
+                            $i = 1;
+                            foreach ($result as $row) {
+                        ?>
+                                <tr>
+                                    <td>
+                                        <p style="font-weight:400;"><?php echo $row['id_card'] ?></p>
+                                    </td>
+                                    <td>
+                                        <p style="font-weight:400;"><?php echo $row['prefix'] ?></p>
+                                    </td>
+                                    <td>
+                                        <p style="font-weight:400;"><?php echo $row['name'] ?></p>
+                                    </td>
+                                    <td>
+                                        <p style="font-weight:400;"><?php echo $row['lastname'] ?></p>
+                                    </td>
+                                </tr>
+                            <?php $i++;
+                            }
+                        } else { ?>
+                            <tr>
+                                <td colspan="11" style="text-align: center; color:red;">ไม่มีข้อมูล</td>
+                            </tr>
+                        <?php  } ?>
                     </tbody>
                 </table>
             </div>
