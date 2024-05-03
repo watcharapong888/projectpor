@@ -35,6 +35,7 @@
     <div class="menushow">
         <?php
         if (
+            isset($_GET['zip_code']) &&
             isset($_GET['id_card']) &&
             isset($_GET['prefix_id']) &&
             isset($_GET['lastname']) &&
@@ -58,6 +59,7 @@
             // isset($_GET['stay']) && 
             // isset($_GET['id'])
         ) {
+            $zip_code = $_GET['zip_code'];
             $id_card = $_GET['id_card'];
             $prefix_id = $_GET['prefix_id'];
             $lastname = $_GET['lastname'];
@@ -141,11 +143,11 @@
                         </td>
                         <td class="table-light">กลุ่มเปราะบาง:</td>
                         <td>
-                            <p id='font'> <?php echo $status ?></p>
+                            <p id='font'> <?php echo $handicap ?></p>
                         </td>
                         <td class="table-light">สถานที่รับยา:</td>
                         <td>
-                            <p id='font'> <?php echo $occupation ?></p>
+                            <p id='font'> <?php echo $place ?></p>
                         </td>
                     </tr>
                 </tbody>
@@ -184,7 +186,7 @@
                         </td>
                         <td class="table-light">รหัสไปรษณีย์:</td>
                         <td>
-                            <p id='font'> <?php echo $sex ?></p>
+                            <p id='font'> <?php echo $zip_code ?></p>
                         </td>
                         <td></td>
                         <td></td>

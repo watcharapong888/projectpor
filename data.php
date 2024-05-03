@@ -73,7 +73,8 @@
     m_rank,
     stay,
     user_id,
-    id_card
+    id_card,
+    zip_code
   )
   VALUES
   (
@@ -97,7 +98,8 @@
   :m_rank,
   :stay,
   :user_id,
-  :card_id
+  :card_id,
+  :zip_code
   )
 ");
 
@@ -114,7 +116,7 @@
     $stmt->bindParam(':tel', $_POST['tel'], PDO::PARAM_STR);
     $stmt->bindParam(':home_id', $_POST['home_id'], PDO::PARAM_INT);
     $stmt->bindParam(':home_no', $_POST['home_no'], PDO::PARAM_STR);
-    $stmt->bindParam(':swine', $_POST['swine'], PDO::PARAM_INT);
+    $stmt->bindParam(':swine', $_POST['swine'], PDO::PARAM_STR);
     $stmt->bindParam(':amphure_id', $_POST['amphure'], PDO::PARAM_STR);
     $stmt->bindParam(':district_id', $_POST['district'], PDO::PARAM_STR);
     $stmt->bindParam(':province_id', $_POST['province_id'], PDO::PARAM_INT);
@@ -122,6 +124,7 @@
     $stmt->bindParam(':stay', $stay, PDO::PARAM_INT);
     $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
     $stmt->bindParam(':card_id', $_POST['card_id'], PDO::PARAM_STR);
+    $stmt->bindParam(':zip_code', $_POST['zip_code'], PDO::PARAM_STR);
 
     $result = $stmt->execute();
     $conn = null; // ปิดการเชื่อมต่อกับฐานข้อมูล
@@ -169,7 +172,8 @@
       isset($_POST['swine']) &&
       isset($_POST['province_id']) &&
       isset($_POST['amphure']) &&
-      isset($_POST['district'])
+      isset($_POST['district'])&&
+      isset($_POST['zip_code'])
     ) {
       $id = $_POST['id'];
       $id_card = $_POST['id_card'];
@@ -190,6 +194,7 @@
       $province_id = $_POST['province_id'];
       $amphure_id = $_POST['amphure'];
       $district_id = $_POST['district'];
+      $zip_code = $_POST['zip_code'];
 
       // SQL update
       $stmt = $conn->prepare("UPDATE data SET 
@@ -209,7 +214,8 @@
             swine = :swine,
             province_id = :province_id,
             amphure = :amphure_id,
-            district = :district_id
+            district = :district_id,
+            zip_code = :zip_code
             WHERE id = :id");
 
       $stmt->bindParam(':id', $id, PDO::PARAM_INT);
@@ -226,10 +232,11 @@
       $stmt->bindParam(':place', $place, PDO::PARAM_STR);
       $stmt->bindParam(':tel', $tel, PDO::PARAM_INT);
       $stmt->bindParam(':home_no', $home_no, PDO::PARAM_STR);
-      $stmt->bindParam(':swine', $swine, PDO::PARAM_INT);
+      $stmt->bindParam(':swine', $swine, PDO::PARAM_STR);
       $stmt->bindParam(':province_id', $province_id, PDO::PARAM_INT);
       $stmt->bindParam(':amphure_id', $amphure_id, PDO::PARAM_STR);
       $stmt->bindParam(':district_id', $district_id, PDO::PARAM_STR);
+      $stmt->bindParam(':zip_code', $zip_code, PDO::PARAM_STR);
 
       try {
         $stmt->execute();
@@ -494,6 +501,8 @@
 
               </div>
               <div class="col">
+              <label class="col-form-label">รหัสไปรษณีย์:<span class="required-star">*</span></label>
+                <input type="text" class="form-control" id="" name="zip_code" required>
               </div>
             </div>
             <br>
@@ -557,7 +566,8 @@
                 m_rank, 
                 stay, 
                 us.user_name as user_name,
-                id_card
+                id_card,
+                zip_code
                 FROM data as dt 
                 JOIN 
                 prefix AS pr ON dt.prefix_id = pr.prefix_id
@@ -608,7 +618,7 @@
                     <td><?php echo $row['handicap']; ?></td>
                     <td><?php echo $row['place']; ?></td>
                     <td><?php echo $row['tel']; ?></td> -->
-                    <td><a  href="show-data.php?id_card=<?php echo $row['id_card']; ?>&prefix_id=<?php echo $row['prefix']; ?>&lastname=<?php echo $row['lastname']; ?>&name=<?php echo $row['name']; ?>&date=<?php echo $row['date']; ?>&age=<?php echo $row['age']; ?>&sex=<?php echo $row['sex']; ?>&status=<?php echo $row['status']; ?>&occupation=<?php echo $row['occupation']; ?>&disease=<?php echo $row['disease']; ?>&place=<?php echo $row['place']; ?>&handicap=<?php echo $row['handicap']; ?>&tel=<?php echo $row['tel']; ?>&status=<?php echo $row['status']; ?>&home_id=<?php echo $row['home_id']; ?>&home_no=<?php echo $row['home_no']; ?>&swine=<?php echo $row['swine']; ?>&amphure=<?php echo $row['amphure']; ?>&district=<?php echo $row['district']; ?>&province_id=<?php echo $row['pro']; ?>" class="btn btn-success">ดูข้อมูล</a></td>
+                    <td><a  href="show-data.php?zip_code=<?php echo $row['zip_code']; ?>&id_card=<?php echo $row['id_card']; ?>&prefix_id=<?php echo $row['prefix']; ?>&lastname=<?php echo $row['lastname']; ?>&name=<?php echo $row['name']; ?>&date=<?php echo $row['date']; ?>&age=<?php echo $row['age']; ?>&sex=<?php echo $row['sex']; ?>&status=<?php echo $row['status']; ?>&occupation=<?php echo $row['occupation']; ?>&disease=<?php echo $row['disease']; ?>&place=<?php echo $row['place']; ?>&handicap=<?php echo $row['handicap']; ?>&tel=<?php echo $row['tel']; ?>&status=<?php echo $row['status']; ?>&home_id=<?php echo $row['home_id']; ?>&home_no=<?php echo $row['home_no']; ?>&swine=<?php echo $row['swine']; ?>&amphure=<?php echo $row['amphure']; ?>&district=<?php echo $row['district']; ?>&province_id=<?php echo $row['pro']; ?>" class="btn btn-success">ดูข้อมูล</a></td>
                     <td><button  type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#myModal<?php echo $row['id']; ?>">แก้ไขข้อมูล</button></td>
                     <td> <button  type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Modaldeletel<?php echo $row['id']; ?>">
                         ลบข้อมูล
@@ -783,6 +793,10 @@
                               <div class="col">
                                 <label class="col-form-label">ตำบล:<span class="required-star">*</span></label>
                                 <input type="text" class="form-control" id="" name="district" value="<?php echo $row['district']; ?>" required>
+                              </div>
+                              <div class="col">
+                                <label class="col-form-label">รหัสไปรษณีย์:<span class="required-star">*</span></label>
+                                <input type="text" class="form-control" id="" name="zip_code" value="<?php echo $row['zip_code']; ?>" required>
                               </div>
                             </div>
                         </div>
