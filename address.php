@@ -100,16 +100,24 @@
   }
   if (isset($_GET['act']) && $_GET['act'] === 'edit') {
     if (
-      isset($_POST['homeid']) && isset($_POST['homeno']) && isset($_POST['id_home']) && isset($_POST['swine']) &&
-      isset($_POST['pro']) && isset($_POST['aph']) && isset($_POST['di']) && isset($_POST['hometype']) && isset($_POST['location']) && isset($_POST['zip_code'])
+      isset($_POST['homeid']) && 
+      isset($_POST['homeno']) && 
+      isset($_POST['id_home']) && 
+      isset($_POST['swine']) &&
+      isset($_POST['pro']) && 
+      isset($_POST['amphure']) &&
+      isset($_POST['district']) && 
+      isset($_POST['hometype']) && 
+      isset($_POST['location']) && 
+      isset($_POST['zip_code'])
     ) {
-      $homeid = $_POST['homeid'];
+      $id = $_POST['homeid'];
       $id_home = $_POST['id_home'];
       $homeno = $_POST['homeno'];
       $swine = $_POST['swine'];
       $pro = $_POST['pro'];
-      $aph = $_POST['aph'];
-      $di = $_POST['di'];
+      $aph = $_POST['amphure'];
+      $di = $_POST['district'];
       $hometype = $_POST['hometype'];
       $location = $_POST['location'];
       $zip_code = $_POST['zip_code'];
@@ -123,7 +131,7 @@
         district = :di,
         province_id = :pro,
         home_type = :hometype,
-        location = :location
+        location = :location,
         zip_code = :zip_code
         WHERE id = :id");
 
@@ -136,7 +144,7 @@
       $stmt->bindParam(':di', $di, PDO::PARAM_STR);
       $stmt->bindParam(':hometype', $hometype, PDO::PARAM_STR);
       $stmt->bindParam(':location', $location, PDO::PARAM_STR);
-      $stmt->bindParam(':zip_code', $location, PDO::PARAM_STR);
+      $stmt->bindParam(':zip_code', $zip_code, PDO::PARAM_STR);
       try {
         $stmt->execute();
 
@@ -192,7 +200,7 @@
 
   if (@isset($_GET['delete_id'])) {
     $id = $_GET['delete_id'];
-    $stmt = $conn->prepare('DELETE FROM address WHERE home_id=:id');
+    $stmt = $conn->prepare('DELETE FROM address WHERE id=:id');
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
     if ($stmt->rowCount() == 1) {
@@ -362,7 +370,7 @@
                         ลบข้อมูล
                       </button></td>
                   </tr>
-                  <div class="modal fade" id="Modaldeletel<?php echo $row['home_id']; ?>">
+                  <div class="modal fade" id="Modaldeletel<?php echo $row['id']; ?>">
                     <div class="modal-dialog">
                       <div class="modal-content">
 
