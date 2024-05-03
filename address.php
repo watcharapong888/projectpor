@@ -329,7 +329,8 @@
                    ad.home_type ,
                    pro.province_id as provinceId ,
                    ad.amphure,
-                   ad.district
+                   ad.district,
+                   ad.zip_code
                    FROM 
                    address AS ad
                    JOIN 
@@ -352,7 +353,7 @@
                     <td><?php echo $row['district']; ?></td>
                     <td><?php echo $row['pro']; ?></td>
                     <td>
-                      <!-- <?php echo $row['zip_code']; ?> -->
+                      <?php echo $row['zip_code']; ?>
                     </td>
                     <td><?php echo $row['home_type']; ?></td>
                     <td><a href="show-address.php?home_id=<?php echo $row['id']; ?>&id_home=<?php echo $row['id_home']; ?>&home_no=<?php echo $row['home_no']; ?>&swine=<?php echo $row['swine']; ?>&aph=<?php echo $row['amphure']; ?>&di=<?php echo $row['district']; ?>&pro=<?php echo $row['pro']; ?>&location=<?php echo urlencode($row['location']); ?>&zip_code=<?php echo $row['zip_code']; ?>&home_type=<?php echo $row['home_type']; ?>" class="btn btn-success">ดูข้อมูล</a></td>
