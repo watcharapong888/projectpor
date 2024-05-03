@@ -5,6 +5,16 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+
+
     <title>ข้อมูลคนในชุมชน</title>
     <style>
         th,
@@ -63,6 +73,13 @@
                 /* ตั้งค่าระยะขอบในการพิมพ์ */
                 font-size: 14px;
                 /* ตั้งขนาดตัวอักษร */
+            }
+
+            button,
+            input[type="button"],
+            input[type="submit"],
+            input[type="reset"] {
+                visibility: hidden;
             }
         }
     </style>
@@ -191,22 +208,19 @@ $diseaseCondition";
         $result = $stmt->fetchAll();
         ?>
         <div class="container mt-3">
-            <div class="table-responsive" id="print">
-                <table class="table table-striped" id="myTable" >
+            <div class="table-responsive">
+                <table class="table table-striped" id="myTable">
                     <thead>
                         <tr class="table-success">
                             <th>#</th>
                             <th>รหัสบัตรประชาชน</th>
                             <th>ชื่อ</th>
-                            <th>วันเกิด</th>
                             <th>อายุ</th>
-                            <th>เพศ</th>
-                            <th>สถานะ</th>
                             <th>อาชีพ</th>
                             <th>โรคประจำตัว</th>
                             <th>กลุ่มเปราะบาง</th>
-                            <th>สถานที่รับยา</th>
                             <th>เบอร์โทร</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -217,20 +231,31 @@ $diseaseCondition";
                         if (!empty($result)) {
                             $i = 1;
                             foreach ($result as $row) {
+                                $id_card = $row['id_card'];
+                                if (strlen($id_card) >= 3) {
+                                    $masked_id = substr($id_card, 0, -3) . 'XXX';
+                                    if (strlen($masked_id) == 13) {
+                                        $display_id_card = substr($masked_id, 0, 1) . '-' .
+                                            substr($masked_id, 1, 4) . '-' .
+                                            substr($masked_id, 5, 5) . '-' .
+                                            substr($masked_id, 10, 3);
+                                    } else {
+                                        $display_id_card = $masked_id;
+                                    }
+                                } else {
+                                    $display_id_card = str_repeat('*', strlen($id_card));
+                                }
                                 ?>
                                 <tr>
                                     <td><?php echo $i; ?></td>
-                                    <td><?php echo htmlspecialchars($row['id_card']); ?></td>
+                                    <td><?php echo htmlspecialchars($display_id_card); ?></td>
                                     <td><?php echo htmlspecialchars($row['full_name']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['date']); ?></td>
                                     <td><?php echo htmlspecialchars($row['age']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['sex']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['status']); ?></td>
                                     <td><?php echo htmlspecialchars($row['occupation']); ?></td>
                                     <td><?php echo htmlspecialchars($row['disease']); ?></td>
                                     <td><?php echo htmlspecialchars($row['handicap']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['place']); ?></td>
                                     <td><?php echo htmlspecialchars($row['tel']); ?></td>
+                                    <td><a id="ff" href="show-data.php?id_card=<?php echo $row['id_card']; ?>" class="btn btn-success">ดูข้อมูล</a></td>
                                 </tr>
                                 <?php
                                 $i++;
@@ -243,31 +268,47 @@ $diseaseCondition";
                             <?php
                         }
                         ?>
-
                     </tbody>
                 </table>
-               
+                <button id="printButton" class="btn btn-primary">พิมพ์ตารางเป็น PDF</button>
+
             </div>
-        </div> <button onclick="printContent('print')" class="btn btn-primary print-button">พิมพ์</button>
+        </div>
     </div>
-
-
     <script>
         $(document).ready(function () {
             $('#myTable').DataTable();
         });
-        function printContent(elementId) {
-            document.querySelectorAll('.print-section').forEach(el => {
-                el.classList.remove('print-section');
-            });
-            const element = document.getElementById(elementId);
-            element.classList.add('print-section');
+        document.addEventListener('DOMContentLoaded', function () {
+            function printTableToPDF() {
+                const { jsPDF } = window.jspdf;
+                const table = document.getElementById("myTable");
+                html2canvas(table, { scale: 1 }).then(canvas => {
+                    const imgData = canvas.toDataURL('image/jpeg');
+                    const pdf = new jsPDF({
+                        orientation: 'portrait',
+                        unit: 'pt',
+                        format: 'a4'
+                    });
+                    const pageWidth = pdf.internal.pageSize.getWidth();
+                    const pageHeight = pdf.internal.pageSize.getHeight();
+                    const ratio = pageWidth / canvas.width;
+                    const canvasHeight = canvas.height * ratio;
+                    if (canvasHeight > pageHeight) {
+                        pdf.addImage(imgData, 'JPEG', 0, 0, pageWidth, pageHeight);
+                    } else {
+                        pdf.addImage(imgData, 'JPEG', 0, 0, pageWidth, canvasHeight);
+                    }
 
-            window.print(); // เรียกใช้งาน window.print หลังจากตั้งค่าคลาสที่ต้องการ
-        }
+                    pdf.save('ข้อมูลคนในชุมชน.pdf');
+                });
+            }
 
+            document.getElementById("printButton").addEventListener("click", printTableToPDF);
+        });
 
     </script>
+
 </body>
 
 </html>
