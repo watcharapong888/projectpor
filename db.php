@@ -4,16 +4,17 @@
 
 // //prod.DB <------------------------------------------------------------------------------------------------------------------------------->
 
+// PHP Data Objects(PDO) Sample Code:
 try {
-   $dateDB = "DATEDIFF(YEAR, date, GETDATE())" ;
-   $user = '"user"';
-   $conn = new PDO("sqlsrv:server = tcp:projectpor.database.windows.net,1433; Database = projectpor", "adminbp@projectpor", "P@ssw0rd");
-   $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  //  echo "Connected successfully";
+    $conn = new PDO("sqlsrv:server = tcp:projectmmo8.database.windows.net,1433; Database = projectmoo8", "CloudSA3e4c16fa", "{your_password_here}");
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 }
 catch (PDOException $e) {
-   echo "Error connecting to SQL Server: " . $e->getMessage();
+    print("Error connecting to SQL Server.");
+    die(print_r($e));
 }
+
+// SQL Server Extension Sample Code:
 
 
 // //xampp.DB  <------------------------------------------------------------------------------------------------------------------------------->
