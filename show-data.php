@@ -143,7 +143,17 @@
                         </td>
                         <td class="table-light">กลุ่มเปราะบาง:</td>
                         <td>
-                            <p id='font'> <?php echo $handicap ?></p>
+                            <p id='font'>
+                                <?php
+                                if ( $handicap == 'Yes') {
+                                    echo 'ใช่';
+                                }
+                                else if ( $handicap == 'No') {
+                                    echo 'ไม่ใช่';
+                                } else {
+                                    echo $handicap;
+                                }; ?>
+                            </p>
                         </td>
                         <td class="table-light">สถานที่รับยา:</td>
                         <td>
@@ -174,7 +184,7 @@
                         <td>
                             <p id='font'> <?php echo $province_id ?></p>
                         </td>
-                         <td class="table-light">อำเภอ:</td>
+                        <td class="table-light">อำเภอ:</td>
                         <td>
                             <p id='font'> <?php echo $amphure ?></p>
                         </td>

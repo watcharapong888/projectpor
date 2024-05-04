@@ -8,7 +8,6 @@
   <title>ข้อมูลคนในชุมชน</title>
 </head>
 <style>
-
   #ff {
     font-size: 5.5pt;
   }
@@ -40,9 +39,9 @@
 <body>
   <?php include 'menu.php';
   require_once 'db.php';
-  // echo '<pre>';
-  // print_r($_POST);
-  // echo '</pre>';
+  echo '<pre>';
+  print_r($_POST);
+  echo '</pre>';
   // exit();
   //ตรวจสอบตัวแปรที่ส่งมาจากฟอร์ม
   if (isset($_POST['card_id']) && $_GET['act'] === 'add') {
@@ -110,7 +109,7 @@
     $stmt->bindParam(':sex', $_POST['sex'], PDO::PARAM_STR);
     $stmt->bindParam(':status', $_POST['status'], PDO::PARAM_STR);
     $stmt->bindParam(':occupation', $_POST['occupation'], PDO::PARAM_INT);
-    $stmt->bindParam(':disease_id', $disease_id, PDO::PARAM_INT);
+    $stmt->bindParam(':disease_id', $disease_id, PDO::PARAM_STR);
     $stmt->bindParam(':place', $_POST['place'], PDO::PARAM_STR);
     $stmt->bindParam(':handicap', $_POST['handicap'], PDO::PARAM_STR);
     $stmt->bindParam(':tel', $_POST['tel'], PDO::PARAM_STR);
@@ -172,7 +171,7 @@
       isset($_POST['swine']) &&
       isset($_POST['province_id']) &&
       isset($_POST['amphure']) &&
-      isset($_POST['district'])&&
+      isset($_POST['district']) &&
       isset($_POST['zip_code'])
     ) {
       $id = $_POST['id'];
@@ -227,7 +226,7 @@
       $stmt->bindParam(':sex', $sex, PDO::PARAM_STR);
       $stmt->bindParam(':status', $status, PDO::PARAM_STR);
       $stmt->bindParam(':occupation_id', $occupation_id, PDO::PARAM_INT);
-      $stmt->bindParam(':disease_id', $disease_id, PDO::PARAM_INT);
+      $stmt->bindParam(':disease_id', $disease_id, PDO::PARAM_STR);
       $stmt->bindParam(':handicap', $handicap, PDO::PARAM_STR);
       $stmt->bindParam(':place', $place, PDO::PARAM_STR);
       $stmt->bindParam(':tel', $tel, PDO::PARAM_INT);
@@ -411,7 +410,7 @@
                   ?>
                     <div class="form-check">
                       <div>
-                        <input class="form-check-input" type="checkbox" id="check1" name="disease_id[]" value="<?php echo $row2['disease_id'] ?? ''; ?>">
+                        <input class="form-check-input" type="checkbox" id="check1" name="disease_id[]" value="<?php echo $row2['disease'] ?? ''; ?>">
                         <label class="form-check-label" style="font-weight:400;"><?php echo $row2['disease']; ?></label>
                       </div>
                     </div>
@@ -424,8 +423,8 @@
                 <label class="col-form-label">กลุ่มเปราะบาง:<span class="required-star">*</span></label>
                 <select name="handicap" class="form-select" id="inputGroupSelect01" required>
                   <option selected disabled>--กรุณาเลือก--</option>
-                  <option>ใช่</option>
-                  <option>ไม่ใช่</option>
+                  <option value="Yes">ใช่</option>
+                  <option value="No">ไม่ใช่</option>
                 </select>
               </div>
               <div class="col">
@@ -501,7 +500,7 @@
 
               </div>
               <div class="col">
-              <label class="col-form-label">รหัสไปรษณีย์:<span class="required-star">*</span></label>
+                <label class="col-form-label">รหัสไปรษณีย์:<span class="required-star">*</span></label>
                 <input type="text" class="form-control" id="" name="zip_code" required>
               </div>
             </div>
@@ -551,8 +550,7 @@
                 status, 
                 o.occupation_id,
                 o.occupation as occupation, 
-                ds.disease_id,
-                ds.disease as disease, 
+                dt.disease_id as disease, 
                 place, 
                 handicap, 
                 tel, 
@@ -574,8 +572,6 @@
                 JOIN 
                 occupation AS o ON dt.occupation_id = o.occupation_id
                 JOIN 
-                disease  AS ds ON dt.disease_id = ds.disease_id
-                JOIN 
                 provinces AS pro ON dt.province_id = pro.province_id 
                 JOIN 
                 user AS us ON dt.user_id = us.user_id 
@@ -590,37 +586,30 @@
               ?>
                   <tr>
                     <td><?php echo $i; ?></td>
-                    <td><?php 
-                     $id_card = $row['id_card'];
-                     if (strlen($id_card) >= 3) {
-                         $masked_id = substr($id_card, 0, -3) . 'XXX';
-                         if (strlen($masked_id) == 13) {
-                             $display_id_card = substr($masked_id, 0, 1) . '-' .
-                                 substr($masked_id, 1, 4) . '-' .
-                                 substr($masked_id, 5, 5) . '-' .
-                                 substr($masked_id, 10, 3);
-                         } else {
-                             $display_id_card = $masked_id;
-                         }
-                     } else {
-                         $display_id_card = str_repeat('*', strlen($id_card));
-                     }
-                    echo $display_id_card ?></td>
+                    <td><?php
+                        $id_card = $row['id_card'];
+                        if (strlen($id_card) >= 3) {
+                          $masked_id = substr($id_card, 0, -3) . 'XXX';
+                          if (strlen($masked_id) == 13) {
+                            $display_id_card = substr($masked_id, 0, 1) . '-' .
+                              substr($masked_id, 1, 4) . '-' .
+                              substr($masked_id, 5, 5) . '-' .
+                              substr($masked_id, 10, 3);
+                          } else {
+                            $display_id_card = $masked_id;
+                          }
+                        } else {
+                          $display_id_card = str_repeat('*', strlen($id_card));
+                        }
+                        echo $display_id_card ?></td>
                     <td><?php echo $row['prefix']; ?></td>
                     <td><?php echo $row['name']; ?></td>
                     <td><?php echo $row['lastname']; ?></td>
                     <td><?php echo $row['date']; ?></td>
                     <td><?php echo $row['age']; ?></td>
-                    <!-- <td><?php echo $row['sex']; ?></td>
-                    <td><?php echo $row['status']; ?></td>
-                    <td><?php echo $row['occupation']; ?></td>
-                    <td><?php echo $row['disease']; ?></td>
-                    <td><?php echo $row['handicap']; ?></td>
-                    <td><?php echo $row['place']; ?></td>
-                    <td><?php echo $row['tel']; ?></td> -->
-                    <td><a  href="show-data.php?zip_code=<?php echo $row['zip_code']; ?>&id_card=<?php echo $row['id_card']; ?>&prefix_id=<?php echo $row['prefix']; ?>&lastname=<?php echo $row['lastname']; ?>&name=<?php echo $row['name']; ?>&date=<?php echo $row['date']; ?>&age=<?php echo $row['age']; ?>&sex=<?php echo $row['sex']; ?>&status=<?php echo $row['status']; ?>&occupation=<?php echo $row['occupation']; ?>&disease=<?php echo $row['disease']; ?>&place=<?php echo $row['place']; ?>&handicap=<?php echo $row['handicap']; ?>&tel=<?php echo $row['tel']; ?>&status=<?php echo $row['status']; ?>&home_id=<?php echo $row['home_id']; ?>&home_no=<?php echo $row['home_no']; ?>&swine=<?php echo $row['swine']; ?>&amphure=<?php echo $row['amphure']; ?>&district=<?php echo $row['district']; ?>&province_id=<?php echo $row['pro']; ?>" class="btn btn-success">ดูข้อมูล</a></td>
-                    <td><button  type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#myModal<?php echo $row['id']; ?>">แก้ไขข้อมูล</button></td>
-                    <td> <button  type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Modaldeletel<?php echo $row['id']; ?>">
+                    <td><a href="show-data.php?zip_code=<?php echo $row['zip_code']; ?>&id_card=<?php echo $row['id_card']; ?>&prefix_id=<?php echo $row['prefix']; ?>&lastname=<?php echo $row['lastname']; ?>&name=<?php echo $row['name']; ?>&date=<?php echo $row['date']; ?>&age=<?php echo $row['age']; ?>&sex=<?php echo $row['sex']; ?>&status=<?php echo $row['status']; ?>&occupation=<?php echo $row['occupation']; ?>&disease=<?php echo $row['disease']; ?>&place=<?php echo $row['place']; ?>&handicap=<?php echo $row['handicap']; ?>&tel=<?php echo $row['tel']; ?>&status=<?php echo $row['status']; ?>&home_id=<?php echo $row['home_id']; ?>&home_no=<?php echo $row['home_no']; ?>&swine=<?php echo $row['swine']; ?>&amphure=<?php echo $row['amphure']; ?>&district=<?php echo $row['district']; ?>&province_id=<?php echo $row['pro']; ?>" class="btn btn-success">ดูข้อมูล</a></td>
+                    <td><button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#myModal<?php echo $row['id']; ?>">แก้ไขข้อมูล</button></td>
+                    <td> <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Modaldeletel<?php echo $row['id']; ?>">
                         ลบข้อมูล
                       </button></td>
                   </tr>
@@ -719,24 +708,25 @@
                             </select>
 
                             <label class="col-form-label">โรคประจำตัว:<span class="required-star">*</span></label>
-                            <div id="re">
-                              <div class="form-check">
-                                <div>
-                                  <input class="form-check-input" type="checkbox" id="check1" name="disease_id[]" value="<?php echo $row['disease_id'] ?? ''; ?>" checked>
-                                  <label class="form-check-label" style="font-weight:400;"><?php echo $row['disease']; ?></label>
-                                </div>
+
+                            <div class="form-check">
+                              <div>
+                                <input class="form-check-input" type="checkbox" id="check1" name="disease_id[]" value="<?php echo $row['disease'] ?? ''; ?>" checked>
+                                <label class="form-check-label" style="font-weight:400; color:blue;"><?php echo $row['disease']; ?></label>
                               </div>
+                            </div>
+                            <div id="re">
                               <?php
-                              $ds = $row['disease_id'];
-                              $stmt2 = $conn->prepare("SELECT  * FROM disease where disease_id != $ds  ORDER BY disease  ASC; ");
+                              // $ds = $row['disease'];
+                              $stmt2 = $conn->prepare("SELECT  * FROM disease  ORDER BY disease  ASC; ");
                               $stmt2->execute();
                               $result2 = $stmt2->fetchAll();
                               foreach ($result2 as $row2) {
                               ?>
                                 <div class="form-check">
                                   <div>
-                                    <input class="form-check-input" type="checkbox" id="check1" name="disease_id[]" value="<?php echo $row2['disease_id'] ?? ''; ?>">
-                                    <label class="form-check-label" style="font-weight:400;"><?php echo $row2['disease']; ?></label>
+                                    <input class="form-check-input" type="checkbox" id="check1" name="disease_id[]" value="<?php echo $row2['disease'] ?? ''; ?>">
+                                    <label class="form-check-label" style="font-weight:400; "><?php echo $row2['disease']; ?> </p></label>
                                   </div>
                                 </div>
                               <?php } ?>
@@ -745,9 +735,20 @@
                             <label class="col-form-label">กลุ่มเปราะบาง:<span class="required-star">*</span></label>
                             <select name="handicap" class="form-select" id="inputGroupSelect01" required>
                               <option selected disabled>--กรุณาเลือก--</option>
-                              <option selected value="<?php echo $row['handicap']; ?> "><?php echo $row['handicap']; ?></option>
-                              <option>ใช่</option>
-                              <option>ไม่ใช่</option>
+                              <option selected value="<?php echo $row['handicap']; ?> ">
+                                <?php 
+                                if ($row['handicap'] == 'Yes') {
+                                  echo 'ใช่';
+                                }
+                                else if ($row['handicap'] == 'No') {
+                                  echo 'ไม่ใช่';
+                                } 
+                                else {
+                                  echo $row['handicap'];
+                                }; ?>
+                                </option>
+                              <option value="Yes">ใช่</option>
+                              <option value="No">ไม่ใช่</option>
                             </select>
 
                             <label class="col-form-label">สถานที่รับยา:<span class="required-star">*</span></label>
