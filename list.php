@@ -13,8 +13,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
-
-
     <title>ข้อมูลคนในชุมชน</title>
     <style>
         th,
@@ -163,42 +161,44 @@
         }
         $diseaseCondition = $selectedChronicDisease !== 'all' ? "AND ds.disease_id = '$selectedChronicDisease'" : "";
         $sql = "SELECT 
-id, 
-pr.prefix_id,
-CONCAT(pr.prefix, ' ', name, ' ', lastname) AS full_name,
-date,
-$dateDB AS age,
-sex, 
-status, 
-o.occupation_id,
-o.occupation as occupation, 
-ds.disease_id,
-ds.disease as disease, 
-place, 
-dt.handicap, 
-tel, 
-home_id, 
-home_no, 
-swine, 
-aph.name_th as aph, 
-di.name_th as di, 
-pro.name_th as pro, 
-m_rank, 
-stay, 
-id_card
-FROM data as dt 
-JOIN 
-prefix AS pr ON dt.prefix_id = pr.prefix_id
-JOIN 
-occupation AS o ON dt.occupation_id = o.occupation_id
-JOIN 
-disease  AS ds ON dt.disease_id = ds.disease_id
-JOIN 
-amphures AS aph ON dt.amphure_id = aph.amphure_id 
-JOIN 
-districts AS di ON dt.district_id = di.district_id 
-JOIN 
-provinces AS pro ON dt.province_id = pro.province_id 
+        id, 
+        pr.prefix_id,
+        pr.prefix as prefix,
+        CONCAT(pr.prefix,' ', name,' ', lastname) AS full_name,
+        name, 
+        lastname,  
+        date,
+        TIMESTAMPDIFF(YEAR, date, CURDATE()) AS age,
+        sex, 
+        status, 
+        o.occupation_id,
+        o.occupation as occupation, 
+        ds.disease_id,
+        ds.disease as disease, 
+        place, 
+        handicap, 
+        tel, 
+        home_id, 
+        home_no, 
+        swine, 
+        district,
+        amphure ,
+        pro.province_id,
+        pro.name_th as pro, 
+        m_rank, 
+        stay, 
+        
+        id_card,
+        zip_code
+        FROM data as dt 
+        JOIN 
+        prefix AS pr ON dt.prefix_id = pr.prefix_id
+        JOIN 
+        occupation AS o ON dt.occupation_id = o.occupation_id
+        JOIN 
+        disease  AS ds ON dt.disease_id = ds.disease_id
+        JOIN 
+        provinces AS pro ON dt.province_id = pro.province_id 
 WHERE 1 = 1
 $handicapCondition
 $ageCondition
@@ -255,7 +255,7 @@ $diseaseCondition";
                                     <td><?php echo htmlspecialchars($row['disease']); ?></td>
                                     <td><?php echo htmlspecialchars($row['handicap']); ?></td>
                                     <td><?php echo htmlspecialchars($row['tel']); ?></td>
-                                    <td><a id="ff" href="show-data.php?id_card=<?php echo $row['id_card']; ?>" class="btn btn-success">ดูข้อมูล</a></td>
+                                    <td><a  href="show-data.php?zip_code=<?php echo $row['zip_code']; ?>&id_card=<?php echo $row['id_card']; ?>&prefix_id=<?php echo $row['prefix']; ?>&lastname=<?php echo $row['lastname']; ?>&name=<?php echo $row['name']; ?>&date=<?php echo $row['date']; ?>&age=<?php echo $row['age']; ?>&sex=<?php echo $row['sex']; ?>&status=<?php echo $row['status']; ?>&occupation=<?php echo $row['occupation']; ?>&disease=<?php echo $row['disease']; ?>&place=<?php echo $row['place']; ?>&handicap=<?php echo $row['handicap']; ?>&tel=<?php echo $row['tel']; ?>&status=<?php echo $row['status']; ?>&home_id=<?php echo $row['home_id']; ?>&home_no=<?php echo $row['home_no']; ?>&swine=<?php echo $row['swine']; ?>&amphure=<?php echo $row['amphure']; ?>&district=<?php echo $row['district']; ?>&province_id=<?php echo $row['pro']; ?>" class="btn btn-success">ดูข้อมูล</a></td>
                                 </tr>
                                 <?php
                                 $i++;
