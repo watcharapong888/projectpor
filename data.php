@@ -605,7 +605,23 @@
                     <td><?php echo $row['prefix']; ?></td>
                     <td><?php echo $row['name']; ?></td>
                     <td><?php echo $row['lastname']; ?></td>
-                    <td><?php echo $row['date']; ?></td>
+                    <?php
+                    if (!function_exists('DateThai')) {
+                      function DateThai($strDate)
+                      {
+                        $strDay = date("j", strtotime($strDate));
+                        $strMonthCut = array("", "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค.");
+                        $strMonthThai = $strMonthCut[date("n", strtotime($strDate))];
+                        $strYearThai = date("Y", strtotime($strDate)) + 543;
+                        return "$strDay $strMonthThai $strYearThai";
+                      }
+                    }
+
+                    $strDate = $row['date'];
+                    echo '<td>' . DateThai($strDate) . '</td>';
+                    ?>
+
+
                     <td><?php echo $row['age']; ?></td>
                     <td><a href="show-data.php?zip_code=<?php echo $row['zip_code']; ?>&id_card=<?php echo $row['id_card']; ?>&prefix_id=<?php echo $row['prefix']; ?>&lastname=<?php echo $row['lastname']; ?>&name=<?php echo $row['name']; ?>&date=<?php echo $row['date']; ?>&age=<?php echo $row['age']; ?>&sex=<?php echo $row['sex']; ?>&status=<?php echo $row['status']; ?>&occupation=<?php echo $row['occupation']; ?>&disease=<?php echo $row['disease']; ?>&place=<?php echo $row['place']; ?>&handicap=<?php echo $row['handicap']; ?>&tel=<?php echo $row['tel']; ?>&status=<?php echo $row['status']; ?>&home_id=<?php echo $row['home_id']; ?>&home_no=<?php echo $row['home_no']; ?>&swine=<?php echo $row['swine']; ?>&amphure=<?php echo $row['amphure']; ?>&district=<?php echo $row['district']; ?>&province_id=<?php echo $row['pro']; ?>" class="btn btn-success">ดูข้อมูล</a></td>
                     <td><button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#myModal<?php echo $row['id']; ?>">แก้ไขข้อมูล</button></td>
@@ -736,17 +752,15 @@
                             <select name="handicap" class="form-select" id="inputGroupSelect01" required>
                               <option selected disabled>--กรุณาเลือก--</option>
                               <option selected value="<?php echo $row['handicap']; ?> ">
-                                <?php 
+                                <?php
                                 if ($row['handicap'] == 'Yes') {
                                   echo 'ใช่';
-                                }
-                                else if ($row['handicap'] == 'No') {
+                                } else if ($row['handicap'] == 'No') {
                                   echo 'ไม่ใช่';
-                                } 
-                                else {
+                                } else {
                                   echo $row['handicap'];
                                 }; ?>
-                                </option>
+                              </option>
                               <option value="Yes">ใช่</option>
                               <option value="No">ไม่ใช่</option>
                             </select>
