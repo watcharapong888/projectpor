@@ -164,7 +164,7 @@
         id, 
         pr.prefix_id,
         pr.prefix as prefix,
-        CONCAT(pr.prefix,' ', name,' ', lastname) AS full_name,
+        CONCAT(pr.prefix,' ', name,' ', lastname) AS fullname,
         name, 
         lastname,  
         date,
@@ -173,8 +173,8 @@
         status, 
         o.occupation_id,
         o.occupation as occupation, 
-        ds.disease_id,
-        ds.disease as disease, 
+        ds.disease_id as disease,
+        ds.disease as diseasename, 
         place, 
         handicap, 
         tel, 
@@ -187,7 +187,6 @@
         pro.name_th as pro, 
         m_rank, 
         stay, 
-        
         id_card,
         zip_code
         FROM data as dt 
@@ -215,11 +214,10 @@ $diseaseCondition";
                             <th>#</th>
                             <th>รหัสบัตรประชาชน</th>
                             <th>ชื่อ</th>
+                            <th>วันเดือนปีเกิด</th>
                             <th>อายุ</th>
-                            <th>อาชีพ</th>
                             <th>โรคประจำตัว</th>
                             <th>กลุ่มเปราะบาง</th>
-                            <th>เบอร์โทร</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -228,51 +226,59 @@ $diseaseCondition";
                         $stmt->execute();
                         $result = $stmt->fetchAll();
 
-                        if (!empty($result)) {
+                        if ($result != null) {
                             $i = 1;
                             foreach ($result as $row) {
-                                $id_card = $row['id_card'];
-                                if (strlen($id_card) >= 3) {
-                                    $masked_id = substr($id_card, 0, -3) . 'XXX';
-                                    if (strlen($masked_id) == 13) {
-                                        $display_id_card = substr($masked_id, 0, 1) . '-' .
-                                            substr($masked_id, 1, 4) . '-' .
-                                            substr($masked_id, 5, 5) . '-' .
-                                            substr($masked_id, 10, 3);
-                                    } else {
-                                        $display_id_card = $masked_id;
-                                    }
-                                } else {
-                                    $display_id_card = str_repeat('*', strlen($id_card));
-                                }
                                 ?>
                                 <tr>
                                     <td><?php echo $i; ?></td>
-                                    <td><?php echo htmlspecialchars($display_id_card); ?></td>
-                                    <td><?php echo htmlspecialchars($row['full_name']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['age']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['occupation']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['disease']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['handicap']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['tel']); ?></td>
-                                    <td><a  href="show-data.php?zip_code=<?php echo $row['zip_code']; ?>&id_card=<?php echo $row['id_card']; ?>&prefix_id=<?php echo $row['prefix']; ?>&lastname=<?php echo $row['lastname']; ?>&name=<?php echo $row['name']; ?>&date=<?php echo $row['date']; ?>&age=<?php echo $row['age']; ?>&sex=<?php echo $row['sex']; ?>&status=<?php echo $row['status']; ?>&occupation=<?php echo $row['occupation']; ?>&disease=<?php echo $row['disease']; ?>&place=<?php echo $row['place']; ?>&handicap=<?php echo $row['handicap']; ?>&tel=<?php echo $row['tel']; ?>&status=<?php echo $row['status']; ?>&home_id=<?php echo $row['home_id']; ?>&home_no=<?php echo $row['home_no']; ?>&swine=<?php echo $row['swine']; ?>&amphure=<?php echo $row['amphure']; ?>&district=<?php echo $row['district']; ?>&province_id=<?php echo $row['pro']; ?>" class="btn btn-success">ดูข้อมูล</a></td>
+                                    <td><?php
+                                    $id_card = $row['id_card'];
+                                    if (strlen($id_card) >= 3) {
+                                        $masked_id = substr($id_card, 0, -3) . 'XXX';
+                                        if (strlen($masked_id) == 13) {
+                                            $display_id_card = substr($masked_id, 0, 1) . '-' .
+                                                substr($masked_id, 1, 4) . '-' .
+                                                substr($masked_id, 5, 5) . '-' .
+                                                substr($masked_id, 10, 3);
+                                        } else {
+                                            $display_id_card = $masked_id;
+                                        }
+                                    } else {
+                                        $display_id_card = str_repeat('*', strlen($id_card));
+                                    }
+                                    echo $display_id_card ?></td>
+                                    <td><?php echo $row['fullname']; ?></td>
+                                    <?php
+                                    if (!function_exists('DateThai')) {
+                                        function DateThai($strDate)
+                                        {
+                                            $strDay = date("j", strtotime($strDate));
+                                            $strMonthCut = array("", "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค.");
+                                            $strMonthThai = $strMonthCut[date("n", strtotime($strDate))];
+                                            $strYearThai = date("Y", strtotime($strDate)) + 543;
+                                            return "$strDay $strMonthThai $strYearThai";
+                                        }
+                                    }
+                                    $strDate = $row['date'];
+                                    echo '<td>' . DateThai($strDate) . '</td>';
+                                    ?>
+                                    <td><?php echo $row['age']; ?></td>
+                                    <td><?php echo $row['diseasename']; ?></td>
+                                    <td><?php echo $row['handicap']; ?></td>
+                                    <td><a href="show-data.php?zip_code=<?php echo $row['zip_code']; ?>&id_card=<?php echo $row['id_card']; ?>&prefix_id=<?php echo $row['prefix']; ?>&lastname=<?php echo $row['lastname']; ?>&name=<?php echo $row['name']; ?>&date=<?php echo $row['date']; ?>&age=<?php echo $row['age']; ?>&sex=<?php echo $row['sex']; ?>&status=<?php echo $row['status']; ?>&occupation=<?php echo $row['occupation']; ?>&disease=<?php echo $row['disease']; ?>&place=<?php echo $row['place']; ?>&handicap=<?php echo $row['handicap']; ?>&tel=<?php echo $row['tel']; ?>&status=<?php echo $row['status']; ?>&home_id=<?php echo $row['home_id']; ?>&home_no=<?php echo $row['home_no']; ?>&swine=<?php echo $row['swine']; ?>&amphure=<?php echo $row['amphure']; ?>&district=<?php echo $row['district']; ?>&province_id=<?php echo $row['pro']; ?>"
+                                            class="btn btn-success">ดูข้อมูล</a></td>
                                 </tr>
-                                <?php
-                                $i++;
+                                <?php $i++;
                             }
-                        } else {
-                            ?>
+                        } else { ?>
                             <tr>
-                                <td colspan="17" style="text-align: center; color:red;">ไม่มีข้อมูล</td>
+                                <td colspan="16" style="text-align: center; color:red;">ไม่มีข้อมูล</td>
                             </tr>
-                            <?php
-                        }
-                        ?>
+                        <?php } ?>
                     </tbody>
                 </table>
-                <button id="printButton" class="btn btn-primary">พิมพ์ตารางเป็น PDF</button>
-
-            </div>
+            </div><button id="printButton" class="btn btn-primary">พิมพ์ตารางเป็น PDF</button>
         </div>
     </div>
     <script>
