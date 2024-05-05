@@ -1,12 +1,8 @@
 <?php session_start();
 // print_r($_SESSION);
-// $user_name = $_SESSION['user_name'];
-// $user_lname = $_SESSION['user_lname'];
-// $user_rank = $_SESSION['user_rank'];
-// if ($_SESSION['user_name'] == '' || $_SESSION['user_name'] == null) {
-//   header("Location: login.php"); // ทำการ redirect ไปยังหน้า login.php
-//   exit; // จบการทำงานของสคริปต์
-// }
+@$user_name = $_SESSION['user_name'];
+@$user_lname = $_SESSION['user_lname'];
+@$user_rank = $_SESSION['user_rank'];
 ?>
 
 <html lang="en">
@@ -66,13 +62,19 @@
 <div class="w3-sidebar w3-bar-block w3-card w3-animate-left" style="display:none" id="mySidebar">
   <button class="w3-bar-item w3-button w3-large" onclick="w3_close()">ย้อนกลับ &times;</button>
   <p style="font-size: 15pt;" class="w3-bar-item">สวัสดีผู้ใช้งาน</p>
-  <p class="w3-bar-item" style="color: green;"></p>
   <a href="Index.php" class="w3-bar-item w3-button">หน้าแรก</a>
-  <a href="address.php" class="w3-bar-item w3-button">ข้อมูลครัวเรือน</a>
-  <a href="data.php" class="w3-bar-item w3-button">ข้อมูลคนในชุมชน</a>
-  <a href="list.php" class="w3-bar-item w3-button">รายชื่อทั้งหมด</a>
-  <a href="news.php" class="w3-bar-item w3-button">กิจกรรมและข่าวสารประจำเดือน</a>
-  <a href="logout.php" class="w3-bar-item w3-button" style="color: red;">ออกจากระบบ</a>
+  <?php
+  if ($user_name != null || $user_name != '') {
+  ?>
+    <a href="address.php" class="w3-bar-item w3-button">ข้อมูลครัวเรือน</a>
+    <a href="data.php" class="w3-bar-item w3-button">ข้อมูลคนในชุมชน</a>
+    <a href="list.php" class="w3-bar-item w3-button">รายชื่อทั้งหมด</a>
+    <a href="news.php" class="w3-bar-item w3-button">กิจกรรมและข่าวสารประจำเดือน</a>
+    <a href="logout.php" class="w3-bar-item w3-button" style="color: red;">ออกจากระบบ</a>
+  <?php
+  }
+  ?>
+
 </div>
 
 <div id="main">
@@ -85,7 +87,29 @@
           <a>ระบบจัดการข้อมูลคนในชุมชน</a>
         </h4>
       </div>
+      <?php
+      if ($user_name != null || $user_name != '') {
+      ?>
+        <div style="display: flex; flex-wrap:wrap;">
+          <div style="text-align: right; margin-right:10px;">
+            <?php
+            echo $user_name . " " . $user_lname . "<br> " . $user_rank;
+            ?>
+          </div>
+          <div>
+            <a class="navbar-brand" href="#">
+              <img src="https://www.w3schools.com/bootstrap5/img_avatar1.png" alt="Avatar Logo" style="width:40px;" class="rounded-pill">
+            </a>
+          </div>
+        </div>
+      <?php
+      } else {
+      ?>
         <a href="login.php"><span class="material-symbols-outlined" id="login">login </span></a>
+      <?php
+      }
+      ?>
+
     </div>
   </div>
 

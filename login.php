@@ -80,7 +80,7 @@
         $_SESSION['user_lname'] = $row['user_lname'];
         $_SESSION['user_rank'] = $row['user_rank'];
 
-          header('Location: Index.php'); 
+        echo '<script>window.location.href = "Index.php";</script>';
       }else{ 
          echo '<script>
                        setTimeout(function() {
