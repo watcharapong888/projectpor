@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
@@ -117,7 +117,7 @@
                                 <th>ชื่อ</th>
                                 <th>วันเดือนปีเกิด</th>
                                 <th>อายุ</th>
-                                <!-- <th>โรคประจำตัว</th> -->
+                                <th>โรคประจำตัว</th>
                                 <th>กลุ่มเปราะบาง</th>
                                 <th>เบอร์โทร</th>
                                 <th></th>
@@ -127,8 +127,8 @@
                             <?php
                             $selectedHandicap = $_POST['handicap'] ?? 'all';
                             $selectedAgeGroup = $_POST['age'] ?? 'all';
-                            $selectedChronicDisease = $_POST['disease_id'] ?? 'all';
-                            $handicapCondition = $selectedHandicap !== 'all' ? "AND dt.handicap = '$selectedHandicap'" : "";
+                            $selectedChronicDisease = $_POST['disease'] ?? 'all';
+                            $handicapCondition = $selectedHandicap !== 'all' ? "AND handicap = '$selectedHandicap'" : "";
                             $ageCondition = "";
                             if ($selectedAgeGroup != 'all') {
                                 switch ($selectedAgeGroup) {
@@ -146,45 +146,42 @@
                                         break;
                                 }
                             }
-                            $diseaseCondition = $selectedChronicDisease !== 'all' ? "AND ds.disease_id = '$selectedChronicDisease'" : "";
+                            $diseaseCondition = $selectedChronicDisease !== 'all' ? "AND disease = '$selectedChronicDisease'" : "";
                             $stmt = $conn->prepare(
                                 "SELECT 
-                id, 
-                pr.prefix_id,
-                Concat(pr.prefix,' ',name,' ',lastname)as fullname,
-                name, 
-                lastname,  
-                date,
-                TIMESTAMPDIFF(YEAR, date, CURDATE()) AS age,
-                sex, 
-                status, 
-                o.occupation_id,
-                o.occupation as occupation, 
-                dt.disease_id as disease, 
-                ds.disease as diseasename, 
-                place, 
-                handicap, 
-                tel, 
-                home_id, 
-                home_no, 
-                swine, 
-                district,
-                amphure ,
-                pro.province_id,
-                pro.name_th as pro, 
-                m_rank, 
-                stay, 
-                id_card,
-                zip_code
-                FROM data as dt 
-                JOIN 
-                prefix AS pr ON dt.prefix_id = pr.prefix_id
-                JOIN 
-                occupation AS o ON dt.occupation_id = o.occupation_id
-                JOIN 
-                provinces AS pro ON dt.province_id = pro.province_id 
-                JOIN 
-                disease AS ds ON dt.disease_id = ds.disease_id 
+                                id, 
+                                pr.prefix_id,
+                                Concat(pr.prefix,' ',name,' ',lastname)as fullname,
+                                name, 
+                                lastname,  
+                                date,
+                                TIMESTAMPDIFF(YEAR, date, CURDATE()) AS age,
+                                sex, 
+                                status, 
+                                o.occupation_id,
+                                o.occupation as occupation, 
+                                dt.disease_id as disease, 
+                                place, 
+                                handicap, 
+                                tel, 
+                                home_id, 
+                                home_no, 
+                                swine, 
+                                district,
+                                amphure ,
+                                pro.province_id,
+                                pro.name_th as pro, 
+                                m_rank, 
+                                stay, 
+                                id_card,
+                                zip_code
+                                FROM data as dt 
+                                JOIN 
+                                prefix AS pr ON dt.prefix_id = pr.prefix_id
+                                JOIN 
+                                occupation AS o ON dt.occupation_id = o.occupation_id
+                                JOIN 
+                                provinces AS pro ON dt.province_id = pro.province_id 
                 WHERE 1 = 1
 $handicapCondition
 $ageCondition
@@ -232,7 +229,7 @@ $diseaseCondition
                                         echo '<td>' . DateThai($strDate) . '</td>';
                                         ?>
                                         <td><?php echo $row['age']; ?></td>
-                                        <!-- <td><?php echo $row['diseasename']; ?></td> -->
+                                        <td><?php echo $row['disease']; ?></td>
                                         <td><?php echo $row['handicap']; ?></td>
                                         <td><?php echo $row['tel']; ?></td>
                                         <td><a href="show-data.php?id_card=<?php echo $id_card; ?>"
