@@ -1,3 +1,4 @@
+<?php include 'menu.php';   ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -62,7 +63,7 @@
 </head>
 
 <body>
-  <?php include 'menu.php'; require_once 'db.php'; ?>
+  <?php require_once 'db.php'; ?>
   
   <div class="showall container">
     <div class="card mb-4">

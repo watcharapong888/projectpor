@@ -53,7 +53,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
 </style>
 
 <body>
-  <?php include 'menu.php';
+  <?php 
   require_once 'db.php';
   echo '<pre>';
   print_r($_POST);
