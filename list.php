@@ -117,7 +117,7 @@
                                 <th>ชื่อ</th>
                                 <th>วันเดือนปีเกิด</th>
                                 <th>อายุ</th>
-                                <th>โรคประจำตัว</th>
+                                <!-- <th>โรคประจำตัว</th> -->
                                 <th>กลุ่มเปราะบาง</th>
                                 <th>เบอร์โทร</th>
                                 <th></th>
@@ -232,7 +232,7 @@ $diseaseCondition
                                         echo '<td>' . DateThai($strDate) . '</td>';
                                         ?>
                                         <td><?php echo $row['age']; ?></td>
-                                        <td><?php echo $row['diseasename']; ?></td>
+                                        <!-- <td><?php echo $row['diseasename']; ?></td> -->
                                         <td><?php echo $row['handicap']; ?></td>
                                         <td><?php echo $row['tel']; ?></td>
                                         <td><a href="show-data.php?id_card=<?php echo $id_card; ?>"
