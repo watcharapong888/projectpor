@@ -81,8 +81,8 @@
                             </select>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label for="disease_id" class="form-label">เลือกกลุ่มโรคประจำตัว:</label>
-                            <select id="disease_id" name="disease_id" class="form-select">
+                            <label for="disease" class="form-label">เลือกกลุ่มโรคประจำตัว:</label>
+                            <select id="disease" name="disease" class="form-select">
                                 <option value="all">ทั้งหมด</option>
                                 <option value="12">ไม่มีโรคประจำตัว</option>
                                 <option value="1">โรคเบาหวาน</option>
