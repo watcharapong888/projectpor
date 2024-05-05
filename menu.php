@@ -1,5 +1,5 @@
 <?php session_start();
-print_r($_SESSION);
+// print_r($_SESSION);
 @$user_name = $_SESSION['user_name'];
 @$user_lname = $_SESSION['user_lname'];
 @$user_rank = $_SESSION['user_rank'];
