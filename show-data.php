@@ -1,3 +1,19 @@
+<?php include 'menu.php';
+if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
+  echo '<script>
+  setTimeout(function() {
+   swal({
+       title: "แจ้งเตือน!",
+        text: "คุณไม่มีสิทธิ์เข้าถึง กรุณาเข้าสู่ระบบแล้วลองอีกครั้ง",
+       type: "warning"
+   }, function() {
+       window.location = "login.php"; //หน้าที่ต้องการให้กระโดดไป
+   });
+ }, 1000);
+</script>';
+  $conn = null;
+} else {
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,8 +41,6 @@
 
 <body>
     <?php
-    // เรียกใช้ไฟล์ menu.php
-    include "menu.php";
     require 'db.php';
     // echo '<pre>';
     // print_r($_GET);
@@ -79,6 +93,8 @@
             $amphure = $_GET['amphure'];
             $district = $_GET['district'];
             $province_id = $_GET['province_id'];
+            $user_name = $_GET['user_name'];
+            $user_lname = $_GET['user_lname'];
         ?>
             <p style="font-size: 13pt;">ข้อมูล</p>
             <table class="table">
@@ -168,7 +184,7 @@
                     <tr>
                         <td class="table-light">บ้านเลขที่:</td>
                         <td>
-                            <p id='font'> <?php echo $province_id ?></p>
+                            <p id='font'> <?php echo $home_no ?></p>
                         </td>
                         <td></td>
                         <td></td>
@@ -203,6 +219,8 @@
                     </tr>
                 </tbody>
             </table>
+            <p style="font-size: 13pt;">เจ้าหน้าที่</p>
+            <p><?php echo $user_name . '  ' . $user_lname ?></p>
             <center>
                 <button onclick="window.print()" class="btn btn-primary print-button">พิมพ์</button>
                 <a href="data.php" class="btn btn-danger print-button">ย้อนกลับ</a>
@@ -218,3 +236,4 @@
 </body>
 
 </html>
+<?php } ?>
