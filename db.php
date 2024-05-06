@@ -6,7 +6,7 @@
 
 try {
    $dateDB = "DATEDIFF(YEAR, date, GETDATE())" ;
-   $user = '"user"';
+   $user = 'user';
    $conn = new PDO("sqlsrv:server = tcp:projectpor.database.windows.net,1433; Database = projectpor", "adminbp@projectpor", "P@ssw0rd");
    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   //  echo "Connected successfully";
