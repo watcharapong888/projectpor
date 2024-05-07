@@ -123,7 +123,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                                     }
                                     if ($age == '61+' && $age != '') {
                                         echo '<option value="61+">61 ปีขึ้นไป</option>';
-                                    }   
+                                    }
                                     ?>
                                     <option value="all">ทั้งหมด</option>
                                     <option value="0-20">0-20 ปี</option>
@@ -214,6 +214,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                                     "SELECT 
                                 id, 
                                 pr.prefix_id,
+                                pr.prefix as prefix,
                                 Concat(pr.prefix,' ',name,' ',lastname)as fullname,
                                 name, 
                                 lastname,  
@@ -236,6 +237,8 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                                 pro.name_th as pro, 
                                 m_rank, 
                                 stay, 
+                                us.user_name as user_name,
+                                us.user_lname as user_lname,
                                 id_card,
                                 zip_code
                                 FROM data as dt 
@@ -245,11 +248,13 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                                 occupation AS o ON dt.occupation_id = o.occupation_id
                                 JOIN 
                                 provinces AS pro ON dt.province_id = pro.province_id 
-                WHERE 1 = 1
-$handicapCondition
-$ageCondition
-$diseaseCondition
-                   "
+                                JOIN 
+                                user AS us ON dt.user_id = us.user_id 
+                                                WHERE 1 = 1
+                                $handicapCondition
+                                $ageCondition
+                                $diseaseCondition
+                                "
                                 );
                                 $stmt->execute();
                                 $result = $stmt->fetchAll();
@@ -295,7 +300,7 @@ $diseaseCondition
                                             <td><?php echo $row['disease']; ?></td>
                                             <td><?php echo $row['handicap']; ?></td>
                                             <td><?php echo $row['tel']; ?></td>
-                                            <td><a href="show-data.php?id_card=<?php echo $id_card; ?>" class="btn btn-success print-button">ดูข้อมูล</a></td>
+                                            <td><a href="show-data.php?user_name=<?php echo $row['user_name']; ?>&user_lname=<?php echo $row['user_lname']; ?>&zip_code=<?php echo $row['zip_code']; ?>&id_card=<?php echo $row['id_card']; ?>&prefix_id=<?php echo $row['prefix']; ?>&lastname=<?php echo $row['lastname']; ?>&name=<?php echo $row['name']; ?>&date=<?php echo $row['date']; ?>&age=<?php echo $row['age']; ?>&sex=<?php echo $row['sex']; ?>&status=<?php echo $row['status']; ?>&occupation=<?php echo $row['occupation']; ?>&disease=<?php echo $row['disease']; ?>&place=<?php echo $row['place']; ?>&handicap=<?php echo $row['handicap']; ?>&tel=<?php echo $row['tel']; ?>&status=<?php echo $row['status']; ?>&home_id=<?php echo $row['home_id']; ?>&home_no=<?php echo $row['home_no']; ?>&swine=<?php echo $row['swine']; ?>&amphure=<?php echo $row['amphure']; ?>&district=<?php echo $row['district']; ?>&province_id=<?php echo $row['pro']; ?>" class="btn btn-success">ดูข้อมูล</a></td>
                                         </tr>
                                     <?php $i++;
                                     }
