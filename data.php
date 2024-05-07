@@ -55,9 +55,9 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
   <body>
     <?php
     require_once 'db.php';
-    echo '<pre>';
-    print_r($_POST);
-    echo '</pre>';
+    // echo '<pre>';
+    // print_r($_POST);
+    // echo '</pre>';
     // exit();
     //ตรวจสอบตัวแปรที่ส่งมาจากฟอร์ม
     if (isset($_GET['id_home']) && isset($_GET['act']) && $_GET['act'] === 'adhome') {
@@ -96,120 +96,179 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
         echo '<script>window.location.href = "data.php";</script>';
       }
     }
+
+
+
     if (isset($_POST['card_id']) && $_GET['act'] === 'add') {
-      $disease_ids = $_POST['disease_id'];
-      $disease_id = implode(',', $disease_ids);
-      $m_rank = $_POST['m_rank'];
-      $user_id = @$_SESSION['user_id'];
-      $stmt = $conn->prepare("INSERT INTO data
-  (
-    prefix_id,
-    name,
-    lastname,
-    date,
-    sex,
-    status,
-    occupation_id ,
-    disease_id,
-    place,
-    handicap,
-    tel,
-    home_id,
-    home_no,
-    swine,
-    amphure,
-    district,
-    province_id,
-    m_rank,
-    stay,
-    user_id,
-    id_card,
-    zip_code
-  )
-  VALUES
-  (
-  :prefix_id,
-  :fname,
-  :lname,
-  :bdate, 
-  :sex,
-  :status,
-  :occupation,
-  :disease_id,
-  :place,
-  :handicap,
-  :tel,
-  :home_id,
-  :home_no,
-  :swine,
-  :amphure_id,
-  :district_id,
-  :province_id,
-  :m_rank,
-  :stay,
-  :user_id,
-  :card_id,
-  :zip_code
-  )
-");
-
-      $stmt->bindParam(':prefix_id', $_POST['prefix_id'], PDO::PARAM_INT);
-      $stmt->bindParam(':fname', $_POST['fname'], PDO::PARAM_STR);
-      $stmt->bindParam(':lname', $_POST['lname'], PDO::PARAM_STR);
-      $stmt->bindParam(':bdate', $_POST['bdate'], PDO::PARAM_STR);
-      $stmt->bindParam(':sex', $_POST['sex'], PDO::PARAM_STR);
-      $stmt->bindParam(':status', $_POST['status'], PDO::PARAM_STR);
-      $stmt->bindParam(':occupation', $_POST['occupation'], PDO::PARAM_INT);
-      $stmt->bindParam(':disease_id', $disease_id, PDO::PARAM_STR);
-      $stmt->bindParam(':place', $_POST['place'], PDO::PARAM_STR);
-      $stmt->bindParam(':handicap', $_POST['handicap'], PDO::PARAM_STR);
-      $stmt->bindParam(':tel', $_POST['tel'], PDO::PARAM_STR);
-      $stmt->bindParam(':home_id', $_POST['home_id'], PDO::PARAM_INT);
-      $stmt->bindParam(':home_no', $_POST['home_no'], PDO::PARAM_STR);
-      $stmt->bindParam(':swine', $_POST['swine'], PDO::PARAM_STR);
-      $stmt->bindParam(':amphure_id', $_POST['amphure'], PDO::PARAM_STR);
-      $stmt->bindParam(':district_id', $_POST['district'], PDO::PARAM_STR);
-      $stmt->bindParam(':province_id', $_POST['province_id'], PDO::PARAM_INT);
-      $stmt->bindParam(':m_rank', $m_rank, PDO::PARAM_STR);
-      $stmt->bindParam(':stay', $_POST['stay'], PDO::PARAM_STR);
-      $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+      $stmt = $conn->prepare("SELECT id_card FROM data WHERE id_card = :card_id");
       $stmt->bindParam(':card_id', $_POST['card_id'], PDO::PARAM_STR);
-      $stmt->bindParam(':zip_code', $_POST['zip_code'], PDO::PARAM_STR);
+      $stmt->execute();
 
-      $result = $stmt->execute();
-      $conn = null; // ปิดการเชื่อมต่อกับฐานข้อมูล
+      if ($stmt->rowCount() >= 1) {
+        $card_id_use = 'เลขบัตรประชาชนซ้ำ';
+      } else {
+        $card_id_use = 'เลขบัตรประชาชนไม่ซ้ำ';
+      }
+      if ($card_id_use == 'เลขบัตรประชาชนไม่ซ้ำ') {
+        if (
+          isset($_POST['card_id']) &&
+          isset($_POST['prefix_id']) &&
+          isset($_POST['fname']) &&
+          isset($_POST['lname']) &&
+          isset($_POST['bdate']) &&
+          isset($_POST['sex']) &&
+          isset($_POST['status']) &&
+          isset($_POST['occupation']) &&
+          isset($_POST['disease_id']) &&
+          isset($_POST['handicap']) &&
+          isset($_POST['place']) &&
+          isset($_POST['tel']) &&
+          isset($_POST['home_no']) &&
+          isset($_POST['home_id']) &&
+          isset($_POST['swine']) &&
+          isset($_POST['province_id']) &&
+          isset($_POST['amphure']) &&
+          isset($_POST['district']) &&
+          isset($_POST['zip_code']) &&
+          isset($_POST['m_rank'])
+        ) {
+          $disease_ids = $_POST['disease_id'];
+          $disease_id = implode(',', $disease_ids);
+          $m_rank = $_POST['m_rank'];
+          $user_id = @$_SESSION['user_id'];
+          $stmt = $conn->prepare("INSERT INTO data
+          (
+            prefix_id,
+            name,
+            lastname,
+            date,
+            sex,
+            status,
+            occupation_id ,
+            disease_id,
+            place,
+            handicap,
+            tel,
+            home_id,
+            home_no,
+            swine,
+            amphure,
+            district,
+            province_id,
+            m_rank,
+            stay,
+            user_id,
+            id_card,
+            zip_code
+          )
+          VALUES
+          (
+          :prefix_id,
+          :fname,
+          :lname,
+          :bdate, 
+          :sex,
+          :status,
+          :occupation,
+          :disease_id,
+          :place,
+          :handicap,
+          :tel,
+          :home_id,
+          :home_no,
+          :swine,
+          :amphure_id,
+          :district_id,
+          :province_id,
+          :m_rank,
+          :stay,
+          :user_id,
+          :card_id,
+          :zip_code
+          )
+         ");
 
-      if ($result) {
-        unset($_SESSION['home_no']);
-        unset($_SESSION['id_home']);
-        unset($_SESSION['swine']);
-        unset($_SESSION['amphure']);
-        unset($_SESSION['district']);
-        unset($_SESSION['pro']);
-        unset($_SESSION['zip_code']);
-        unset($_SESSION['disabled']);
+          $stmt->bindParam(':prefix_id', $_POST['prefix_id'], PDO::PARAM_INT);
+          $stmt->bindParam(':fname', $_POST['fname'], PDO::PARAM_STR);
+          $stmt->bindParam(':lname', $_POST['lname'], PDO::PARAM_STR);
+          $stmt->bindParam(':bdate', $_POST['bdate'], PDO::PARAM_STR);
+          $stmt->bindParam(':sex', $_POST['sex'], PDO::PARAM_STR);
+          $stmt->bindParam(':status', $_POST['status'], PDO::PARAM_STR);
+          $stmt->bindParam(':occupation', $_POST['occupation'], PDO::PARAM_INT);
+          $stmt->bindParam(':disease_id', $disease_id, PDO::PARAM_STR);
+          $stmt->bindParam(':place', $_POST['place'], PDO::PARAM_STR);
+          $stmt->bindParam(':handicap', $_POST['handicap'], PDO::PARAM_STR);
+          $stmt->bindParam(':tel', $_POST['tel'], PDO::PARAM_STR);
+          $stmt->bindParam(':home_id', $_POST['home_id'], PDO::PARAM_INT);
+          $stmt->bindParam(':home_no', $_POST['home_no'], PDO::PARAM_STR);
+          $stmt->bindParam(':swine', $_POST['swine'], PDO::PARAM_STR);
+          $stmt->bindParam(':amphure_id', $_POST['amphure'], PDO::PARAM_STR);
+          $stmt->bindParam(':district_id', $_POST['district'], PDO::PARAM_STR);
+          $stmt->bindParam(':province_id', $_POST['province_id'], PDO::PARAM_INT);
+          $stmt->bindParam(':m_rank', $m_rank, PDO::PARAM_STR);
+          $stmt->bindParam(':stay', $_POST['stay'], PDO::PARAM_STR);
+          $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+          $stmt->bindParam(':card_id', $_POST['card_id'], PDO::PARAM_STR);
+          $stmt->bindParam(':zip_code', $_POST['zip_code'], PDO::PARAM_STR);
 
-        echo '<script>
-    setTimeout(function() {
-      swal({
-      title: "เพิ่มข้อมูลสำเร็จ",
-      type: "success"
-      }, function() {
-      window.location = "data.php"; //หน้าที่ต้องการให้กระโดดไป
-      });
-    }, 1000);
-  </script>';
+          $result = $stmt->execute();
+          $conn = null; // ปิดการเชื่อมต่อกับฐานข้อมูล
+
+          if ($result) {
+            unset($_SESSION['home_no']);
+            unset($_SESSION['id_home']);
+            unset($_SESSION['swine']);
+            unset($_SESSION['amphure']);
+            unset($_SESSION['district']);
+            unset($_SESSION['pro']);
+            unset($_SESSION['zip_code']);
+            unset($_SESSION['disabled']);
+
+            echo '<script>
+            setTimeout(function() {
+              swal({
+              title: "เพิ่มข้อมูลสำเร็จ",
+              type: "success"
+              }, function() {
+              window.location = "data.php"; //หน้าที่ต้องการให้กระโดดไป
+              });
+            }, 1000);
+          </script>';
+          } else {
+            echo '<script>
+            setTimeout(function() {
+              swal({
+              title: "เกิดข้อผิดพลาด",
+              type: "error"
+              }, function() {
+              window.location = "data.php"; //หน้าที่ต้องการให้กระโดดไป
+              });
+            }, 1000);
+          </script>';
+          }
+        } else {
+          echo '<script>
+           setTimeout(function() {
+            swal({
+                title: "ข้อมูลไม่ครบถ้วน",
+                type: "error"
+            }, function() {
+                window.location = "data.php"; //หน้าที่ต้องการให้กระโดดไป
+            });
+          }, 1000);
+       </script>';
+        }
       } else {
         echo '<script>
-    setTimeout(function() {
-      swal({
-      title: "เกิดข้อผิดพลาด",
-      type: "error"
-      }, function() {
-      window.location = "data.php"; //หน้าที่ต้องการให้กระโดดไป
-      });
-    }, 1000);
-  </script>';
+        setTimeout(function() {
+         swal({
+             title: "เลขบัตรประชาชนซ้ำ",
+             type: "error"
+         }, function() {
+             window.location = "data.php"; //หน้าที่ต้องการให้กระโดดไป
+         });
+       }, 1000);
+    </script>';
       }
     }
     if (isset($_GET['act']) && $_GET['act'] === 'edit') {
@@ -234,6 +293,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
         isset($_POST['amphure']) &&
         isset($_POST['district']) &&
         isset($_POST['zip_code']) &&
+        isset($_POST['stay']) &&
         isset($_POST['m_rank'])
       ) {
         $id = $_POST['id'];
@@ -258,6 +318,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
         $district_id = $_POST['district'];
         $zip_code = $_POST['zip_code'];
         $m_rank = $_POST['m_rank'];
+        $stay = $_POST['stay'];
         $user_id = @$_SESSION['user_id'];
 
         // SQL update
@@ -282,6 +343,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
             district = :district_id,
             zip_code = :zip_code,
             m_rank = :m_rank,
+            stay = :stay,
             user_id = :user_id
             WHERE id = :id");
 
@@ -306,6 +368,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
         $stmt->bindParam(':district_id', $district_id, PDO::PARAM_STR);
         $stmt->bindParam(':zip_code', $zip_code, PDO::PARAM_STR);
         $stmt->bindParam(':m_rank', $m_rank, PDO::PARAM_STR);
+        $stmt->bindParam(':stay', $stay, PDO::PARAM_STR);
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_STR);
 
         try {
@@ -446,11 +509,18 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                     </div>
                   </div>
                   <?php if (@$_SESSION['id_home']) { ?>
-                    <input type="hidden" class="form-control" name="home_id" id="" value="<?php echo @$_SESSION['id_home'] ?>" required>
+                    <input type="hidden" class="form-control" name="home_id" id="" value="<?php echo @$_SESSION['id_home'] ?>">
+                    <input type="hidden" class="form-control" name="home_no" id="" value="<?php echo @$_SESSION['home_no'] ?>">
+                    <input type="hidden" class="form-control" name="stay" id="" value="อยู่ตามทะเบียบบ้าน">
+                    <input type="hidden" class="form-control" name="swine" id="" value="<?php echo @$_SESSION['swine'] ?>">
+                    <input type="hidden" class="form-control" name="province_id" id="" value="<?php echo @$_SESSION['provinceId'] ?>">
+                    <input type="hidden" class="form-control" name="amphure" id="" value="<?php echo @$_SESSION['amphure'] ?>">
+                    <input type="hidden" class="form-control" name="district" id="" value="<?php echo @$_SESSION['district'] ?>">
+                    <input type="hidden" class="form-control" name="zip_code" id="" value="<?php echo @$_SESSION['zip_code'] ?>">
                     <div class="row">
                       <div class="col">
                         <label class="col-form-label"> การอยู่อาศัย:<span class="required-star">*</span></label>
-                        <select name="stay" class="form-select" id="inputGroupSelect01" required>
+                        <select class="form-select" id="inputGroupSelect01" disabled>
                           <option selected>อยู่ตามทะเบียบบ้าน</option>
                         </select>
                       </div>
@@ -464,17 +534,17 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                       </div>
                       <div class="col">
                         <label class="col-form-label">บ้านเลขที่:<span class="required-star">*</span></label>
-                        <input type="text" class="form-control" id="" value="<?php echo @$_SESSION['home_no'] ?>" name="home_no" required>
+                        <input type="text" class="form-control" id="" value="<?php echo @$_SESSION['home_no'] ?>" disabled>
                       </div>
                       <div class="col">
                         <label class="col-form-label">หมู่:<span class="required-star">*</span></label>
-                        <input type="text" class="form-control" id="" value="<?php echo @$_SESSION['swine'] ?>" name="swine" required>
+                        <input type="text" class="form-control" id="" value="<?php echo @$_SESSION['swine'] ?>" disabled>
                       </div>
                     </div>
                     <div class="row">
                       <div class="col">
                         <label class="col-form-label">จังหวัด:<span class="required-star">*</span></label>
-                        <select name="province_id" class="form-select" id="inputGroupSelect01" required>
+                        <select class="form-select" id="inputGroupSelect01" disabled>
                           <option selected value="<?php echo @$_SESSION['provinceId']; ?>">
                             <?php echo @$_SESSION['pro']; ?>
                           </option>
@@ -482,15 +552,15 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                       </div>
                       <div class="col">
                         <label class="col-form-label">อำเภอ:<span class="required-star">*</span></label>
-                        <input type="text" class="form-control" id="" value="<?php echo @$_SESSION['amphure'] ?>" name="amphure" required>
+                        <input type="text" class="form-control" id="" value="<?php echo @$_SESSION['amphure'] ?>" disabled>
                       </div>
                       <div class="col">
                         <label class="col-form-label">ตำบล:<span class="required-star">*</span></label>
-                        <input type="text" class="form-control" id="" value="<?php echo @$_SESSION['district'] ?>" name="district" required>
+                        <input type="text" class="form-control" id="" value="<?php echo @$_SESSION['district'] ?>" disabled>
                       </div>
                       <div class="col">
                         <label class="col-form-label">รหัสไปรษณีย์:<span class="required-star">*</span></label>
-                        <input type="text" class="form-control" id="" value="<?php echo @$_SESSION['zip_code'] ?>" name="zip_code" required>
+                        <input type="text" class="form-control" id="" value="<?php echo @$_SESSION['zip_code'] ?>" disabled>
                       </div>
                     </div>
                   <?php } ?>
@@ -983,6 +1053,15 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                                   </select>
                                 </div>
                                 <div class="col">
+                                  <label class="col-form-label">การอยู่อาศัย :<span class="required-star">*</span></label>
+                                  <select name="stay" class="form-select" id="inputGroupSelect01" required>
+                                    <option selected disabled>--กรุณาเลือก--</option>
+                                    <option selected value="<?php echo $row['stay']; ?>"><?php echo $row['stay']; ?></option>
+                                    <option>อยู่ตามทะเบียบบ้าน</option>
+                                    <option>ไม่อยู่ตามทะเบียบบ้าน</option>
+                                  </select>
+                                </div>
+                                <div class="col">
                                   <label class="col-form-label">ตำแหน่งในบ้าน :<span class="required-star">*</span></label>
                                   <select name="m_rank" class="form-select" id="inputGroupSelect01" required>
                                     <option selected disabled>--กรุณาเลือก--</option>
@@ -1066,7 +1145,8 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
 
           <!-- Modal body -->
           <div class="modal-body">
-            <table class="table table-striped" id="myTable">
+            <input class="form-control" id="myInput" type="text" placeholder="ค้นหา.."><br>
+            <table class="table table-striped">
               <thead>
                 <tr class="table-success">
                   <th>#</th>
@@ -1081,7 +1161,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                   <th></th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody id="myTable-home">
                 <?php
                 $stmt9 = $conn->prepare(
                   "SELECT 
@@ -1139,6 +1219,16 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
         </div>
       </div>
     </div>
+    <script>
+      $(document).ready(function() {
+        $("#myInput").on("keyup", function() {
+          var value = $(this).val().toLowerCase();
+          $("#myTable-home tr").filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+          });
+        });
+      });
+    </script>
     <script>
       $(document).ready(function() {
         $('#myTable').DataTable();

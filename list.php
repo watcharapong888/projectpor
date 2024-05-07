@@ -13,6 +13,10 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
 </script>';
     $conn = null;
 } else {
+
+    if (@$_GET['act'] === 'clear') {
+        unset($_POST);
+    }
 ?>
     <!DOCTYPE html>
     <html lang="en">
@@ -63,6 +67,10 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
     <body>
         <?php
         require_once 'db.php';
+        // print_r($_POST);
+        @$disease = $_POST['disease'];
+        @$age = $_POST['age'];
+        @$handicap = $_POST['handicap'];
         ?>
         <br>
         <div class="showall">
@@ -76,11 +84,22 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                         </div>
                     </div>
                     <br>
-                    <form action="" method="POST">
+                    <form action="list.php" method="POST">
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label for="handicap" class="form-label">เลือกกลุ่มเปราะบาง:</label>
                                 <select id="handicap" name="handicap" class="form-select">
+                                    <?php
+                                    if ($handicap == 'all' && $handicap != '') {
+                                        echo '<option value="all">ทั้งหมด</option>';
+                                    }
+                                    if ($handicap == 'Yes' && $handicap != '') {
+                                        echo '<option value="Yes">กลุ่มเปราะบาง</option>';
+                                    }
+                                    if ($handicap == 'No' && $handicap != '') {
+                                        echo '<option value="No">ไม่อยู่ในกลุ่มเปราะบาง</option>';
+                                    }
+                                    ?>
                                     <option value="all">ทั้งหมด</option>
                                     <option value="Yes">กลุ่มเปราะบาง</option>
                                     <option value="No">ไม่อยู่ในกลุ่มเปราะบาง</option>
@@ -89,6 +108,23 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                             <div class="col-md-4 mb-3">
                                 <label for="age" class="form-label">เลือกกลุ่มอายุ:</label>
                                 <select id="age" name="age" class="form-select">
+                                    <?php
+                                    if ($age == 'all' && $age != '') {
+                                        echo '<option value="all">ทั้งหมด</option>';
+                                    }
+                                    if ($age == '0-20' && $age != '') {
+                                        echo '<option value="0-20">0-20 ปี</option>';
+                                    }
+                                    if ($age == '21-40' && $age != '') {
+                                        echo '<option value="21-40">21-40 ปี</option>';
+                                    }
+                                    if ($age == '41-60' && $age != '') {
+                                        echo ' <option value="41-60">41-60 ปี</option>';
+                                    }
+                                    if ($age == '61+' && $age != '') {
+                                        echo '<option value="61+">61 ปีขึ้นไป</option>';
+                                    }   
+                                    ?>
                                     <option value="all">ทั้งหมด</option>
                                     <option value="0-20">0-20 ปี</option>
                                     <option value="21-40">21-40 ปี</option>
@@ -99,25 +135,36 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                             <div class="col-md-4 mb-3">
                                 <label for="disease" class="form-label">เลือกกลุ่มโรคประจำตัว:</label>
                                 <select id="disease" name="disease" class="form-select">
+                                    <?php
+                                    if ($disease == 'all' && $disease != '') {
+                                        echo '<option value="all">ทั้งหมด</option>';
+                                    }
+                                    if ($disease != 'all' && $disease != '') {
+                                        echo '<option>' . @$disease . '</option>';
+                                    }
+                                    ?>
                                     <option value="all">ทั้งหมด</option>
-                                    <option value="12">ไม่มีโรคประจำตัว</option>
-                                    <option value="1">โรคเบาหวาน</option>
-                                    <option value="2">โรคหัวใจ</option>
-                                    <option value="3">โรคความดัน</option>
-                                    <option value="4">โรคเส้นเลือดตีบ</option>
-                                    <option value="5">โรคไต</option>
-                                    <option value="6">โรครูมาตอยด์</option>
-                                    <option value="7">โรคมะเร็งเต้านม</option>
-                                    <option value="9">โรคมะเร็งตับ</option>
-                                    <option value="8">โรคมะเร็งลำไส้</option>
-                                    <option value="10">โรคมะเร็งกล่องเสียง</option>
-                                    <option value="11">ภาวะธาตุเหล็กเกิน</option>
+                                    <option>ไม่มีโรคประจำตัว</option>
+                                    <option>โรคเบาหวาน</option>
+                                    <option>โรคหัวใจ</option>
+                                    <option>โรคความดัน</option>
+                                    <option>โรคเส้นเลือดตีบ</option>
+                                    <option>โรคไต</option>
+                                    <option>โรครูมาตอยด์</option>
+                                    <option>โรคมะเร็งเต้านม</option>
+                                    <option>โรคมะเร็งตับ</option>
+                                    <option>โรคมะเร็งลำไส้</option>
+                                    <option>โรคมะเร็งกล่องเสียง</option>
+                                    <option>ภาวะธาตุเหล็กเกิน</option>
                                 </select>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-12">
-                                <button type="submit" class="btn btn-success">แสดงผล</button>
+                                <center>
+                                    <button type="submit" class="btn btn-primary">คันหา</button>
+                                    <a href="list.php?act=clear" class="btn btn-secondary">ล้างข้อมูล</a>
+                                </center>
                             </div>
                         </div>
                     </form>
@@ -162,7 +209,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                                             break;
                                     }
                                 }
-                                $diseaseCondition = $selectedChronicDisease !== 'all' ? "AND disease = '$selectedChronicDisease'" : "";
+                                $diseaseCondition = $selectedChronicDisease !== 'all' ? "AND disease_id like'%$selectedChronicDisease%'" : "";
                                 $stmt = $conn->prepare(
                                     "SELECT 
                                 id, 
