@@ -1,18 +1,18 @@
 <?php include 'menu.php';
-if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
-  echo '<script>
-  setTimeout(function() {
-   swal({
-       title: "แจ้งเตือน!",
-        text: "คุณไม่มีสิทธิ์เข้าถึง กรุณาเข้าสู่ระบบแล้วลองอีกครั้ง",
-       type: "warning"
-   }, function() {
-       window.location = "login.php"; //หน้าที่ต้องการให้กระโดดไป
-   });
- }, 1000);
-</script>';
-  $conn = null;
-} else {
+// if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
+//   echo '<script>
+//   setTimeout(function() {
+//    swal({
+//        title: "แจ้งเตือน!",
+//         text: "คุณไม่มีสิทธิ์เข้าถึง กรุณาเข้าสู่ระบบแล้วลองอีกครั้ง",
+//        type: "warning"
+//    }, function() {
+//        window.location = "login.php"; //หน้าที่ต้องการให้กระโดดไป
+//    });
+//  }, 1000);
+// </script>';
+//   $conn = null;
+// } else {
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -236,4 +236,6 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
 </body>
 
 </html>
-<?php } ?>
+<?php 
+// } 
+?>
