@@ -44,7 +44,6 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
     print_r($_POST);
     if (count($_FILES) > 0) {
       if (is_uploaded_file($_FILES['upload']['tmp_name'])) {
-
         $post_date = date('Y-m-d H:i:s');
         $sql_post = "INSERT INTO post 
         (
@@ -287,18 +286,16 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
               <tbody>
                 <?php
                 $stmt = $conn->prepare(
-                  "SELECT 
-                   post_id,
-                   post_text,
-                   img.img as img,
-                   img.img_id,
-                   img.status_img,
-                   post_date,
-                   user_id	
-                   FROM post as po
-                   join 
-                   img as img ON po.post_id = img.img_post_id
-                   GROUP BY po.post_id"
+                  "SELECT DISTINCT
+                  po.post_id,
+                  post_text,
+                  img.img AS img,
+                  img.img_id,
+                  img.status_img,
+                  post_date,
+                  user_id
+                  FROM post AS po
+                  JOIN img AS img ON po.post_id = img.img_post_id;"
                 );
                 $stmt->execute();
                 $result = $stmt->fetchAll();
