@@ -264,7 +264,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                     <tr>
                       <td><?php echo $i; ?></td>
                       <td><?php echo $row['post_text']; ?></td>
-                      <td><img src="data:<?php echo $row['img_id']; ?>;base64,<?php echo base64_encode($row['img']); ?>" alt="Image"></td>
+                      <td><img width="100px" height="100px" src="data:<?php echo $row['img_id']; ?>;base64,<?php echo base64_encode($row['img']); ?>" alt="Image"></td>
                       <td><?php echo $row['post_date']; ?></td>
                       <td><?php echo $row['user_id']; ?></td>
                       <td><button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#myModal<?php echo $row['post_id']; ?>">แก้ไขข้อมูล</button></td>
