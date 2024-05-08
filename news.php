@@ -44,26 +44,57 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
     print_r($_POST);
     if (count($_FILES) > 0) {
       if (is_uploaded_file($_FILES['upload']['tmp_name'])) {
-        $imgData = file_get_contents($_FILES['upload']['tmp_name']);
-        $imgType = $_FILES['upload']['type'];
 
-        $sql_img = "INSERT INTO img (Img_name, img) VALUES (:imgType, :imgData)";
-        $statement_img = $conn->prepare($sql_img);
-        $statement_img->bindParam(':imgType', $imgType, PDO::PARAM_STR);
-        $statement_img->bindParam(':imgData', $imgData, PDO::PARAM_LOB); 
-        $statement_img->execute();
-        $img_id = $conn->lastInsertId(); 
-
-        $post_date = date('Y-m-d H:i:s'); 
-        $sql_post = "INSERT INTO post (post_text, user_id, img_id, post_date) VALUES (:post_text, :user_id, :img_id, :post_date)";
+        $post_date = date('Y-m-d H:i:s');
+        $sql_post = "INSERT INTO post 
+        (
+          post_text, 
+          user_id, 
+          post_date
+        ) 
+        VALUES 
+        (
+          :post_text, 
+          :user_id, 
+          :post_date
+        )";
         $statement_post = $conn->prepare($sql_post);
         $statement_post->bindParam(':post_text', $_POST['post_text'], PDO::PARAM_STR);
         $statement_post->bindParam(':user_id', $_SESSION['user_id'], PDO::PARAM_STR);
-        $statement_post->bindParam(':post_date', $post_date, PDO::PARAM_STR); 
-        $statement_post->bindParam(':img_id', $img_id, PDO::PARAM_INT); 
+        $statement_post->bindParam(':post_date', $post_date, PDO::PARAM_STR);
         $result = $statement_post->execute();
+        $post_id  = $conn->lastInsertId();
 
-        if ($result) {
+        if (@$_POST['img_post_id'] != null || @$_POST['img_post_id'] != '') {
+          $img_post_id = @$_POST['img_post_id'];
+        } else {
+          $img_post_id = $post_id;
+        }
+
+        $imgData = file_get_contents($_FILES['upload']['tmp_name']);
+        $imgType = $_FILES['upload']['type'];
+        $sql_img = "INSERT INTO img 
+        (
+          Img_name,
+          img_post_id, 
+          status_img, 
+          img
+        ) 
+        VALUES 
+        (
+          :imgType, 
+          :img_post_id, 
+          :status_img, 
+          :imgData
+        )";
+        $statement_img = $conn->prepare($sql_img);
+        $statement_img->bindParam(':imgType', $imgType, PDO::PARAM_STR);
+        $statement_img->bindParam(':img_post_id', $img_post_id, PDO::PARAM_STR);
+        $statement_img->bindParam(':status_img', $_POST['status_img'], PDO::PARAM_STR);
+        $statement_img->bindParam(':imgData', $imgData, PDO::PARAM_LOB);
+        $statement_img->execute();
+
+        if ($statement_img) {
           echo '<script>
          setTimeout(function() {
            swal({
@@ -212,13 +243,24 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
               <div class="row">
                 <div class="col">
                   <label class="col-form-label">ข้อความ:<span class="required-star">*</span></label>
-                  <input type="text" class="form-control" id="" name="post_text" required>
+                  <textarea type="text" class="form-control" id="" name="post_text"></textarea>
                 </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <label class="col-form-label">รูปแบบโพสต์:<span class="required-star">*</span></label>
+                  <select name="status_img" class="form-select" id="inputGroupSelect01" required>
+                    <option selected disabled>--กรุณาเลือก--</option>
+                    <option>โพสต์รูปเดียว</option>
+                    <option>โพสต์หลายรูป</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
                 <div class="col">
                   <label class="col-form-label">รูปภาพ:<span class="required-star">*</span></label>
                   <input type="file" class="form-control" id="" name="upload" required>
                 </div>
-
               </div> <br>
               <div class="row">
                 <center><input type="submit" class="btn btn-primary" value="เพิ่มข้อมูล"> <a href="news.php" class="btn btn-secondary">ล้างข้อมูล</a></center>
@@ -232,9 +274,11 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
               <thead>
                 <tr class="table-success">
                   <th>#</th>
+                  <!-- <th>โพสต์ไอดี</th> -->
                   <th>ข้อความ</th>
-                  <th>ตัวอย่างรูป</th>
-                  <th>วันที่อัพโหลด</th>
+                  <!-- <th>ตัวอย่างรูป</th> -->
+                  <!-- <th>วันที่อัพโหลด</th>-->
+                  <th>รูปแบบโพสต์</th>
                   <th>อัพโหลดโดย</th>
                   <th></th>
                   <th></th>
@@ -246,13 +290,15 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                   "SELECT 
                    post_id,
                    post_text,
-                   po.img_id,
                    img.img as img,
+                   img.img_id,
+                   img.status_img,
                    post_date,
                    user_id	
                    FROM post as po
                    join 
-                   img as img ON po.img_id = img.img_id"
+                   img as img ON po.post_id = img.img_post_id
+                   GROUP BY po.post_id"
                 );
                 $stmt->execute();
                 $result = $stmt->fetchAll();
@@ -263,13 +309,16 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                 ?>
                     <tr>
                       <td><?php echo $i; ?></td>
+                      <!-- <td><?php echo $row['post_id']; ?></td> -->
                       <td><?php echo $row['post_text']; ?></td>
-                      <td><img width="100px" height="100px" src="data:<?php echo $row['img_id']; ?>;base64,<?php echo base64_encode($row['img']); ?>" alt="Image"></td>
-                      <td><?php echo $row['post_date']; ?></td>
+                      <!-- <td><img width="100px" height="100px" src="data:<?php echo $row['img_id']; ?>;base64,<?php echo base64_encode($row['img']); ?>" alt="Image"></td> -->
+                      <!-- <td><?php echo $row['post_date']; ?></td> -->
+                      <td><?php echo $row['status_img']; ?></td>
                       <td><?php echo $row['user_id']; ?></td>
-                      <td><button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#myModal<?php echo $row['post_id']; ?>">แก้ไขข้อมูล</button></td>
+                      <td> <a href="news-edit.php?post_id=<?php echo $row['post_id']; ?>&post_text=<?php echo $row['post_text'];?>&status_img=<?php echo $row['status_img']; ?>" class="btn btn-warning">แก้ไข</a>
+                      </td>
                       <td> <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Modaldeletel<?php echo $row['post_id']; ?>">
-                          ลบข้อมูล
+                          ลบ
                         </button></td>
                     </tr>
                     <div class="modal fade" id="Modaldeletel<?php echo $row['post_id']; ?>">
@@ -296,35 +345,6 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                         </div>
                       </div>
                     </div>
-
-                    <div class="modal fade" id="myModal<?php echo $row['post_id']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                      <div class="modal-dialog modal-dialog-scrollable">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">
-                              <p>แก้ไขโพสต์</p>
-                            </h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                          </div>
-                          <div class="modal-body">
-                            <form action="address.php?act=edit" method="post">
-                              <input type="hidden" name="homeid" value="<?php echo $row['post_id']; ?>">
-                              <label class="col-form-label">ข้อความ:<span class="required-star">*</span></label>
-                              <input type="text" class="form-control" id="" name="post_text" value="<?php echo $row['post_text']; ?>">
-
-                              <label class="col-form-label">รูปภาพ:<span class="required-star">*</span></label>
-                              <input type="file" class="form-control" id="" name="img_id" value="<?php echo $row['img_id']; ?>">
-
-                          </div>
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ย้อนกลับ</button>
-                            <button type="submit" class="btn btn-primary">แก้ไขข้อมูล</button>
-                          </div>
-                          </form>
-                        </div>
-                      </div>
-                    </div>
-
                   <?php $i++;
                   }
                 } else { ?>
