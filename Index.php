@@ -114,9 +114,13 @@
         img.img_post_id AS img_post_id,
         img.status_img AS status_img,
         user_id
-        FROM post AS po
-        JOIN img AS img ON po.post_id = img.img_post_id
-        GROUP BY po.post_id;
+    FROM 
+        post AS po
+    JOIN 
+        img AS img ON po.post_id = img.img_post_id
+    WHERE 
+        img.img_id = (SELECT MIN(img_id) FROM img WHERE img_post_id = po.post_id);
+    ;
         "
       );
       $stmt->execute();

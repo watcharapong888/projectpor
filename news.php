@@ -286,16 +286,25 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
               <tbody>
                 <?php
                 $stmt = $conn->prepare(
-                  "SELECT DISTINCT
-                  po.post_id,
-                  post_text,
+                  "SELECT 
+                  po.post_id AS post_id,
+                  po.post_text,
                   img.img AS img,
                   img.img_id,
                   img.status_img,
-                  post_date,
-                  user_id
-                  FROM post AS po
-                  JOIN img AS img ON po.post_id = img.img_post_id;"
+                  po.post_date,
+                  po.user_id
+              FROM 
+                  post AS po
+              JOIN 
+                  img AS img ON po.post_id = img.img_post_id
+              WHERE
+                  img.img_id IN (
+                      SELECT MIN(img_id) 
+                      FROM img 
+                      WHERE img_post_id = po.post_id
+                  );
+              "
                 );
                 $stmt->execute();
                 $result = $stmt->fetchAll();

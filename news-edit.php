@@ -229,17 +229,20 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
           <?php
           $stmt = $conn->prepare(
             "SELECT 
-        po.post_id AS post_id,
-        post_text,
-        img.img AS img,
-        post_date,
-        img.img_post_id AS img_post_id,
-        img.status_img AS status_img,
-        user_id
-        FROM post AS po
-        JOIN img AS img ON po.post_id = img.img_post_id
-        where po.post_id = $path_post_id
-        GROUP BY po.post_id;
+            po.post_id AS post_id,
+            post_text,
+            img.img AS img,
+            post_date,
+            img.img_post_id AS img_post_id,
+            img.status_img AS status_img,
+            user_id
+        FROM 
+            post AS po
+        JOIN 
+            img AS img ON po.post_id = img.img_post_id
+        WHERE 
+            img.img_id = (SELECT MIN(img_id) FROM img WHERE img_post_id = po.post_id);
+        
         "
           );
           $stmt->execute();
