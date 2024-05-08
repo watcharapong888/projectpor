@@ -241,7 +241,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
         JOIN 
             img AS img ON po.post_id = img.img_post_id
         WHERE 
-            img.img_id = (SELECT MIN(img_id) FROM img WHERE img_post_id = po.post_id);
+            img.img_id = (SELECT MIN(img_id) FROM img WHERE img_post_id = $path_post_id);
         
         "
           );
