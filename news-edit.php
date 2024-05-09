@@ -201,9 +201,9 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                   <input type="hidden" name="img_post_id" value="<?php echo  $path_post_id ?>">
                 </div>
                 <div class="col">
-                  <label class="col-form-label">รูปแบบโพสต์:<span class="required-star">*</span></label>
-                  <input type="text" class="form-control" id="" value="<?php echo  $status_img ?>" disabled>
-                  <input type="hidden" name="status_img" value="<?php echo  $status_img ?>">
+                  <!-- <label class="col-form-label">รูปแบบโพสต์:<span class="required-star">*</span></label>
+                  <input type="text" class="form-control" id="" value="<?php echo  $status_img ?>" disabled>-->
+                  <input type="hidden" name="status_img" value="<?php echo  $status_img ?>"> 
                 </div>
               </div>
               <div class="row">

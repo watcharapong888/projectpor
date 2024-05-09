@@ -223,7 +223,6 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
           }, 1000);
       </script>';
       }
-      $conn = null;
     } //isset
     ?>
     <br>
@@ -245,7 +244,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                   <textarea type="text" class="form-control" id="" name="post_text"></textarea>
                 </div>
               </div>
-              <div class="row">
+              <!-- <div class="row">
                 <div class="col">
                   <label class="col-form-label">รูปแบบโพสต์:<span class="required-star">*</span></label>
                   <select name="status_img" class="form-select" id="inputGroupSelect01" required>
@@ -254,7 +253,8 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                     <option>โพสต์หลายรูป</option>
                   </select>
                 </div>
-              </div>
+              </div> -->
+              <input type="hidden" name="status_img" value="โพสต์รูปเดียว">
               <div class="row">
                 <div class="col">
                   <label class="col-form-label">รูปภาพ:<span class="required-star">*</span></label>
@@ -277,7 +277,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                   <th>ข้อความ</th>
                   <!-- <th>ตัวอย่างรูป</th> -->
                   <!-- <th>วันที่อัพโหลด</th>-->
-                  <th>รูปแบบโพสต์</th>
+                  <!-- <th>รูปแบบโพสต์</th> -->
                   <th>อัพโหลดโดย</th>
                   <th></th>
                   <th></th>
@@ -293,11 +293,14 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                   img.img_id,
                   img.status_img,
                   po.post_date,
-                  po.user_id
+                  po.user_id,
+                  us.user_name as username
               FROM 
                   post AS po
               JOIN 
                   img AS img ON po.post_id = img.img_post_id
+              JOIN 
+                  user AS us ON po.user_id  = us.user_id 
               WHERE
                   img.img_id IN (
                       SELECT MIN(img_id) 
@@ -319,9 +322,9 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                       <td><?php echo $row['post_text']; ?></td>
                       <!-- <td><img width="100px" height="100px" src="data:<?php echo $row['img_id']; ?>;base64,<?php echo base64_encode($row['img']); ?>" alt="Image"></td> -->
                       <!-- <td><?php echo $row['post_date']; ?></td> -->
-                      <td><?php echo $row['status_img']; ?></td>
-                      <td><?php echo $row['user_id']; ?></td>
-                      <td> <a href="news-edit.php?post_id=<?php echo $row['post_id']; ?>&post_text=<?php echo $row['post_text'];?>&status_img=<?php echo $row['status_img']; ?>" class="btn btn-warning">แก้ไข</a>
+                      <!-- <td><?php echo $row['status_img']; ?></td> -->
+                      <td><?php echo $row['username']; ?></td>
+                      <td> <a href="news-edit.php?post_id=<?php echo $row['post_id']; ?>&post_text=<?php echo $row['post_text']; ?>&status_img=<?php echo $row['status_img']; ?>" class="btn btn-warning">แก้ไข</a>
                       </td>
                       <td> <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Modaldeletel<?php echo $row['post_id']; ?>">
                           ลบ
