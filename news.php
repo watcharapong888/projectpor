@@ -41,7 +41,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
   <body>
     <?php
     require_once 'db.php';
-    print_r($_POST);
+    // print_r($_POST);
     if (count($_FILES) > 0) {
       if (is_uploaded_file($_FILES['upload']['tmp_name'])) {
         $post_date = date('Y-m-d H:i:s');

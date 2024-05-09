@@ -29,7 +29,7 @@ print_r($_SESSION)
 
 <body>
 <?php 
- print_r($_POST);
+//  print_r($_POST);
 ?>
   <div class="container mt-3 box card">
     <h2>
