@@ -119,8 +119,9 @@
     JOIN 
         img AS img ON po.post_id = img.img_post_id
     WHERE 
-        img.img_id = (SELECT MIN(img_id) FROM img WHERE img_post_id = po.post_id);
-    ;
+        img.img_id = (SELECT MIN(img_id) FROM img WHERE img_post_id = po.post_id)
+    ORDER BY 
+        post_date DESC;    
         "
       );
       $stmt->execute();

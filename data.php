@@ -754,9 +754,9 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                   <label class="col-form-label">สถานที่รับยา:<span class="required-star">*</span></label>
                   <select name="place" class="form-select" id="inputGroupSelect01" required>
                     <option selected disabled>--กรุณาเลือก--</option>
+                    <option>ไม่มีโรคประจำตัว</option>
                     <option>โรงพยาบาลมหาราช</option>
                     <option>โรงพยาบาลเทคโนโลยีสุรนารี</option>
-                    <option>ไม่มีโรคประจำตัว</option>
                     <option>โรงพยาบาลด่านขุนทด (รพ.เก่า)</option>
                     <option>โรงพยาบาลหลวงพ่อคูณปริสุทฺโธ (รพ.ใหม่)</option>
                   </select>
@@ -1032,9 +1032,9 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                               <select name="place" class="form-select" id="inputGroupSelect01" required>
                                 <option selected disabled>--กรุณาเลือก--</option>
                                 <option selected value="<?php echo $row['place']; ?> "><?php echo $row['place']; ?></option>
+                                <option>ไม่มีโรคประจำตัว</option>
                                 <option>โรงพยาบาลมหาราช</option>
                                 <option>โรงพยาบาลเทคโนโลยีสุรนารี</option>
-                                <option>ไม่มีโรคประจำตัว</option>
                                 <option>โรงพยาบาลด่านขุนทด (รพ.เก่า)</option>
                                 <option>โรงพยาบาลหลวงพ่อคูณปริสุทฺโธ (รพ.ใหม่)</option>
                               </select>
