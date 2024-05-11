@@ -121,7 +121,7 @@
     WHERE 
         img.img_id = (SELECT MIN(img_id) FROM img WHERE img_post_id = po.post_id)
     ORDER BY 
-        post_date DESC;    
+    post_id DESC;    
         "
       );
       $stmt->execute();
