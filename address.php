@@ -117,7 +117,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
               }, 1000);
             </script>';
         }
-      }else {
+      } else {
         echo '<script>
         setTimeout(function() {
          swal({
@@ -277,8 +277,10 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
               <div class="row">
                 <div class="col">
                   <label class="col-form-label">รหัสบ้าน:<span class="required-star">*</span></label>
-                  <input type="text" class="form-control" id="" name="home_id" maxlength="11" placeholder="ระบุตัวเลขไม่เกิน 11 ตัว" required>
+                  <input type="text" class="form-control" id="home_id" name="home_id" maxlength="11" placeholder="ระบุตัวเลขไม่เกิน 11 ตัว" pattern="[0-9]{11}" title="กรุณากรอกตัวเลข 11 หลัก" required>
+                  <!-- <small id="homeIdHelp" class="form-text text-muted">โปรดกรอกตัวเลข 11 หลักเท่านั้น</small> -->
                 </div>
+
                 <div class="col">
                   <label class="col-form-label">บ้านเลขที่:<span class="required-star">*</span></label>
                   <input type="text" class="form-control" id="" name="home_no" placeholder="ตัวอย่างเช่น 44/1 " required>
@@ -345,15 +347,15 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                   <th>#</th>
                   <th>รหัสบ้าน</th>
                   <th>บ้านเลขที่</th>
-                  <th>หมู่</th>
+                  <!-- <th>หมู่</th>
                   <th>ตำบล</th>
                   <th>อำเภอ</th>
                   <th>จังหวัด</th>
-                  <th>รหัสไปรษณีย์</th>
+                  <th>รหัสไปรษณีย์</th> -->
                   <th>ประเภทบ้าน</th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
+                  <th style="width:5%"></th>
+                  <th style="width:5%"></th>
+                  <th style="width:5%"></th>
                 </tr>
               </thead>
               <tbody>
@@ -388,19 +390,35 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                       <td><?php echo $i; ?></td>
                       <td><?php echo $row['id_home']; ?></td>
                       <td><?php echo $row['home_no']; ?></td>
-                      <td><?php echo $row['swine']; ?></td>
+                      <!-- <td><?php echo $row['swine']; ?></td>
                       <td><?php echo $row['amphure']; ?></td>
                       <td><?php echo $row['district']; ?></td>
                       <td><?php echo $row['pro']; ?></td>
                       <td>
                         <?php echo $row['zip_code']; ?>
-                      </td>
+                      </td> -->
                       <td><?php echo $row['home_type']; ?></td>
-                      <td><a href="show-address.php?home_id=<?php echo $row['id']; ?>&id_home=<?php echo $row['id_home']; ?>&home_no=<?php echo $row['home_no']; ?>&swine=<?php echo $row['swine']; ?>&aph=<?php echo $row['amphure']; ?>&di=<?php echo $row['district']; ?>&pro=<?php echo $row['pro']; ?>&location=<?php echo urlencode($row['location']); ?>&zip_code=<?php echo $row['zip_code']; ?>&home_type=<?php echo $row['home_type']; ?>" class="btn btn-success">ดูข้อมูล</a></td>
-                      <td><button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#myModal<?php echo $row['id']; ?>">แก้ไขข้อมูล</button></td>
-                      <td> <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Modaldeletel<?php echo $row['id']; ?>">
-                          ลบข้อมูล
-                        </button></td>
+                      <td >
+                        <a href="show-address.php?home_id=<?php echo $row['id']; ?>&id_home=<?php echo $row['id_home']; ?>&home_no=<?php echo $row['home_no']; ?>&swine=<?php echo $row['swine']; ?>&aph=<?php echo $row['amphure']; ?>&di=<?php echo $row['district']; ?>&pro=<?php echo $row['pro']; ?>&location=<?php echo urlencode($row['location']); ?>&zip_code=<?php echo $row['zip_code']; ?>&home_type=<?php echo $row['home_type']; ?>" class="btn btn-success">
+                          <span class="material-symbols-outlined">
+                            description
+                          </span>
+                        </a>
+                      </td>
+                      <td>
+                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#myModal<?php echo $row['id']; ?>">
+                          <span class="material-symbols-outlined">
+                            edit_square
+                          </span>
+                        </button>
+                      </td>
+                      <td>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Modaldeletel<?php echo $row['id']; ?>">
+                          <span class="material-symbols-outlined">
+                            delete
+                          </span>
+                        </button>
+                      </td>
                     </tr>
                     <div class="modal fade" id="Modaldeletel<?php echo $row['id']; ?>">
                       <div class="modal-dialog">

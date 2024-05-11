@@ -178,7 +178,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                                     <th>#</th>
                                     <th>รหัสบัตรประชาชน</th>
                                     <th>ชื่อ</th>
-                                    <th>วันเดือนปีเกิด</th>
+                                    <!-- <th>วันเดือนปีเกิด</th> -->
                                     <th>อายุ</th>
                                     <th>โรคประจำตัว</th>
                                     <th>กลุ่มเปราะบาง</th>
@@ -282,25 +282,17 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                                                 }
                                                 echo $display_id_card ?></td>
                                             <td><?php echo $row['fullname']; ?></td>
-                                            <?php
-                                            if (!function_exists('DateThai')) {
-                                                function DateThai($strDate)
-                                                {
-                                                    $strDay = date("j", strtotime($strDate));
-                                                    $strMonthCut = array("", "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค.");
-                                                    $strMonthThai = $strMonthCut[date("n", strtotime($strDate))];
-                                                    $strYearThai = date("Y", strtotime($strDate)) + 543;
-                                                    return "$strDay $strMonthThai $strYearThai";
-                                                }
-                                            }
-                                            $strDate = $row['date'];
-                                            echo '<td>' . DateThai($strDate) . '</td>';
-                                            ?>
                                             <td><?php echo $row['age']; ?></td>
                                             <td><?php echo $row['disease']; ?></td>
                                             <td><?php echo $row['handicap']; ?></td>
                                             <td><?php echo $row['tel']; ?></td>
-                                            <td><a href="show-data.php?user_name=<?php echo $row['user_name']; ?>&user_lname=<?php echo $row['user_lname']; ?>&zip_code=<?php echo $row['zip_code']; ?>&id_card=<?php echo $row['id_card']; ?>&prefix_id=<?php echo $row['prefix']; ?>&lastname=<?php echo $row['lastname']; ?>&name=<?php echo $row['name']; ?>&date=<?php echo $row['date']; ?>&age=<?php echo $row['age']; ?>&sex=<?php echo $row['sex']; ?>&status=<?php echo $row['status']; ?>&occupation=<?php echo $row['occupation']; ?>&disease=<?php echo $row['disease']; ?>&place=<?php echo $row['place']; ?>&handicap=<?php echo $row['handicap']; ?>&tel=<?php echo $row['tel']; ?>&status=<?php echo $row['status']; ?>&home_id=<?php echo $row['home_id']; ?>&home_no=<?php echo $row['home_no']; ?>&swine=<?php echo $row['swine']; ?>&amphure=<?php echo $row['amphure']; ?>&district=<?php echo $row['district']; ?>&province_id=<?php echo $row['pro']; ?>" class="btn btn-success print-button">ดูข้อมูล</a></td>
+                                            <td>
+                                                <a href="show-data.php?user_name=<?php echo $row['user_name']; ?>&user_lname=<?php echo $row['user_lname']; ?>&zip_code=<?php echo $row['zip_code']; ?>&id_card=<?php echo $row['id_card']; ?>&prefix_id=<?php echo $row['prefix']; ?>&lastname=<?php echo $row['lastname']; ?>&name=<?php echo $row['name']; ?>&date=<?php echo $row['date']; ?>&age=<?php echo $row['age']; ?>&sex=<?php echo $row['sex']; ?>&status=<?php echo $row['status']; ?>&occupation=<?php echo $row['occupation']; ?>&disease=<?php echo $row['disease']; ?>&place=<?php echo $row['place']; ?>&handicap=<?php echo $row['handicap']; ?>&tel=<?php echo $row['tel']; ?>&status=<?php echo $row['status']; ?>&home_id=<?php echo $row['home_id']; ?>&home_no=<?php echo $row['home_no']; ?>&swine=<?php echo $row['swine']; ?>&amphure=<?php echo $row['amphure']; ?>&district=<?php echo $row['district']; ?>&province_id=<?php echo $row['pro']; ?>" class="btn btn-success print-button">
+                                                    <span class="material-symbols-outlined">
+                                                        description
+                                                    </span>
+                                                </a>
+                                            </td>
                                         </tr>
                                     <?php $i++;
                                     }

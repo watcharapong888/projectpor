@@ -661,7 +661,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
               <div class="row">
                 <div class="col">
                   <label class="col-form-label">รหัสบัตรประชาชน:<span class="required-star">*</span></label>
-                  <input type="text" class="form-control" id="" name="card_id" maxlength="13" placeholder="ระบุตัวเลขไม่เกิน 13 ตัว" required>
+                  <input type="text" class="form-control" id="" name="card_id" maxlength="13" pattern="[0-9]{13}" title="ระบุตัวเลข 13 ตัว" placeholder="ระบุตัวเลข 13 ตัว" required>
                 </div>
                 <div class="col">
                   <label class="col-form-label">คำนำหน้า:<span class="required-star">*</span></label>
@@ -780,11 +780,11 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                 <tr class="table-success">
                   <th>#</th>
                   <th>รหัสบัตรประชาชน</th>
-                  <th>คำนำหน้า</th>
+                  <!-- <th>คำนำหน้า</th> -->
                   <th>ชื่อ</th>
-                  <th>นามสกุล</th>
+                  <!-- <th>นามสกุล</th>
                   <th>วันเดือนปีเกิด</th>
-                  <th>อายุ</th>
+                  <th>อายุ</th> -->
                   <th>เจ้าหน้าที่</th>
                   <!-- <th>เพศ</th>
                 <th>สถานะ</th>
@@ -793,9 +793,9 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                 <th>กลุ่มเปราะบาง</th>
                 <th>สถานที่รับยา</th>
                 <th>เบอร์โทร</th> -->
-                  <th></th>
-                  <th></th>
-                  <th></th>
+                  <th style="width:5%"></th>
+                  <th style="width:5%"></th>
+                  <th style="width:5%"></th>
                 </tr>
               </thead>
               <tbody>
@@ -866,31 +866,33 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                             $display_id_card = str_repeat('*', strlen($id_card));
                           }
                           echo $display_id_card ?></td>
-                      <td><?php echo $row['prefix']; ?></td>
-                      <td><?php echo $row['name']; ?></td>
-                      <td><?php echo $row['lastname']; ?></td>
-                      <?php
-                      if (!function_exists('DateThai')) {
-                        function DateThai($strDate)
-                        {
-                          $strDay = date("j", strtotime($strDate));
-                          $strMonthCut = array("", "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค.");
-                          $strMonthThai = $strMonthCut[date("n", strtotime($strDate))];
-                          $strYearThai = date("Y", strtotime($strDate)) + 543;
-                          return "$strDay $strMonthThai $strYearThai";
-                        }
-                      }
 
-                      $strDate = $row['date'];
-                      echo '<td>' . DateThai($strDate) . '</td>';
-                      ?>
-                      <td><?php echo $row['age']; ?></td>
+                      <td><?php echo  $row['prefix'];
+                          echo $row['name'] . '⠀';
+                          echo $row['lastname']; ?></td>
+
                       <td><?php echo $row['user_name'] ?></td>
-                      <td><a href="show-data.php?user_name=<?php echo $row['user_name']; ?>&user_lname=<?php echo $row['user_lname']; ?>&zip_code=<?php echo $row['zip_code']; ?>&id_card=<?php echo $row['id_card']; ?>&prefix_id=<?php echo $row['prefix']; ?>&lastname=<?php echo $row['lastname']; ?>&name=<?php echo $row['name']; ?>&date=<?php echo $row['date']; ?>&age=<?php echo $row['age']; ?>&sex=<?php echo $row['sex']; ?>&status=<?php echo $row['status']; ?>&occupation=<?php echo $row['occupation']; ?>&disease=<?php echo $row['disease']; ?>&place=<?php echo $row['place']; ?>&handicap=<?php echo $row['handicap']; ?>&tel=<?php echo $row['tel']; ?>&status=<?php echo $row['status']; ?>&home_id=<?php echo $row['home_id']; ?>&home_no=<?php echo $row['home_no']; ?>&swine=<?php echo $row['swine']; ?>&amphure=<?php echo $row['amphure']; ?>&district=<?php echo $row['district']; ?>&province_id=<?php echo $row['pro']; ?>" class="btn btn-success">ดูข้อมูล</a></td>
-                      <td><button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#myModal<?php echo $row['id']; ?>">แก้ไขข้อมูล</button></td>
-                      <td> <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Modaldeletel<?php echo $row['id']; ?>">
-                          ลบข้อมูล
-                        </button></td>
+                      <td>
+                        <a href="show-data.php?user_name=<?php echo $row['user_name']; ?>&user_lname=<?php echo $row['user_lname']; ?>&zip_code=<?php echo $row['zip_code']; ?>&id_card=<?php echo $row['id_card']; ?>&prefix_id=<?php echo $row['prefix']; ?>&lastname=<?php echo $row['lastname']; ?>&name=<?php echo $row['name']; ?>&date=<?php echo $row['date']; ?>&age=<?php echo $row['age']; ?>&sex=<?php echo $row['sex']; ?>&status=<?php echo $row['status']; ?>&occupation=<?php echo $row['occupation']; ?>&disease=<?php echo $row['disease']; ?>&place=<?php echo $row['place']; ?>&handicap=<?php echo $row['handicap']; ?>&tel=<?php echo $row['tel']; ?>&status=<?php echo $row['status']; ?>&home_id=<?php echo $row['home_id']; ?>&home_no=<?php echo $row['home_no']; ?>&swine=<?php echo $row['swine']; ?>&amphure=<?php echo $row['amphure']; ?>&district=<?php echo $row['district']; ?>&province_id=<?php echo $row['pro']; ?>" class="btn btn-success">
+                          <span class="material-symbols-outlined">
+                            description
+                          </span>
+                        </a>
+                      </td>
+                      <td>
+                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#myModal<?php echo $row['id']; ?>">
+                          <span class="material-symbols-outlined">
+                            edit_square
+                          </span>
+                        </button>
+                      </td>
+                      <td>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Modaldeletel<?php echo $row['id']; ?>">
+                          <span class="material-symbols-outlined">
+                            delete
+                          </span>
+                        </button>
+                      </td>
                     </tr>
                     <div class="modal fade" id="Modaldeletel<?php echo $row['id']; ?>">
                       <div class="modal-dialog">
@@ -1116,7 +1118,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ย้อนกลับ</button>
-                            <button type="submit" class="btn btn-primary">แก้ไขข้อมูล</button>
+                            <button type="submit" class="btn btn-success">บันทึกข้อมูล</button>
                           </div>
                           </form>
                         </div>
