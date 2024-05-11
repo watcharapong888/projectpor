@@ -40,7 +40,7 @@
     }
 
     .card-header {
-      background-color: #66CCCC;
+      background-color: #726e5e;
       color: #ffffff;
       border-bottom: none;
     }
@@ -100,7 +100,7 @@
     <div class="card mb-4">
       <h3 class="card-header">Dashboard</h3>
       <div class="card-body">
-      <iframe title="project" width="100%"  height="650" src="https://app.powerbi.com/view?r=eyJrIjoiYTA5OWFlNzQtOTBkMS00OWFmLTliNzMtZTRjZmEyZGJkYjk5IiwidCI6IjczM2UyY2UwLWNlMjgtNGRmYS04YWY2LWFkNTdiMzcwOTBjZSIsImMiOjEwfQ%3D%3D" frameborder="0" allowFullScreen="true"></iframe>
+      <iframe title="project" width="100%"  height="650" src="https://app.powerbi.com/view?r=eyJrIjoiYmQ0N2NhNjUtMGI1MC00YzcwLWJkZTEtOWUzYmJjNDc3NGFhIiwidCI6IjczM2UyY2UwLWNlMjgtNGRmYS04YWY2LWFkNTdiMzcwOTBjZSIsImMiOjEwfQ%3D%3D" frameborder="0" allowFullScreen="true"></iframe>
       </div>
     </div>
     <div class="posts">
