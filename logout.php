@@ -8,6 +8,6 @@ session_unset();
 session_destroy();
 
 // Redirect ไปยังหน้า login.php หรือหน้าอื่นๆ ตามที่คุณต้องการ
-header("Location: login.php");
+header("Location: Index.php");
 exit; // จบการทำงานของสคริปต์
 ?>
