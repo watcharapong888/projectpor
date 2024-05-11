@@ -705,6 +705,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                     <option value="โสด">โสด</option>
                     <option value="สมรส">สมรส</option>
                     <option value="หย่าร้าง">หย่าร้าง</option>
+                    <option value="หม้าย">หม้าย</option>
                   </select>
 
                 </div>
@@ -973,6 +974,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                                 <option value="โสด">โสด</option>
                                 <option value="สมรส">สมรส</option>
                                 <option value="หย่าร้าง">หย่าร้าง</option>
+                                <option value="หม้าย">หม้าย</option>
                               </select>
 
                               <label class="col-form-label">อาชีพ:<span class="required-star">*</span></label>
