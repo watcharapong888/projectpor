@@ -786,10 +786,10 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                   <!-- <th>นามสกุล</th>
                   <th>วันเดือนปีเกิด</th>
                   <th>อายุ</th> -->
+                  <th>อาชีพ</th>
                   <th>เจ้าหน้าที่</th>
                   <!-- <th>เพศ</th>
                 <th>สถานะ</th>
-                <th>อาชีพ</th>
                 <th>โรคประจำตัว</th>
                 <th>กลุ่มเปราะบาง</th>
                 <th>สถานที่รับยา</th>
@@ -871,7 +871,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                       <td><?php echo  $row['prefix'];
                           echo $row['name'] . '⠀';
                           echo $row['lastname']; ?></td>
-
+                      <td><?php echo $row['occupation'] ?></td>
                       <td><?php echo $row['user_name'] ?></td>
                       <td>
                         <a href="show-data.php?user_name=<?php echo $row['user_name']; ?>&user_lname=<?php echo $row['user_lname']; ?>&zip_code=<?php echo $row['zip_code']; ?>&id_card=<?php echo $row['id_card']; ?>&prefix_id=<?php echo $row['prefix']; ?>&lastname=<?php echo $row['lastname']; ?>&name=<?php echo $row['name']; ?>&date=<?php echo $row['date']; ?>&age=<?php echo $row['age']; ?>&sex=<?php echo $row['sex']; ?>&status=<?php echo $row['status']; ?>&occupation=<?php echo $row['occupation']; ?>&disease=<?php echo $row['disease']; ?>&place=<?php echo $row['place']; ?>&handicap=<?php echo $row['handicap']; ?>&tel=<?php echo $row['tel']; ?>&status=<?php echo $row['status']; ?>&home_id=<?php echo $row['home_id']; ?>&home_no=<?php echo $row['home_no']; ?>&swine=<?php echo $row['swine']; ?>&amphure=<?php echo $row['amphure']; ?>&district=<?php echo $row['district']; ?>&province_id=<?php echo $row['pro']; ?>" class="btn btn-success">
