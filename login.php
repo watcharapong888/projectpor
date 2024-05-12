@@ -56,7 +56,7 @@
     </form>
   </div>
   <center>
-    <br><p>?</p>
+    <br>
     <a href="Index.php" type="button" class="btn btn-light" style="text-decoration: none;">กลับไปที่หน้าหลัก</a>
   </center>
 </body>
