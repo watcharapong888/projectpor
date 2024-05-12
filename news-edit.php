@@ -225,7 +225,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
           </form>
         </div>
         <div class="posts">
-          <p style="color: red; font-size:20pt;">Ex.ทดสอบ</p>
+          <p style="color: red; font-size:20pt;">ตัวอย่างโพสต์</p>
           <?php
           $stmt = $conn->prepare(
             "SELECT 
