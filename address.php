@@ -498,7 +498,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                               </div>
                               <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ย้อนกลับ</button>
-                                <button type="submit" class="btn btn-primary">แก้ไขข้อมูล</button>
+                                <button type="submit" class="btn btn-success">บันทึกข้อมูล</button>
                               </div>
                             </form>
                           </div>
