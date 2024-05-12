@@ -16,7 +16,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
   $path_post_id = $_GET['post_id'];
   $post_text = $_GET['post_text'];
   $status_img = $_GET['status_img'];
-?>
+  ?>
   <!DOCTYPE html>
   <html lang="en">
 
@@ -50,6 +50,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
       flex-wrap: wrap;
       justify-content: space-between;
     }
+
     .required-star {
       color: red;
       /* กำหนดสีของดาว */
@@ -201,19 +202,20 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
               <div class="row">
                 <div class="col">
                   <label class="col-form-label">รหัสโพสต์:</label>
-                  <input type="text" class="form-control" id="" value="<?php echo  $path_post_id ?>" disabled>
-                  <input type="hidden" name="img_post_id" value="<?php echo  $path_post_id ?>">
+                  <input type="text" class="form-control" id="" value="<?php echo $path_post_id ?>" disabled>
+                  <input type="hidden" name="img_post_id" value="<?php echo $path_post_id ?>">
                 </div>
                 <div class="col">
                   <!-- <label class="col-form-label">รูปแบบโพสต์:<span class="required-star">*</span></label>
-                  <input type="text" class="form-control" id="" value="<?php echo  $status_img ?>" disabled>-->
-                  <input type="hidden" name="status_img" value="<?php echo  $status_img ?>"> 
+                  <input type="text" class="form-control" id="" value="<?php echo $status_img ?>" disabled>-->
+                  <input type="hidden" name="status_img" value="<?php echo $status_img ?>">
                 </div>
               </div>
               <div class="row">
                 <div class="col">
                   <label class="col-form-label">ข้อความ:<span class="required-star">*</span></label>
-                  <textarea type="text" rows="10" class="form-control" id="" name="post_text"><?php echo  $post_text ?></textarea>
+                  <textarea type="text" rows="10" class="form-control" id=""
+                    name="post_text"><?php echo $post_text ?></textarea>
                 </div>
               </div>
               <div class="row">
@@ -223,7 +225,9 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                 </div>
               </div> <br>
               <div class="row">
-                <center><input type="submit" class="btn btn-success" value="บันทึกการแก้ไขข้อมูล"> </center>
+                <center><input type="submit" class="btn btn-success" value="บันทึกข้อมูล">
+                  <button type="button" class="btn btn-secondary" onclick="window.history.back()">ย้อนกลับ</button>
+                </center>
               </div>
             </div>
           </form>
@@ -276,18 +280,19 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                 $stmt2->bindParam(':post_id', $post_id, PDO::PARAM_STR);
                 $stmt2->execute();
                 $result2 = $stmt2->fetchAll();
-          ?>
+                ?>
                 <div id="box" class="gallery js-flickity" data-flickity-options='{ "wrapAround": true }'>
                   <?php
                   if ($result2 != null) {
                     foreach ($result2 as $row2) { ?>
-                      <img src="data:<?php echo $row2['img_id']; ?>;base64,<?php echo base64_encode($row2['img']); ?>" alt="Los Angeles" class="d-block" style="width: 100%;">
-                  <?php
+                      <img src="data:<?php echo $row2['img_id']; ?>;base64,<?php echo base64_encode($row2['img']); ?>"
+                        alt="Los Angeles" class="d-block" style="width: 100%;">
+                      <?php
                     }
                   }
                   ?>
                 </div> <br><br>
-              <?php
+                <?php
               }
 
               if ($status_img == 'โพสต์รูปเดียว') {
@@ -308,26 +313,27 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                 $stmt2->bindParam(':post_id', $post_id, PDO::PARAM_STR);
                 $stmt2->execute();
                 $result2 = $stmt2->fetchAll();
-              ?>
+                ?>
 
                 <?php
                 if ($result2 != null) {
                   foreach ($result2 as $row2) { ?>
                     <div class="box-post2">
                       <div style="width: 49.5%;">
-                        <img src="data:<?php echo $row2['img_id']; ?>;base64,<?php echo base64_encode($row2['img']); ?>" alt="Los Angeles" style="width: 100%;">
+                        <img src="data:<?php echo $row2['img_id']; ?>;base64,<?php echo base64_encode($row2['img']); ?>"
+                          alt="Los Angeles" style="width: 100%;">
                       </div>
                       <div style="width: 49.5%;">
                         <p> <?php echo htmlspecialchars($row2['post_text']); ?></p>
                       </div>
                     </div><br>
-                <?php
+                    <?php
 
                   }
                 }
                 ?>
 
-            <?php
+                <?php
               }
             }
           } else { ?>
@@ -338,7 +344,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
     </div>
 
     <script>
-      $(document).ready(function() {
+      $(document).ready(function () {
         $('#myTable').DataTable();
       });
     </script>
