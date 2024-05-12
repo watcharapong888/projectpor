@@ -538,7 +538,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                       </div>
                       <div class="col">
                         <label class="col-form-label">หมู่:<span class="required-star">*</span></label>
-                        <input type="text" class="form-control" id="" value="<?php echo @$_SESSION['swine'] ?>" disabled>
+                        <input type="text" class="form-control" id=""  value="<?php echo @$_SESSION['swine'] ?>" disabled>
                       </div>
                     </div>
                     <div class="row">
@@ -551,11 +551,11 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                         </select>
                       </div>
                       <div class="col">
-                        <label class="col-form-label">อำเภอ:<span class="required-star">*</span></label>
+                        <label class="col-form-label">อำเภอ/เขต:<span class="required-star">*</span></label>
                         <input type="text" class="form-control" id="" value="<?php echo @$_SESSION['amphure'] ?>" disabled>
                       </div>
                       <div class="col">
-                        <label class="col-form-label">ตำบล:<span class="required-star">*</span></label>
+                        <label class="col-form-label">ตำบล/แขวง:<span class="required-star">*</span></label>
                         <input type="text" class="form-control" id="" value="<?php echo @$_SESSION['district'] ?>" disabled>
                       </div>
                       <div class="col">
@@ -609,7 +609,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                       </div>
                       <div class="col">
                         <label class="col-form-label">หมู่:<span class="required-star">*</span></label>
-                        <input type="text" class="form-control" id="" value="<?php echo @$_SESSION['swine'] ?>" name="swine" required>
+                        <input type="text" class="form-control" id="" placeholder="ถ้าไม่มีหมู่ให้ใส่ -" value="<?php echo @$_SESSION['swine'] ?>" name="swine" required>
                       </div>
                     </div>
                     <div class="row">
@@ -635,11 +635,11 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                         </select>
                       </div>
                       <div class="col">
-                        <label class="col-form-label">อำเภอ:<span class="required-star">*</span></label>
+                        <label class="col-form-label">อำเภอ/เขต:<span class="required-star">*</span></label>
                         <input type="text" class="form-control" id="" value="<?php echo @$_SESSION['amphure'] ?>" name="amphure" required>
                       </div>
                       <div class="col">
-                        <label class="col-form-label">ตำบล:<span class="required-star">*</span></label>
+                        <label class="col-form-label">ตำบล/แขวง:<span class="required-star">*</span></label>
                         <input type="text" class="form-control" id="" value="<?php echo @$_SESSION['district'] ?>" name="district" required>
                       </div>
                       <div class="col">
@@ -1105,11 +1105,11 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                                   </select>
                                 </div>
                                 <div class="col">
-                                  <label class="col-form-label">อำเภอ:<span class="required-star">*</span></label>
+                                  <label class="col-form-label">อำเภอ/เขต:<span class="required-star">*</span></label>
                                   <input type="text" class="form-control" id="" name="amphure" value="<?php echo $row['amphure']; ?>" required>
                                 </div>
                                 <div class="col">
-                                  <label class="col-form-label">ตำบล:<span class="required-star">*</span></label>
+                                  <label class="col-form-label">ตำบล/แขวง:<span class="required-star">*</span></label>
                                   <input type="text" class="form-control" id="" name="district" value="<?php echo $row['district']; ?>" required>
                                 </div>
                                 <div class="col">
@@ -1161,8 +1161,8 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                   <th>รหัสบ้าน</th>
                   <th>บ้านเลขที่</th>
                   <th>หมู่</th>
-                  <th>ตำบล</th>
-                  <th>อำเภอ</th>
+                  <th>ตำบล/แขวง</th>
+                  <th>อำเภอ/เขต</th>
                   <th>จังหวัด</th>
                   <th>รหัสไปรษณีย์</th>
                   <th>ประเภทบ้าน</th>

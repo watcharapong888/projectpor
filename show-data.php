@@ -96,7 +96,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                 $user_name = $_GET['user_name'];
                 $user_lname = $_GET['user_lname'];
             ?>
-                <p style="font-size: 13pt;">ข้อมูล</p>
+                <p style="font-size: 13pt;">ข้อมูลรายบุคคล</p>
                 <table class="table">
                     <tbody>
                         <tr>

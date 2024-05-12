@@ -61,7 +61,7 @@
 </style>
 <div class="w3-sidebar w3-bar-block w3-card w3-animate-left" style="display:none" id="mySidebar">
   <button class="w3-bar-item w3-button w3-large" onclick="w3_close()">ย้อนกลับ &times;</button>
-  <p style="font-size: 15pt;" class="w3-bar-item">สวัสดีผู้ใช้งาน</p>
+  <p style="font-size: 15pt;" class="w3-bar-item">บ้านด่านขุนทดหมู่ที่ 8</p>
   <img src="" alt="">
   <a href="Index.php" class="w3-bar-item w3-button">หน้าแรก</a>
   <?php
