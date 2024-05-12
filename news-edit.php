@@ -50,6 +50,10 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
       flex-wrap: wrap;
       justify-content: space-between;
     }
+    .required-star {
+      color: red;
+      /* กำหนดสีของดาว */
+    }
   </style>
 
   <body>
@@ -196,7 +200,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
             <div class="container mt-3">
               <div class="row">
                 <div class="col">
-                  <label class="col-form-label">โพสต์ไอดี:<span class="required-star">*</span></label>
+                  <label class="col-form-label">รหัสโพสต์:</label>
                   <input type="text" class="form-control" id="" value="<?php echo  $path_post_id ?>" disabled>
                   <input type="hidden" name="img_post_id" value="<?php echo  $path_post_id ?>">
                 </div>
@@ -219,7 +223,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                 </div>
               </div> <br>
               <div class="row">
-                <center><input type="submit" class="btn btn-warning" value="แก้ไขข้อมูล"> </center>
+                <center><input type="submit" class="btn btn-success" value="บันทึกการแก้ไขข้อมูล"> </center>
               </div>
             </div>
           </form>
