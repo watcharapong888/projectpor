@@ -13,7 +13,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
 </script>';
   $conn = null;
 } else {
-?>
+  ?>
   <!DOCTYPE html>
   <html lang="en">
 
@@ -93,7 +93,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
 
         $result = $stmt->execute();
         $conn = null; // ปิดการเชื่อมต่อกับฐานข้อมูล
-
+  
         if ($result) {
           echo '<script>
               setTimeout(function() {
@@ -277,7 +277,8 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
               <div class="row">
                 <div class="col">
                   <label class="col-form-label">รหัสบ้าน:<span class="required-star">*</span></label>
-                  <input type="text" class="form-control" id="home_id" name="home_id" maxlength="11" placeholder="ระบุตัวเลขไม่เกิน 11 ตัว" pattern="[0-9]{11}" title="กรุณากรอกตัวเลข 11 หลัก" required>
+                  <input type="text" class="form-control" id="home_id" name="home_id" maxlength="11"
+                    placeholder="ระบุตัวเลขไม่เกิน 11 ตัว" pattern="[0-9]{11}" title="กรุณากรอกตัวเลข 11 หลัก" required>
                   <!-- <small id="homeIdHelp" class="form-text text-muted">โปรดกรอกตัวเลข 11 หลักเท่านั้น</small> -->
                 </div>
 
@@ -299,18 +300,18 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                     $stmt2->execute();
                     $result2 = $stmt2->fetchAll();
                     foreach ($result2 as $row2) {
-                    ?>
+                      ?>
                       <option value="<?php echo $row2['province_id']; ?>"><?php echo $row2['name_th']; ?></option>
                     <?php } ?>
                   </select>
                 </div>
                 <div class="col">
-                  <label class="col-form-label">อำเภอ:<span class="required-star">*</span></label>
+                  <label class="col-form-label">อำเภอ/เขต:<span class="required-star">*</span></label>
                   <input type="text" class="form-control" id="" name="amphure" required>
                   </select>
                 </div>
                 <div class="col">
-                  <label class="col-form-label">ตำบล:<span class="required-star">*</span></label>
+                  <label class="col-form-label">ตำบล/แขวง:<span class="required-star">*</span></label>
                   <input type="text" class="form-control" id="" name="district" required>
                 </div>
                 <div class="col">
@@ -334,7 +335,8 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                 </div>
               </div><br>
               <div class="row">
-                <center><input type="submit" class="btn btn-primary" value="เพิ่มข้อมูล"> <a href="address.php" class="btn btn-secondary">ล้างข้อมูล</a></center>
+                <center><input type="submit" class="btn btn-primary" value="เพิ่มข้อมูล"> <a href="address.php"
+                    class="btn btn-secondary">ล้างข้อมูล</a></center>
               </div>
             </div>
           </form>
@@ -377,6 +379,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                    address AS ad
                    JOIN 
                    provinces AS pro ON ad.province_id = pro.province_id 
+                   Order by ad.id_home
                    "
                 );
                 $stmt->execute();
@@ -385,10 +388,21 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                 if ($result != null) {
                   $i = 1;
                   foreach ($result as $row) {
-                ?>
+                    ?>
                     <tr>
                       <td><?php echo $i; ?></td>
-                      <td><?php echo $row['id_home']; ?></td>
+                      <!-- <td><?php echo $row['id_home']; ?></td> -->
+                      <td>
+                        <?php
+                        $id_home = $row['id_home'];
+                        if (strlen($id_home) >= 11) {
+                          $masked_id = substr($id_home, 0, 4) . '-' . substr($id_home, 4, 6) . '-' . substr($id_home, -1);
+                          echo $masked_id;
+                        } else {
+                          echo 'Invalid ID';
+                        }
+                        ?>
+                      </td>
                       <td><?php echo $row['home_no']; ?></td>
                       <!-- <td><?php echo $row['swine']; ?></td>
                       <td><?php echo $row['amphure']; ?></td>
@@ -398,22 +412,25 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                         <?php echo $row['zip_code']; ?>
                       </td> -->
                       <td><?php echo $row['home_type']; ?></td>
-                      <td >
-                        <a href="show-address.php?home_id=<?php echo $row['id']; ?>&id_home=<?php echo $row['id_home']; ?>&home_no=<?php echo $row['home_no']; ?>&swine=<?php echo $row['swine']; ?>&aph=<?php echo $row['amphure']; ?>&di=<?php echo $row['district']; ?>&pro=<?php echo $row['pro']; ?>&location=<?php echo urlencode($row['location']); ?>&zip_code=<?php echo $row['zip_code']; ?>&home_type=<?php echo $row['home_type']; ?>" class="btn btn-success">
+                      <td>
+                        <a href="show-address.php?home_id=<?php echo $row['id']; ?>&id_home=<?php echo $row['id_home']; ?>&home_no=<?php echo $row['home_no']; ?>&swine=<?php echo $row['swine']; ?>&aph=<?php echo $row['amphure']; ?>&di=<?php echo $row['district']; ?>&pro=<?php echo $row['pro']; ?>&location=<?php echo urlencode($row['location']); ?>&zip_code=<?php echo $row['zip_code']; ?>&home_type=<?php echo $row['home_type']; ?>"
+                          class="btn btn-success">
                           <span class="material-symbols-outlined">
                             description
                           </span>
                         </a>
                       </td>
                       <td>
-                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#myModal<?php echo $row['id']; ?>">
+                        <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                          data-bs-target="#myModal<?php echo $row['id']; ?>">
                           <span class="material-symbols-outlined">
                             edit_square
                           </span>
                         </button>
                       </td>
                       <td>
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Modaldeletel<?php echo $row['id']; ?>">
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                          data-bs-target="#Modaldeletel<?php echo $row['id']; ?>">
                           <span class="material-symbols-outlined">
                             delete
                           </span>
@@ -445,7 +462,8 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                       </div>
                     </div>
 
-                    <div class="modal fade" id="myModal<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="myModal<?php echo $row['id']; ?>" tabindex="-1"
+                      aria-labelledby="exampleModalLabel" aria-hidden="true">
                       <div class="modal-dialog modal-dialog-scrollable">
                         <div class="modal-content">
                           <div class="modal-header">
@@ -458,10 +476,12 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                             <form action="address.php?act=edit" method="post">
                               <input type="hidden" name="homeid" value="<?php echo $row['id']; ?>">
                               <label class="col-form-label">รหัสบ้าน:<span class="required-star">*</span></label>
-                              <input type="text" class="form-control" id="" name="id_home" value="<?php echo $row['id_home']; ?>">
+                              <input type="text" class="form-control" id="" name="id_home"
+                                value="<?php echo $row['id_home']; ?>">
 
                               <label class="col-form-label">บ้านเลขที่:<span class="required-star">*</span></label>
-                              <input type="text" class="form-control" id="" name="homeno" value="<?php echo $row['home_no']; ?>">
+                              <input type="text" class="form-control" id="" name="homeno"
+                                value="<?php echo $row['home_no']; ?>">
 
                               <label class="col-form-label">หมู่:<span class="required-star">*</span></label>
                               <input type="text" class="form-control" id="" name="swine" value="<?php echo $row['swine']; ?>">
@@ -473,18 +493,21 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                                 $stmt2->execute();
                                 $result2 = $stmt2->fetchAll();
                                 foreach ($result2 as $row2) {
-                                ?>
+                                  ?>
                                   <option value="<?php echo $row2['province_id']; ?>"><?php echo $row2['name_th']; ?></option>
                                 <?php } ?>
                               </select>
                               <div class="col">
-                                <label class="col-form-label">อำเภอ:<span class="required-star">*</span></label>
-                                <input type="text" class="form-control" id="" name="amphure" value="<?php echo $row['amphure']; ?>" required>
+                                <label class="col-form-label">อำเภอ/เขต:<span class="required-star">*</span></label>
+                                <input type="text" class="form-control" id="" name="amphure"
+                                  value="<?php echo $row['amphure']; ?>" required>
 
-                                <label class="col-form-label">ตำบล:<span class="required-star">*</span></label>
-                                <input type="text" class="form-control" id="" name="district" value="<?php echo $row['district']; ?>" required>
+                                <label class="col-form-label">ตำบล/แขวง:<span class="required-star">*</span></label>
+                                <input type="text" class="form-control" id="" name="district"
+                                  value="<?php echo $row['district']; ?>" required>
                                 <label class="col-form-label">รหัสไปรษณีย์:<span class="required-star">*</span></label>
-                                <input type="text" class="form-control" id="" name="zip_code" value="<?php echo $row['zip_code']; ?>" required>
+                                <input type="text" class="form-control" id="" name="zip_code"
+                                  value="<?php echo $row['zip_code']; ?>" required>
                                 <label class="form-label">ประเภทบ้าน:<span class="required-star">*</span></label>
                                 <select name="hometype" class="form-select" id="inputGroupSelect01" required>
                                   <option selected value="<?php echo $row['home_type']; ?>"><?php echo $row['home_type']; ?>
@@ -494,7 +517,8 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                                 </select>
                                 <label class="col-form-label">ตำแหน่งของบ้าน:<span class="required-star">*</span></label>
                                 <a href="https://www.google.com/maps" target="_blank">ดูบน Google Maps</a></label>
-                                <textarea class="form-control" rows="5" id="comment" name="location"><?php echo $row['location']; ?></textarea>
+                                <textarea class="form-control" rows="5" id="comment"
+                                  name="location"><?php echo $row['location']; ?></textarea>
                               </div>
                               <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ย้อนกลับ</button>
@@ -505,7 +529,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                         </div>
                       </div>
 
-                    <?php $i++;
+                      <?php $i++;
                   }
                 } else { ?>
                     <tr>
@@ -520,7 +544,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
     </div>
 
     <script>
-      $(document).ready(function() {
+      $(document).ready(function () {
         $('#myTable').DataTable();
       });
     </script>

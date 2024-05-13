@@ -17,7 +17,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
     if (@$_GET['act'] === 'clear') {
         unset($_POST);
     }
-?>
+    ?>
     <!DOCTYPE html>
     <html lang="en">
 
@@ -126,10 +126,11 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                                     }
                                     ?>
                                     <option value="all">ทั้งหมด</option>
-                                    <option value="0-20">0-20 ปี</option>
-                                    <option value="21-40">21-40 ปี</option>
-                                    <option value="41-60">41-60 ปี</option>
-                                    <option value="61+">61 ปีขึ้นไป</option>
+                                    <option value="0-2">วัยทารก(0-2ปี)</option>
+                                    <option value="3-12">วัยเด็ก(3-12ปี)</option>
+                                    <option value="13-19">วัยรุ่น(13-19ปี)</option>
+                                    <option value="20-60">วัยผู้ใหญ่(20-60ปี)</option>
+                                    <option value="61+">วัยชรา(61ปีขึ้นไป)</option>
                                 </select>
                             </div>
                             <div class="col-md-4 mb-3">
@@ -156,6 +157,12 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                                     <option>โรคมะเร็งลำไส้</option>
                                     <option>โรคมะเร็งกล่องเสียง</option>
                                     <option>ภาวะธาตุเหล็กเกิน</option>
+                                    <option>SLE</option>
+                                    <option>โรคหอบหืด</option>
+                                    <option>โรคหัวใจโต</option>
+                                    <option>โรคโลหิตจาง</option>
+                                    <option>โรคไขมันในเลือดสูง</option>
+                                    <option>โรคไทรอยด์</option>
                                 </select>
                             </div>
                         </div>
@@ -195,14 +202,17 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                                 $ageCondition = "";
                                 if ($selectedAgeGroup != 'all') {
                                     switch ($selectedAgeGroup) {
-                                        case '0-20':
-                                            $ageCondition = "AND $dateDB BETWEEN 0 AND 20";
+                                        case '0-2':
+                                            $ageCondition = "AND $dateDB BETWEEN 0 AND 2";
                                             break;
-                                        case '21-40':
-                                            $ageCondition = "AND $dateDB BETWEEN 21 AND 40";
+                                        case '3-12':
+                                            $ageCondition = "AND $dateDB BETWEEN 3 AND 12";
                                             break;
-                                        case '41-60':
-                                            $ageCondition = "AND $dateDB BETWEEN 41 AND 60";
+                                        case '13-19':
+                                            $ageCondition = "AND $dateDB BETWEEN 13 AND 19";
+                                            break;
+                                        case '20-60':
+                                            $ageCondition = "AND $dateDB BETWEEN 20 AND 60";
                                             break;
                                         case '61+':
                                             $ageCondition = "AND $dateDB >= 61";
@@ -250,7 +260,8 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                                 provinces AS pro ON dt.province_id = pro.province_id 
                                 JOIN 
                                 user AS us ON dt.user_id = us.user_id 
-                                                WHERE 1 = 1
+                                WHERE 1 = 1
+                                order by id_card
                                 $handicapCondition
                                 $ageCondition
                                 $diseaseCondition
@@ -262,39 +273,40 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                                 if ($result != null) {
                                     $i = 1;
                                     foreach ($result as $row) {
-                                ?>
+                                        ?>
                                         <tr>
                                             <td><?php echo $i; ?></td>
                                             <td><?php
-                                                $id_card = $row['id_card'];
-                                                if (strlen($id_card) >= 3) {
-                                                    $masked_id = substr($id_card, 0, -3) . 'XXX';
-                                                    if (strlen($masked_id) == 13) {
-                                                        $display_id_card = substr($masked_id, 0, 1) . '-' .
-                                                            substr($masked_id, 1, 4) . '-' .
-                                                            substr($masked_id, 5, 5) . '-' .
-                                                            substr($masked_id, 10, 3);
-                                                    } else {
-                                                        $display_id_card = $masked_id;
-                                                    }
+                                            $id_card = $row['id_card'];
+                                            if (strlen($id_card) >= 3) {
+                                                $masked_id = substr($id_card, 0, -3) . 'XXX';
+                                                if (strlen($masked_id) == 13) {
+                                                    $display_id_card = substr($masked_id, 0, 1) . '-' .
+                                                        substr($masked_id, 1, 4) . '-' .
+                                                        substr($masked_id, 5, 5) . '-' .
+                                                        substr($masked_id, 10, 3);
                                                 } else {
-                                                    $display_id_card = str_repeat('*', strlen($id_card));
+                                                    $display_id_card = $masked_id;
                                                 }
-                                                echo $display_id_card ?></td>
+                                            } else {
+                                                $display_id_card = str_repeat('*', strlen($id_card));
+                                            }
+                                            echo $display_id_card ?></td>
                                             <td><?php echo $row['fullname']; ?></td>
                                             <td><?php echo $row['age']; ?></td>
                                             <td><?php echo $row['disease']; ?></td>
                                             <td><?php echo $row['handicap']; ?></td>
                                             <td><?php echo $row['tel']; ?></td>
                                             <td>
-                                                <a href="show-data.php?user_name=<?php echo $row['user_name']; ?>&user_lname=<?php echo $row['user_lname']; ?>&zip_code=<?php echo $row['zip_code']; ?>&id_card=<?php echo $row['id_card']; ?>&prefix_id=<?php echo $row['prefix']; ?>&lastname=<?php echo $row['lastname']; ?>&name=<?php echo $row['name']; ?>&date=<?php echo $row['date']; ?>&age=<?php echo $row['age']; ?>&sex=<?php echo $row['sex']; ?>&status=<?php echo $row['status']; ?>&occupation=<?php echo $row['occupation']; ?>&disease=<?php echo $row['disease']; ?>&place=<?php echo $row['place']; ?>&handicap=<?php echo $row['handicap']; ?>&tel=<?php echo $row['tel']; ?>&status=<?php echo $row['status']; ?>&home_id=<?php echo $row['home_id']; ?>&home_no=<?php echo $row['home_no']; ?>&swine=<?php echo $row['swine']; ?>&amphure=<?php echo $row['amphure']; ?>&district=<?php echo $row['district']; ?>&province_id=<?php echo $row['pro']; ?>" class="btn btn-success print-button">
+                                                <a href="show-data.php?user_name=<?php echo $row['user_name']; ?>&user_lname=<?php echo $row['user_lname']; ?>&zip_code=<?php echo $row['zip_code']; ?>&id_card=<?php echo $row['id_card']; ?>&prefix_id=<?php echo $row['prefix']; ?>&lastname=<?php echo $row['lastname']; ?>&name=<?php echo $row['name']; ?>&date=<?php echo $row['date']; ?>&age=<?php echo $row['age']; ?>&sex=<?php echo $row['sex']; ?>&status=<?php echo $row['status']; ?>&occupation=<?php echo $row['occupation']; ?>&disease=<?php echo $row['disease']; ?>&place=<?php echo $row['place']; ?>&handicap=<?php echo $row['handicap']; ?>&tel=<?php echo $row['tel']; ?>&status=<?php echo $row['status']; ?>&home_id=<?php echo $row['home_id']; ?>&home_no=<?php echo $row['home_no']; ?>&swine=<?php echo $row['swine']; ?>&amphure=<?php echo $row['amphure']; ?>&district=<?php echo $row['district']; ?>&province_id=<?php echo $row['pro']; ?>"
+                                                    class="btn btn-success print-button">
                                                     <span class="material-symbols-outlined">
                                                         description
                                                     </span>
                                                 </a>
                                             </td>
                                         </tr>
-                                    <?php $i++;
+                                        <?php $i++;
                                     }
                                 } else { ?>
                                     <tr>
@@ -309,10 +321,10 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
         </div>
 
         <script>
-            $(document).ready(function() {
+            $(document).ready(function () {
                 $('#myTable').DataTable();
             });
-            document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('DOMContentLoaded', function () {
                 function printTableToPDF() {
                     const {
                         jsPDF
@@ -320,7 +332,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                     if (typeof jsPDF !== 'undefined') {
                         // ซ่อนองค์ประกอบที่มีคลาส .print-button
                         var printButtons = document.querySelectorAll('.print-button');
-                        printButtons.forEach(function(button) {
+                        printButtons.forEach(function (button) {
                             button.style.display = 'none';
                         });
 
