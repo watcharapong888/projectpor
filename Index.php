@@ -40,7 +40,7 @@
     }
 
     .card-header {
-      background-color: #726e5e;
+      background-color: #f7b829;
       color: #ffffff;
       border-bottom: none;
     }
