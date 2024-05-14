@@ -261,10 +261,10 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                                 JOIN 
                                 user AS us ON dt.user_id = us.user_id 
                                 WHERE 1 = 1
-                                order by id_card
                                 $handicapCondition
                                 $ageCondition
                                 $diseaseCondition
+                                order by id_card
                                 "
                                 );
                                 $stmt->execute();
