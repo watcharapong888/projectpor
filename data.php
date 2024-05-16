@@ -772,7 +772,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                 </div>
                 <div class="col-1">
                   <label class="col-form-label">เบอร์โทร:<span class="required-star">*</span></label>
-                  <select name="sex" class="form-select" id="inputGroupSelect01" onchange="if(this.value=='ไม่มี' ||this.value=='มี') noPhoneNumber(this.value);" required>
+                  <select name="tel" class="form-select" id="inputGroupSelect01" onchange="if(this.value=='ไม่มี' ||this.value=='มี') noPhoneNumber(this.value);" required>
                     <option selected>มี</option>
                     <option>ไม่มี</option>
                   </select>
