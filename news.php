@@ -324,11 +324,20 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                       <!-- <td><?php echo $row['post_date']; ?></td> -->
                       <!-- <td><?php echo $row['status_img']; ?></td> -->
                       <td><?php echo $row['username']; ?></td>
-                      <td> <a href="news-edit.php?post_id=<?php echo $row['post_id']; ?>&post_text=<?php echo $row['post_text']; ?>&status_img=<?php echo $row['status_img']; ?>" class="btn btn-warning">แก้ไข</a>
+                      <td>
+                        <a href="news-edit.php?post_id=<?php echo $row['post_id']; ?>&post_text=<?php echo $row['post_text']; ?>&status_img=<?php echo $row['status_img']; ?>" class="btn btn-warning">
+                          <span class="material-symbols-outlined">
+                            edit_square
+                          </span>
+                        </a>
                       </td>
-                      <td> <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Modaldeletel<?php echo $row['post_id']; ?>">
-                          ลบ
-                        </button></td>
+                      <td>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Modaldeletel<?php echo $row['post_id']; ?>">
+                          <span class="material-symbols-outlined">
+                            delete
+                          </span>
+                        </button>
+                      </td>
                     </tr>
                     <div class="modal fade" id="Modaldeletel<?php echo $row['post_id']; ?>">
                       <div class="modal-dialog">

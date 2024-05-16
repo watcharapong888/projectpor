@@ -13,7 +13,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
 </script>';
   $conn = null;
 } else {
-  ?>
+?>
   <!DOCTYPE html>
   <html lang="en">
 
@@ -100,6 +100,8 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
 
 
     if (isset($_POST['card_id']) && $_GET['act'] === 'add') {
+
+
       $stmt = $conn->prepare("SELECT id_card FROM data WHERE id_card = :card_id");
       $stmt->bindParam(':card_id', $_POST['card_id'], PDO::PARAM_STR);
       $stmt->execute();
@@ -122,7 +124,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
           isset($_POST['disease_id']) &&
           isset($_POST['handicap']) &&
           isset($_POST['place']) &&
-          isset($_POST['tel']) &&
+          isset($_POST['telno']) || isset($_POST['telyes']) &&
           isset($_POST['home_no']) &&
           isset($_POST['home_id']) &&
           isset($_POST['swine']) &&
@@ -132,6 +134,12 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
           isset($_POST['zip_code']) &&
           isset($_POST['m_rank'])
         ) {
+          if (@$_POST['telyes'] != null || @$_POST['telyes'] != '') {
+            @$tel = $_POST['telyes'];
+          }
+          if (@$_POST['telno'] != null || @$_POST['telno'] != '') {
+            @$tel = $_POST['telno'];
+          }
           $disease_ids = $_POST['disease_id'];
           $disease_id = implode(',', $disease_ids);
           $m_rank = $_POST['m_rank'];
@@ -198,7 +206,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
           $stmt->bindParam(':disease_id', $disease_id, PDO::PARAM_STR);
           $stmt->bindParam(':place', $_POST['place'], PDO::PARAM_STR);
           $stmt->bindParam(':handicap', $_POST['handicap'], PDO::PARAM_STR);
-          $stmt->bindParam(':tel', $_POST['tel'], PDO::PARAM_STR);
+          $stmt->bindParam(':tel', $tel, PDO::PARAM_STR);
           $stmt->bindParam(':home_id', $_POST['home_id'], PDO::PARAM_INT);
           $stmt->bindParam(':home_no', $_POST['home_no'], PDO::PARAM_STR);
           $stmt->bindParam(':swine', $_POST['swine'], PDO::PARAM_STR);
@@ -213,7 +221,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
 
           $result = $stmt->execute();
           $conn = null; // ปิดการเชื่อมต่อกับฐานข้อมูล
-  
+
           if ($result) {
             unset($_SESSION['home_no']);
             unset($_SESSION['id_home']);
@@ -484,8 +492,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                   <a class="nav-link active" data-bs-toggle="pill" href="#home">ที่อยู่ปัจจุบันตามทะเบียนบ้าน</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link <?php echo @$_SESSION['disabled'] ?>" data-bs-toggle="pill"
-                    href="#menu1">ที่อยู่ปัจจุบันอื่น</a>
+                  <a class="nav-link <?php echo @$_SESSION['disabled'] ?>" data-bs-toggle="pill" href="#menu1">ที่อยู่ปัจจุบันอื่น</a>
                 </li>
               </ul>
               <!-- Tab panes -->
@@ -510,20 +517,14 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                     </div>
                   </div>
                   <?php if (@$_SESSION['id_home']) { ?>
-                    <input type="hidden" class="form-control" name="home_id" id=""
-                      value="<?php echo @$_SESSION['id_home'] ?>">
-                    <input type="hidden" class="form-control" name="home_no" id=""
-                      value="<?php echo @$_SESSION['home_no'] ?>">
+                    <input type="hidden" class="form-control" name="home_id" id="" value="<?php echo @$_SESSION['id_home'] ?>">
+                    <input type="hidden" class="form-control" name="home_no" id="" value="<?php echo @$_SESSION['home_no'] ?>">
                     <input type="hidden" class="form-control" name="stay" id="" value="อยู่ตามทะเบียบบ้าน">
                     <input type="hidden" class="form-control" name="swine" id="" value="<?php echo @$_SESSION['swine'] ?>">
-                    <input type="hidden" class="form-control" name="province_id" id=""
-                      value="<?php echo @$_SESSION['provinceId'] ?>">
-                    <input type="hidden" class="form-control" name="amphure" id=""
-                      value="<?php echo @$_SESSION['amphure'] ?>">
-                    <input type="hidden" class="form-control" name="district" id=""
-                      value="<?php echo @$_SESSION['district'] ?>">
-                    <input type="hidden" class="form-control" name="zip_code" id=""
-                      value="<?php echo @$_SESSION['zip_code'] ?>">
+                    <input type="hidden" class="form-control" name="province_id" id="" value="<?php echo @$_SESSION['provinceId'] ?>">
+                    <input type="hidden" class="form-control" name="amphure" id="" value="<?php echo @$_SESSION['amphure'] ?>">
+                    <input type="hidden" class="form-control" name="district" id="" value="<?php echo @$_SESSION['district'] ?>">
+                    <input type="hidden" class="form-control" name="zip_code" id="" value="<?php echo @$_SESSION['zip_code'] ?>">
                     <div class="row">
                       <div class="col">
                         <label class="col-form-label"> การอยู่อาศัย:<span class="required-star">*</span></label>
@@ -583,7 +584,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                           $stmt3->execute();
                           $result3 = $stmt3->fetchAll();
                           foreach ($result3 as $row3) {
-                            ?>
+                          ?>
                             <option value="<?php echo $row3['id_home']; ?>"><?php echo $row3['id_home']; ?></option>
                           <?php } ?>
                         </select>
@@ -612,13 +613,11 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                       </div>
                       <div class="col">
                         <label class="col-form-label">บ้านเลขที่:<span class="required-star">*</span></label>
-                        <input type="text" class="form-control" id="" value="<?php echo @$_SESSION['home_no'] ?>"
-                          name="home_no" required>
+                        <input type="text" class="form-control" id="" value="<?php echo @$_SESSION['home_no'] ?>" name="home_no" required>
                       </div>
                       <div class="col">
                         <label class="col-form-label">หมู่:<span class="required-star">*</span></label>
-                        <input type="text" class="form-control" id="" placeholder="ถ้าไม่มีหมู่ให้ใส่ -"
-                          value="<?php echo @$_SESSION['swine'] ?>" name="swine" required>
+                        <input type="text" class="form-control" id="" placeholder="ถ้าไม่มีหมู่ให้ใส่ -" value="<?php echo @$_SESSION['swine'] ?>" name="swine" required>
                       </div>
                     </div>
                     <div class="row">
@@ -638,25 +637,22 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                           $stmt2->execute();
                           $result2 = $stmt2->fetchAll();
                           foreach ($result2 as $row2) {
-                            ?>
+                          ?>
                             <option value="<?php echo $row2['province_id']; ?>"><?php echo $row2['name_th']; ?></option>
                           <?php } ?>
                         </select>
                       </div>
                       <div class="col">
                         <label class="col-form-label">อำเภอ/เขต:<span class="required-star">*</span></label>
-                        <input type="text" class="form-control" id="" value="<?php echo @$_SESSION['amphure'] ?>"
-                          name="amphure" required>
+                        <input type="text" class="form-control" id="" value="<?php echo @$_SESSION['amphure'] ?>" name="amphure" required>
                       </div>
                       <div class="col">
                         <label class="col-form-label">ตำบล/แขวง:<span class="required-star">*</span></label>
-                        <input type="text" class="form-control" id="" value="<?php echo @$_SESSION['district'] ?>"
-                          name="district" required>
+                        <input type="text" class="form-control" id="" value="<?php echo @$_SESSION['district'] ?>" name="district" required>
                       </div>
                       <div class="col">
                         <label class="col-form-label">รหัสไปรษณีย์:<span class="required-star">*</span></label>
-                        <input type="text" class="form-control" id="" value="<?php echo @$_SESSION['zip_code'] ?>"
-                          name="zip_code" required>
+                        <input type="text" class="form-control" id="" value="<?php echo @$_SESSION['zip_code'] ?>" name="zip_code" required>
                       </div>
                     </div>
                   <?php } ?>
@@ -673,8 +669,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
               <div class="row">
                 <div class="col">
                   <label class="col-form-label">รหัสบัตรประชาชน:<span class="required-star">*</span></label>
-                  <input type="text" class="form-control" id="" name="card_id" maxlength="13" pattern="[0-9]{13}"
-                    title="ระบุตัวเลข 13 ตัว" placeholder="ระบุตัวเลข 13 ตัว" required>
+                  <input type="text" class="form-control" id="" pattern="^[0-9-]{1,10}$" name="card_id" maxlength="13" pattern="[0-9]{13}" title="ระบุตัวเลข 13 ตัว" placeholder="ระบุตัวเลข 13 ตัว" required>
                 </div>
                 <div class="col">
                   <label class="col-form-label">คำนำหน้า:<span class="required-star">*</span></label>
@@ -684,7 +679,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                     $stmt2->execute();
                     $result2 = $stmt2->fetchAll();
                     foreach ($result2 as $row2) {
-                      ?>
+                    ?>
                       <option value="<?php echo $row2['prefix_id']; ?>"><?php echo $row2['prefix']; ?></option>
                     <?php } ?>
                   </select>
@@ -730,7 +725,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                     $stmt2->execute();
                     $result2 = $stmt2->fetchAll();
                     foreach ($result2 as $row2) {
-                      ?>
+                    ?>
                       <option value="<?php echo $row2['occupation_id']; ?>"><?php echo $row2['occupation']; ?></option>
                     <?php } ?>
                   </select>
@@ -744,11 +739,10 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                     $stmt2->execute();
                     $result2 = $stmt2->fetchAll();
                     foreach ($result2 as $row2) {
-                      ?>
+                    ?>
                       <div class="form-check">
                         <div>
-                          <input class="form-check-input" type="checkbox" id="check1" name="disease_id[]"
-                            value="<?php echo $row2['disease'] ?? ''; ?>">
+                          <input class="form-check-input" type="checkbox" id="check1" name="disease_id[]" value="<?php echo $row2['disease'] ?? ''; ?>">
                           <label class="form-check-label" style="font-weight:400;"><?php echo $row2['disease']; ?></label>
                         </div>
                       </div>
@@ -776,17 +770,27 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                     <option>โรงพยาบาลหลวงพ่อคูณปริสุทฺโธ (รพ.ใหม่)</option>
                   </select>
                 </div>
-                <div class="col">
+                <div class="col-1">
                   <label class="col-form-label">เบอร์โทร:<span class="required-star">*</span></label>
-                  <input type="text" class="form-control" id="tel" name="tel" maxlength="10"
-                    placeholder="ถ้าไม่มีให้ใส่ -" required inputmode="numeric" pattern="^[0-9-]*$">
+                  <select name="sex" class="form-select" id="inputGroupSelect01" onchange="if(this.value=='ไม่มี' ||this.value=='มี') noPhoneNumber(this.value);" required>
+                    <option selected>มี</option>
+                    <option>ไม่มี</option>
+                  </select>
+                </div>
+                <div class="col" id="tel-yes">
+                  <label class="col-form-label">⠀</label>
+                  <input type="text" class="form-control" id="telyes" name="telyes" maxlength="10" placeholder="กรุณากรอกตัวเลข 10 หลัก" inputmode="numeric" pattern="[0-9]{10}" title="กรุณากรอกตัวเลข 10 หลัก" oninput="this.value = this.value.replace(/[^0-9]/g, '').substring(0, 10);" required>
+                </div>
+                <div class="col" id="tel-no" style="display: none;">
+                  <label class="col-form-label">⠀</label>
+                  <input type="text" class="form-control" value="-" disabled>
+                  <input type="hidden" class="form-control" id="telno" name="telno">
                 </div>
               </div>
               <br>
             </div>
             <div class="row">
-              <center><input type="submit" class="btn btn-primary" value="เพิ่มข้อมูล"> <a href="data.php?act=clear"
-                  class="btn btn-secondary">ล้างข้อมูล</a></center>
+              <center><input type="submit" class="btn btn-primary" value="เพิ่มข้อมูล"> <a href="data.php?act=clear" class="btn btn-secondary">ล้างข้อมูล</a></center>
             </div>
           </form>
         </div>
@@ -865,50 +869,47 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                 if ($result != null) {
                   $i = 1;
                   foreach ($result as $row) {
-                    ?>
+                ?>
                     <tr>
                       <td><?php echo $i; ?></td>
                       <td><?php
-                      $id_card = $row['id_card'];
-                      if (strlen($id_card) >= 3) {
-                        $masked_id = substr($id_card, 0, -3) . 'XXX';
-                        if (strlen($masked_id) == 13) {
-                          $display_id_card = substr($masked_id, 0, 1) . '-' .
-                            substr($masked_id, 1, 4) . '-' .
-                            substr($masked_id, 5, 5) . '-' .
-                            substr($masked_id, 10, 3);
-                        } else {
-                          $display_id_card = $masked_id;
-                        }
-                      } else {
-                        $display_id_card = str_repeat('*', strlen($id_card));
-                      }
-                      echo $display_id_card ?></td>
+                          $id_card = $row['id_card'];
+                          if (strlen($id_card) >= 3) {
+                            $masked_id = substr($id_card, 0, -3) . 'XXX';
+                            if (strlen($masked_id) == 13) {
+                              $display_id_card = substr($masked_id, 0, 1) . '-' .
+                                substr($masked_id, 1, 4) . '-' .
+                                substr($masked_id, 5, 5) . '-' .
+                                substr($masked_id, 10, 3);
+                            } else {
+                              $display_id_card = $masked_id;
+                            }
+                          } else {
+                            $display_id_card = str_repeat('*', strlen($id_card));
+                          }
+                          echo $display_id_card ?></td>
 
                       <td><?php echo $row['prefix'];
-                      echo $row['name'] . '⠀';
-                      echo $row['lastname']; ?></td>
+                          echo $row['name'] . '⠀';
+                          echo $row['lastname']; ?></td>
                       <td><?php echo $row['occupation'] ?></td>
                       <td><?php echo $row['user_name'] ?></td>
                       <td>
-                        <a href="show-data.php?user_name=<?php echo $row['user_name']; ?>&user_lname=<?php echo $row['user_lname']; ?>&zip_code=<?php echo $row['zip_code']; ?>&id_card=<?php echo $row['id_card']; ?>&prefix_id=<?php echo $row['prefix']; ?>&lastname=<?php echo $row['lastname']; ?>&name=<?php echo $row['name']; ?>&date=<?php echo $row['date']; ?>&age=<?php echo $row['age']; ?>&sex=<?php echo $row['sex']; ?>&status=<?php echo $row['status']; ?>&occupation=<?php echo $row['occupation']; ?>&disease=<?php echo $row['disease']; ?>&place=<?php echo $row['place']; ?>&handicap=<?php echo $row['handicap']; ?>&tel=<?php echo $row['tel']; ?>&status=<?php echo $row['status']; ?>&home_id=<?php echo $row['home_id']; ?>&home_no=<?php echo $row['home_no']; ?>&swine=<?php echo $row['swine']; ?>&amphure=<?php echo $row['amphure']; ?>&district=<?php echo $row['district']; ?>&province_id=<?php echo $row['pro']; ?>"
-                          class="btn btn-success">
+                        <a href="show-data.php?user_name=<?php echo $row['user_name']; ?>&user_lname=<?php echo $row['user_lname']; ?>&zip_code=<?php echo $row['zip_code']; ?>&id_card=<?php echo $row['id_card']; ?>&prefix_id=<?php echo $row['prefix']; ?>&lastname=<?php echo $row['lastname']; ?>&name=<?php echo $row['name']; ?>&date=<?php echo $row['date']; ?>&age=<?php echo $row['age']; ?>&sex=<?php echo $row['sex']; ?>&status=<?php echo $row['status']; ?>&occupation=<?php echo $row['occupation']; ?>&disease=<?php echo $row['disease']; ?>&place=<?php echo $row['place']; ?>&handicap=<?php echo $row['handicap']; ?>&tel=<?php echo $row['tel']; ?>&status=<?php echo $row['status']; ?>&home_id=<?php echo $row['home_id']; ?>&home_no=<?php echo $row['home_no']; ?>&swine=<?php echo $row['swine']; ?>&amphure=<?php echo $row['amphure']; ?>&district=<?php echo $row['district']; ?>&province_id=<?php echo $row['pro']; ?>" class="btn btn-success">
                           <span class="material-symbols-outlined">
                             description
                           </span>
                         </a>
                       </td>
                       <td>
-                        <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                          data-bs-target="#myModal<?php echo $row['id']; ?>">
+                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#myModal<?php echo $row['id']; ?>">
                           <span class="material-symbols-outlined">
                             edit_square
                           </span>
                         </button>
                       </td>
                       <td>
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                          data-bs-target="#Modaldeletel<?php echo $row['id']; ?>">
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Modaldeletel<?php echo $row['id']; ?>">
                           <span class="material-symbols-outlined">
                             delete
                           </span>
@@ -940,8 +941,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                       </div>
                     </div>
 
-                    <div class="modal fade" id="myModal<?php echo $row['id']; ?>" tabindex="-1"
-                      aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="myModal<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                       <div class="modal-dialog modal-dialog-scrollable modal-xl">
                         <div class="modal-content">
                           <div class="modal-header">
@@ -954,8 +954,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                             <form action="data.php?act=edit" method="post">
                               <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
                               <label class="col-form-label">รหัสบัตรประชาชน:</label>
-                              <input type="text" class="form-control" id="" name="id_card"
-                                value="<?php echo $row['id_card']; ?>">
+                              <input type="text" class="form-control" id="" name="id_card" value="<?php echo $row['id_card']; ?>">
 
                               <label class="col-form-label">คำนำหน้า:<span class="required-star">*</span></label>
                               <select name="prefix_id" class="form-select" id="inputGroupSelect01" required>
@@ -965,25 +964,22 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                                 $stmt2->execute();
                                 $result2 = $stmt2->fetchAll();
                                 foreach ($result2 as $row2) {
-                                  ?>
+                                ?>
                                   <option value="<?php echo $row2['prefix_id']; ?>"><?php echo $row2['prefix']; ?></option>
                                 <?php } ?>
                               </select>
                               <div class="row">
                                 <div class="col">
                                   <label class="col-form-label">ชื่อ:<span class="required-star">*</span></label>
-                                  <input type="text" class="form-control" id="" name="fname"
-                                    value="<?php echo $row['name']; ?>" required>
+                                  <input type="text" class="form-control" id="" name="fname" value="<?php echo $row['name']; ?>" required>
                                 </div>
                                 <div class="col">
                                   <label class="col-form-label">นามสกุล:<span class="required-star">*</span></label>
-                                  <input type="text" class="form-control" id="" name="lname"
-                                    value="<?php echo $row['lastname']; ?>" required>
+                                  <input type="text" class="form-control" id="" name="lname" value="<?php echo $row['lastname']; ?>" required>
                                 </div>
                               </div>
                               <label class="col-form-label">วัน-เดือน-ปีเกิด:<span class="required-star">*</span></label>
-                              <input type="date" class="form-control" id="" name="bdate" value="<?php echo $row['date']; ?>"
-                                required>
+                              <input type="date" class="form-control" id="" name="bdate" value="<?php echo $row['date']; ?>" required>
 
                               <label class="col-form-label">เพศ:<span class="required-star">*</span></label>
                               <select name="sex" class="form-select" id="inputGroupSelect01" required>
@@ -1013,7 +1009,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                                 $stmt2->execute();
                                 $result2 = $stmt2->fetchAll();
                                 foreach ($result2 as $row2) {
-                                  ?>
+                                ?>
                                   <option value="<?php echo $row2['occupation_id']; ?>"><?php echo $row2['occupation']; ?>
                                   </option>
                                 <?php } ?>
@@ -1023,10 +1019,8 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
 
                               <div class="form-check">
                                 <div>
-                                  <input class="form-check-input" type="checkbox" id="check1" name="disease_id[]"
-                                    value="<?php echo $row['disease'] ?? ''; ?>" checked>
-                                  <label class="form-check-label"
-                                    style="font-weight:400; color:blue;"><?php echo $row['disease']; ?></label>
+                                  <input class="form-check-input" type="checkbox" id="check1" name="disease_id[]" value="<?php echo $row['disease'] ?? ''; ?>" checked>
+                                  <label class="form-check-label" style="font-weight:400; color:blue;"><?php echo $row['disease']; ?></label>
                                 </div>
                               </div>
                               <div id="re">
@@ -1036,11 +1030,10 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                                 $stmt2->execute();
                                 $result2 = $stmt2->fetchAll();
                                 foreach ($result2 as $row2) {
-                                  ?>
+                                ?>
                                   <div class="form-check">
                                     <div>
-                                      <input class="form-check-input" type="checkbox" id="check1" name="disease_id[]"
-                                        value="<?php echo $row2['disease'] ?? ''; ?>">
+                                      <input class="form-check-input" type="checkbox" id="check1" name="disease_id[]" value="<?php echo $row2['disease'] ?? ''; ?>">
                                       <label class="form-check-label" style="font-weight:400; "><?php echo $row2['disease']; ?>
                                         </p></label>
                                     </div>
@@ -1059,8 +1052,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                                     echo 'ไม่ใช่';
                                   } else {
                                     echo $row['handicap'];
-                                  }
-                                  ; ?>
+                                  }; ?>
                                 </option>
                                 <option value="Yes">ใช่</option>
                                 <option value="No">ไม่ใช่</option>
@@ -1078,12 +1070,10 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                               </select>
 
                               <label class="col-form-label">เบอร์โทร:<span class="required-star">*</span></label>
-                              <input type="text" class="form-control" id="" name="tel" maxlength="10" pattern="[0-9-]{1,10}"
-                                value="<?php echo $row['tel']; ?>" required>
+                              <input type="text" class="form-control" id="" name="tel" maxlength="10" pattern="[0-9-]{1,10}" value="<?php echo $row['tel']; ?>" required>
                               <div class="row">
                                 <div class="col">
-                                  <label class="col-form-label">รหัสบ้านตามทะเบียนบ้าน:<span
-                                      class="required-star">*</span></label>
+                                  <label class="col-form-label">รหัสบ้านตามทะเบียนบ้าน:<span class="required-star">*</span></label>
                                   <select name="home_id" class="fstdropdown-select" id="inputGroupSelect01" required>
                                     <option selected disabled>--กรุณาเลือก--</option>
                                     <option selected value="<?php echo $row['home_id']; ?>"><?php echo $row['home_id']; ?>
@@ -1092,7 +1082,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                                     $stmt3->execute();
                                     $result3 = $stmt3->fetchAll();
                                     foreach ($result3 as $row3) {
-                                      ?>
+                                    ?>
                                       <option value="<?php echo $row3['id_home']; ?>"><?php echo $row3['id_home']; ?></option>
                                     <?php } ?>
                                   </select>
@@ -1120,13 +1110,11 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                               <div class="row">
                                 <div class="col">
                                   <label class="col-form-label">บ้านเลขที่:<span class="required-star">*</span></label>
-                                  <input type="text" class="form-control" id="" name="home_no"
-                                    value="<?php echo $row['home_no']; ?>" required>
+                                  <input type="text" class="form-control" id="" name="home_no" value="<?php echo $row['home_no']; ?>" required>
                                 </div>
                                 <div class="col">
                                   <label class="col-form-label">หมู่:<span class="required-star">*</span></label>
-                                  <input type="text" class="form-control" id="" name="swine"
-                                    value="<?php echo $row['swine']; ?>" required>
+                                  <input type="text" class="form-control" id="" name="swine" value="<?php echo $row['swine']; ?>" required>
                                 </div>
                               </div>
                               <div class="row">
@@ -1140,7 +1128,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                                     $stmt2->execute();
                                     $result2 = $stmt2->fetchAll();
                                     foreach ($result2 as $row2) {
-                                      ?>
+                                    ?>
                                       <option value="<?php echo $row2['province_id']; ?>"><?php echo $row2['name_th']; ?>
                                       </option>
                                     <?php } ?>
@@ -1148,18 +1136,15 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                                 </div>
                                 <div class="col">
                                   <label class="col-form-label">อำเภอ/เขต:<span class="required-star">*</span></label>
-                                  <input type="text" class="form-control" id="" name="amphure"
-                                    value="<?php echo $row['amphure']; ?>" required>
+                                  <input type="text" class="form-control" id="" name="amphure" value="<?php echo $row['amphure']; ?>" required>
                                 </div>
                                 <div class="col">
                                   <label class="col-form-label">ตำบล/แขวง:<span class="required-star">*</span></label>
-                                  <input type="text" class="form-control" id="" name="district"
-                                    value="<?php echo $row['district']; ?>" required>
+                                  <input type="text" class="form-control" id="" name="district" value="<?php echo $row['district']; ?>" required>
                                 </div>
                                 <div class="col">
                                   <label class="col-form-label">รหัสไปรษณีย์:<span class="required-star">*</span></label>
-                                  <input type="text" class="form-control" id="" name="zip_code"
-                                    value="<?php echo $row['zip_code']; ?>" required>
+                                  <input type="text" class="form-control" id="" name="zip_code" value="<?php echo $row['zip_code']; ?>" required>
                                 </div>
                               </div>
                           </div>
@@ -1172,7 +1157,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                       </div>
                     </div>
 
-                    <?php $i++;
+                  <?php $i++;
                   }
                 } else { ?>
                   <tr>
@@ -1241,7 +1226,7 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                 if ($result9 != null) {
                   $i = 1;
                   foreach ($result9 as $row9) {
-                    ?>
+                ?>
                     <tr>
                       <td><?php echo $i; ?></td>
                       <td><?php echo $row9['id_home']; ?></td>
@@ -1254,10 +1239,9 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
                         <?php echo $row9['zip_code']; ?>
                       </td>
                       <td><?php echo $row9['home_type']; ?></td>
-                      <td><a type="button" class="btn btn-primary"
-                          href="data.php?act=adhome&id_home=<?php echo $row9['id_home']; ?>">เลือก</a></td>
+                      <td><a type="button" class="btn btn-primary" href="data.php?act=adhome&id_home=<?php echo $row9['id_home']; ?>">เลือก</a></td>
                     </tr>
-                    <?php $i++;
+                  <?php $i++;
                   }
                 } else { ?>
                   <tr>
@@ -1274,17 +1258,39 @@ if (@$_SESSION['user_name'] == null || @$_SESSION['user_name'] == '') {
       </div>
     </div>
     <script>
-      $(document).ready(function () {
-        $("#myInput").on("keyup", function () {
+      function noPhoneNumber(selectedValue) {
+        if (selectedValue == 'ไม่มี') {
+          document.getElementById('tel-yes').style.display = 'none';
+          document.getElementById('telyes').style.display = 'none';
+          document.getElementById('telyes').disabled = true;
+          document.getElementById('telno').disabled = false;
+          document.getElementById('tel-no').style.display = 'block';
+          document.getElementById('telno').style.display = 'block';
+          document.getElementById('telno').value = '-';
+          document.getElementById('telyes').value = '';
+        } else {
+          document.getElementById('tel-yes').style.display = 'block';
+          document.getElementById('telyes').style.display = 'block';
+          document.getElementById('tel-no').style.display = 'none';
+          document.getElementById('telno').style.display = 'none';
+          document.getElementById('telno').disabled = true;
+          document.getElementById('telyes').disabled = false;
+
+        }
+      }
+    </script>
+    <script>
+      $(document).ready(function() {
+        $("#myInput").on("keyup", function() {
           var value = $(this).val().toLowerCase();
-          $("#myTable-home tr").filter(function () {
+          $("#myTable-home tr").filter(function() {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
           });
         });
       });
     </script>
     <script>
-      $(document).ready(function () {
+      $(document).ready(function() {
         $('#myTable').DataTable();
       });
     </script>
